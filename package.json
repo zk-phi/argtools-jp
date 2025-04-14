@@ -1,0 +1,23 @@
+{
+  "name": "argtools-jp",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently 'vite' 'tsc --watch --noEmit'",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "tsc --noEmit",
+    "lint": "biome lint",
+    "fix": "biome lint --write"
+  },
+  "dependencies": {
+    "preact": "^10.26.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@preact/preset-vite": "^2.10.1",
+    "concurrently": "^9.1.2",
+    "typescript": "^5.8.3",
+    "vite": "^6.2.6"
+  }
+}
