@@ -13,7 +13,12 @@ const applyFilter = (dataset: Dataset, filter: Filter) => (
       case "prefix": return row.key.startsWith(filter.string);
       case "suffix": return row.key.endsWith(filter.string);
       case "infix": return row.key.includes(filter.string);
-      case "regex": return !!row.key.match(filter.string);
+      case "regex":
+        try {
+          return !!row.key.match(filter.string);
+        } catch {
+          return false;
+        }
       case "minLength": return row.key.length >= filter.length;
       case "maxLength": return row.key.length <= filter.length;
       case "exactLength": return row.key.length === filter.length;
@@ -100,7 +105,7 @@ const App = () => {
             </a>
           </p>
           <p>
-            ※加工・再配布等の際は、上記出典の利用条件を参照してください。
+            ※再配布等の際は、上記出典の利用条件を参照してください。
           </p>
         </>
       )}
