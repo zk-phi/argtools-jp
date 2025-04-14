@@ -1,5 +1,5 @@
 import { render } from "preact";
-import { useState, useCallback, useEffect } from "preact/hooks";
+import { useState, useCallback } from "preact/hooks";
 import { readFileAsDataUrl } from "../../../utils/file";
 import { applyFilter } from "../../../utils/image";
 
