@@ -23,12 +23,12 @@ export const datasets: { [key: string]: DatasetMeta } = {
   words: {
     import: () => import("./nouns.ts"),
     url: "https://clrd.ninjal.ac.jp/unidic/",
-    label: "森羅万象（(C) 国立国語研究所 / 修正BSD）",
+    label: "森羅万象（人名以外の名詞）（(C) 国立国語研究所 / 修正BSD）",
   },
   yomigana: {
     import: () => import("./yomigana.ts"),
     url: "https://clrd.ninjal.ac.jp/unidic/",
-    label: "しんらばんしょう（(C) 国立国語研究所 / 修正BSD）",
+    label: "森羅万象ふりがな（(C) 国立国語研究所 / 修正BSD）",
   },
   propers: {
     import: () => import("./propers.ts"),

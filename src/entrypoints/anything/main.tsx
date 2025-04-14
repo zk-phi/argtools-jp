@@ -47,6 +47,10 @@ const App = () => {
     setFilters([...filters, { type: "infix", string: "", length: 1, id: gensym() }]);
   }, [filters]);
 
+  const removeFilter = useCallback((ix: number) => {
+    setFilters(filters.filter((_, i: number) => i !== ix))
+  }, [filters]);
+
   const selectFilterType = useCallback((ix: number, type: string) => {
     setFilters([
       ...filters.slice(0, ix),
@@ -101,7 +105,7 @@ const App = () => {
       )}
       <h3>フィルタ</h3>
       <div>
-        <button type="button" onClick={addFilter}>＋条件を追加</button>
+        <button type="button" onClick={addFilter}>＋ 条件を追加</button>
       </div>
       {filters.map((filter, ix) => (
         <fieldset key={filter.id}>
@@ -147,6 +151,9 @@ const App = () => {
               />
             </div>
           )}
+          <div>
+            <button type="button" onClick={() => removeFilter(ix)}>− 条件を削除</button>
+          </div>
         </fieldset>
       ))}
       <h3>検索結果</h3>
