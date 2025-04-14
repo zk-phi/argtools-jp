@@ -1,4 +1,4 @@
-export type Dataset = { key: string, value: string }[];
+export type Dataset = { key: string, value: string, id: number }[];
 type Importer = () => Promise<{ data: Dataset }>
 type DatasetMeta = { import: Importer, url: string, label: string };
 

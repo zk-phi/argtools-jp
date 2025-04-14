@@ -1,9 +1,10 @@
-import { render, JSX } from "preact";
+import { render, } from "preact";
 import { useState, useCallback, useEffect, useMemo } from "preact/hooks";
-import { datasets, datasetKeys, getDataset, Dataset } from "../../datasets";
+import { datasets, datasetKeys, getDataset, type Dataset } from "../../datasets";
 import { useDebounce } from "../../utils/useDebounce";
+import { gensym } from "../../utils/gensym";
 
-type Filter = { type: string, string: string, length: number };
+type Filter = { type: string, string: string, length: number, id: number };
 
 const applyFilter = (dataset: Dataset, filter: Filter) => (
   dataset.filter(row => {
@@ -28,7 +29,7 @@ const App = () => {
   const [dataset, setDataset] = useState<Dataset | null>(null);
   useEffect(() => {
     getDataset(datasetKey).then(data => setDataset(data));
-  }, [datasetKey, setDataset]);
+  }, [datasetKey]);
 
   const [filters, setFilters] = useState<Filter[]>([]);
   const debouncedFilters = useDebounce(filters, 300);
@@ -40,11 +41,11 @@ const App = () => {
   const selectDataset = useCallback((key: string) => {
     setDataset(null);
     setDatasetKey(key);
-  }, [setDatasetKey]);
+  }, []);
 
   const addFilter = useCallback(() => {
-    setFilters([...filters, { type: "infix", string: "", length: 1 }]);
-  }, [filters, setFilters]);
+    setFilters([...filters, { type: "infix", string: "", length: 1, id: gensym() }]);
+  }, [filters]);
 
   const selectFilterType = useCallback((ix: number, type: string) => {
     setFilters([
@@ -52,7 +53,7 @@ const App = () => {
       { ...filters[ix], type: type },
       ...filters.slice(ix + 1),
     ]);
-  }, [setFilters, filters])
+  }, [filters])
 
   const inputFilterString = useCallback((ix: number, string: string) => {
     setFilters([
@@ -60,7 +61,7 @@ const App = () => {
       { ...filters[ix], string: string },
       ...filters.slice(ix + 1),
     ]);
-  }, [setFilters, filters]);
+  }, [filters]);
 
   const inputFilterLength = useCallback((ix: number, length: string) => {
     const numberLength = Number(length);
@@ -69,7 +70,7 @@ const App = () => {
       { ...filters[ix], length: numberLength },
       ...filters.slice(ix + 1),
     ]);
-  }, [setFilters, filters]);
+  }, [filters]);
 
   return (
     <>
@@ -79,16 +80,16 @@ const App = () => {
       </p>
       <h3>データセット</h3>
       <select value={datasetKey} onChange={e => selectDataset(e.currentTarget.value)}>
-        <option value=""></option>
+        <option value="" />
         {datasetKeys.map(key => (
-          <option value={key}>{datasets[key].label}</option>
+          <option key={key} value={key}>{datasets[key].label}</option>
         ))}
       </select>
       {datasetKey && (
         <>
           <p>
             ソース：
-            <a href={datasets[datasetKey]?.url} target="_blank">
+            <a href={datasets[datasetKey]?.url} target="_blank" rel="noreferrer">
               {datasets[datasetKey]?.url}
             </a>
           </p>
@@ -99,14 +100,15 @@ const App = () => {
       )}
       <h3>フィルタ</h3>
       <div>
-        <button onClick={addFilter}>＋条件を追加</button>
+        <button type="button" onClick={addFilter}>＋条件を追加</button>
       </div>
       {filters.map((filter, ix) => (
-        <fieldset key={`filter${ix}`}>
+        <fieldset key={filter.id}>
           <legend>条件 {ix + 1}</legend>
           <div>
-            <label>タイプ：</label>
+            <label for="type">タイプ：</label>
             <select
+                name="type"
                 value={filter.type}
                 onChange={e => selectFilterType(ix, e.currentTarget.value)}>
               <option value="infix">〜を含む</option>
@@ -120,21 +122,23 @@ const App = () => {
               <option value="description">補足情報が〜を含む</option>
             </select>
           </div>
-          {!filter.type.match(/Length$/) && (
+          {!filter.type.endsWith("Length") && (
             <div>
-              <label>キーワード：</label>
+              <label for="string">キーワード：</label>
               <input
                   type="text"
+                  name="string"
                   value={filter.string}
                   onInput={e => inputFilterString(ix, e.currentTarget.value)}
               />
             </div>
           )}
-          {filter.type.match(/Length$/) && (
+          {filter.type.endsWith("Length") && (
             <div>
-              <label>文字数：</label>
+              <label for="length">文字数：</label>
               <input
                   type="number"
+                  name="length"
                   step="1"
                   min="0"
                   value={filter.length}
@@ -150,7 +154,7 @@ const App = () => {
         <table>
           <tbody>
             { filteredDataset.map(row => (
-              <tr>
+              <tr key={row.id}>
                 <td>{row.key}</td>
                 <td>{row.value}</td>
               </tr>

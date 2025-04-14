@@ -7,7 +7,8 @@ const jointTypes: { [key: string]: string } = {
   4: "その他",
 };
 
-export const data = highwayJoints.features.map(row => ({
+export const data = highwayJoints.features.map((row, ix) => ({
+  id: ix,
   key: row.properties.N06_018,
   value: jointTypes[row.properties.N06_019],
 }));

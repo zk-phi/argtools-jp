@@ -5,6 +5,9 @@
     "clientKind": "git",
     "useIgnoreFile": true
   },
+  "files": {
+    "ignore": ["datasets/*.json"]
+  },
   "formatter": {
     "enabled": true,
     "indentStyle": "space"
@@ -26,7 +29,8 @@
         "noNodejsModules": "off"
       },
       "complexity": {
-        "noExcessiveCognitiveComplexity": "off"
+        "noExcessiveCognitiveComplexity": "off",
+        "useLiteralKeys": "off"
       },
       "style": {
         "useBlockStatements": "off",
