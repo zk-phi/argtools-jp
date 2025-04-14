@@ -16,8 +16,6 @@ const App = () => {
 
   return (
     <>
-      <p><a href="../../">＜ 他のツール</a></p>
-      <h2>それAAじゃね？ - ○○文字目で改行</h2>
       <h3>テキスト</h3>
       <textarea
           value={text}
