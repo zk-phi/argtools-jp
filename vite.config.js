@@ -16,6 +16,7 @@ export default defineConfig({
         main: "src/entrypoints/index.html",
         anything: "src/entrypoints/anything/index.html",
         aa: "src/entrypoints/text/aa/index.html",
+        rgbextract: "src/entrypoints/image/rgbextract/index.html",
       },
     },
   },
