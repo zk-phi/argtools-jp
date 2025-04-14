@@ -78,6 +78,7 @@ const App = () => {
 
   return (
     <>
+      <p><a href="../">＜ 他のツール</a></p>
       <h2>Anything - 森羅万象検索 (ベータ)</h2>
       <p>
         各種オープンデータから複雑な絞り込み検索を行えます。試作品。
@@ -90,16 +91,16 @@ const App = () => {
           </option>
         ))}
       </select>
-      {datasetKey && datasets[datasetKey]?.url && (
+      {datasetKey && datasets[datasetKey]?.license && (
         <>
           <p>
-            ソース：
+            出典：
             <a href={datasets[datasetKey]?.url} target="_blank" rel="noreferrer">
-              {datasets[datasetKey]?.url}
+              {datasets[datasetKey]?.license}
             </a>
           </p>
           <p>
-            ※加工・再配布等の際は、上記 URL の利用条件を参照してください。
+            ※加工・再配布等の際は、上記出典の利用条件を参照してください。
           </p>
         </>
       )}
@@ -166,11 +167,11 @@ const App = () => {
               ※ 最初の 300 件を表示しています
             </p>
           )}
-          <table>
+          <table style={{ borderCollapse: "collapse" }}>
             <tbody>
-              {filteredDataset.slice(0, 300).map(row => (
-                <tr key={row.id}>
-                  <td>{row.key}</td>
+              {filteredDataset.slice(0, 300).map((row, ix) => (
+                <tr key={row.id} style={{ background: ix % 2 ? "#00000010" : "transparent" }}>
+                  <td style={{ borderRight: "1px dotted" }}>{row.key}</td>
                   <td>{row.value}</td>
                 </tr>
               ))}
