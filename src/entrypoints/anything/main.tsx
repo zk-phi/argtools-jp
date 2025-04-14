@@ -80,12 +80,13 @@ const App = () => {
       </p>
       <h3>データセット</h3>
       <select value={datasetKey} onChange={e => selectDataset(e.currentTarget.value)}>
-        <option value="" />
         {datasetKeys.map(key => (
-          <option key={key} value={key}>{datasets[key].label}</option>
+          <option key={key} value={key} disabled={!datasets[key].import}>
+            {datasets[key].label}
+          </option>
         ))}
       </select>
-      {datasetKey && (
+      {datasetKey && datasets[datasetKey]?.url && (
         <>
           <p>
             ソース：
@@ -150,18 +151,26 @@ const App = () => {
       ))}
       <h3>検索結果</h3>
       <hr />
-      { !filteredDataset ? "読み込み中..." : !filteredDataset[0] ? "データなし" : (
-        <table>
-          <tbody>
-            { filteredDataset.map(row => (
-              <tr key={row.id}>
-                <td>{row.key}</td>
-                <td>{row.value}</td>
-              </tr>
-            )) }
-          </tbody>
-        </table>
-      ) }
+      {!filteredDataset ? "読み込み中..." : !filteredDataset[0] ? "データなし" : (
+        <>
+          <p>{filteredDataset.length} 件</p>
+          {filteredDataset.length > 300 && (
+            <p>
+              ※ 最初の 300 件を表示しています
+            </p>
+          )}
+          <table>
+            <tbody>
+              {filteredDataset.slice(0, 300).map(row => (
+                <tr key={row.id}>
+                  <td>{row.key}</td>
+                  <td>{row.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </>
   );
 };
