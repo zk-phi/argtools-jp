@@ -43,6 +43,7 @@ const App = () => {
         </div>
       )}
       <h3>処理画像</h3>
+      <hr />
       {processedUrls && (
         <>
           <h4>R 成分</h4>
