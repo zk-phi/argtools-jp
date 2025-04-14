@@ -74,9 +74,9 @@ const App = () => {
 
   return (
     <>
-      <h2>Anything - 森羅万象検索</h2>
+      <h2>Anything - 森羅万象検索 (ベータ)</h2>
       <p>
-        各種オープンデータから複雑な絞り込み検索を行えます。
+        各種オープンデータから複雑な絞り込み検索を行えます。試作品。
       </p>
       <h3>データセット</h3>
       <select value={datasetKey} onChange={e => selectDataset(e.currentTarget.value)}>
