@@ -15,7 +15,7 @@ export default defineConfig({
       input: {
         main: "src/entrypoints/index.html",
         anything: "src/entrypoints/anything/index.html",
-        aa: "src/entrypoints/text/aa/anything/index.html",
+        aa: "src/entrypoints/text/aa/index.html",
       },
     },
   },
