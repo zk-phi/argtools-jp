@@ -18,6 +18,7 @@ export default defineConfig({
         aa: "src/entrypoints/text/aa/index.html",
         rgbextract: "src/entrypoints/image/rgbextract/index.html",
         metaextract: "src/entrypoints/image/metaextract/index.html",
+        whoru: "src/entrypoints/file/whoru/index.html",
       },
     },
   },
