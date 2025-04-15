@@ -11,6 +11,7 @@
     "fix": "biome lint --write"
   },
   "dependencies": {
+    "@preact/signals": "^2.0.3",
     "exifreader": "^4.28.1",
     "file-type": "^20.4.1",
     "preact": "^10.26.5"

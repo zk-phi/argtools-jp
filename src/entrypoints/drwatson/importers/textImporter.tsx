@@ -1,39 +1,29 @@
-import { useCallback, useEffect } from "preact/hooks";
-import type { TextData, AbstractState } from "../main";
-import type { ImporterWithStateType, ImporterComponentProps } from ".";
+import { signal } from "@preact/signals";
+import type { TextData, ImporterModule, ResultReporter } from "../main";
 
-export interface TextImporterState extends AbstractState {
-  tag: "textImporter",
-  result: TextData,
-}
+const instantiate = (id: number, updateResult: ResultReporter) => {
+  const input = signal<string>("");
 
-export type TextImporter = ImporterWithStateType<TextImporterState>;
-
-const TextImporter = (
-  { state, updateState }: ImporterComponentProps<TextImporterState>
-) => {
-  const onInput = useCallback((value: string) => {
+  const onInput = (value: string) => {
     const result: TextData = { type: "text", value };
-    updateState(state => ({ ...state, result }));
-  }, [updateState]);
+    input.value = value;
+    updateResult(id, result);
+  };
 
-  return (
+  return () => (
     <section>
-      <h5>文字列を解読</h5>
+      <hr />
+      <h3>文字列を解読</h3>
       <input
           type="text"
           onInput={e => onInput(e.currentTarget.value)}
-          value={state.result.value}
+          value={input.value}
       />
     </section>
   );
 };
 
-export const textImporter: TextImporter = {
+export const textImporter: ImporterModule = {
   label: "文字列を解読",
-  Component: TextImporter,
-  getInitialState: () => ({
-    tag: "textImporter",
-    result: { type: "text", value: "" },
-  }),
+  instantiate,
 };

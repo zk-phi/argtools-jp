@@ -1,20 +1,10 @@
-import { useCallback } from "preact/hooks";
+
 import { fileTypeFromBuffer } from "file-type";
 import { readFileAsBuffer } from "../../../utils/file";
-import type { BinaryData, AbstractState } from "../main";
-import type { ImporterWithStateType, ImporterComponentProps } from ".";
+import type { BinaryData, ImporterModule, ResultReporter } from "../main";
 
-export interface FileImporterState extends AbstractState {
-  tag: "fileImporter",
-  result: BinaryData | null,
-}
-
-export type FileImporter = ImporterWithStateType<FileImporterState>;
-
-const FileImporter = (
-  { state, updateState }: ImporterComponentProps<FileImporterState>
-) => {
-  const openFile = useCallback(async (files: FileList | null) => {
+const instantiate = (id: number, updateResult: ResultReporter) => {
+  const openFile = async (files: FileList | null) => {
     if (files && files.length > 0) {
       const buffer = await readFileAsBuffer(files[0]);
       const fileType = await fileTypeFromBuffer(buffer);
@@ -23,23 +13,20 @@ const FileImporter = (
         type: "binary",
         value: { label: files[0].name, buffer, mime },
       };
-      updateState(state => ({ ...state, result }));
+      updateResult(id, result);
     }
-  }, [updateState]);
+  };
 
-  return (
+  return () => (
     <section>
-      <h5>ファイルを解析</h5>
+      <hr />
+      <h3>ファイルを解析</h3>
       <input type="file" onChange={e => openFile(e.currentTarget.files)} />
     </section>
   );
 };
 
-export const fileImporter: FileImporter = {
+export const fileImporter: ImporterModule = {
   label: "ファイルを解析",
-  Component: FileImporter,
-  getInitialState: () => ({
-    tag: "fileImporter",
-    result: null,
-  }),
+  instantiate,
 };
