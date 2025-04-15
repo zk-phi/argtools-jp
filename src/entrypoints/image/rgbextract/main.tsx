@@ -86,8 +86,8 @@ const App = () => {
       <hr />
       {processedImages.map(([label, src]) => (
         <>
-          <h4>{label}</h4>
-          <img src={src} style={{ maxHeight: 300, border: "1px dashed" }} />
+          <h4 key={`${label}h4`}>{label}</h4>
+          <img key={`${label}img`} src={src} style={{ maxHeight: 300, border: "1px dashed" }} />
         </>
       ))}
     </>
