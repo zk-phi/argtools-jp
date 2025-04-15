@@ -169,7 +169,7 @@ const App = () => {
           )}
           <table>
             <tbody>
-              {filteredDataset.slice(0, 300).map((row, ix) => (
+              {filteredDataset.slice(0, 300).map(row => (
                 <tr key={row.id}>
                   <td>{row.key}</td>
                   <td>{row.value}</td>
