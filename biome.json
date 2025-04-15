@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": ["datasets/*.json"]
+    "ignore": ["resources/*.json"]
   },
   "formatter": {
     "enabled": true,
