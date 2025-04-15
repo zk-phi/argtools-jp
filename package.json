@@ -11,12 +11,14 @@
     "fix": "biome lint --write"
   },
   "dependencies": {
+    "exifreader": "^4.28.1",
     "preact": "^10.26.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@preact/preset-vite": "^2.10.1",
     "@rollup/plugin-dsv": "^3.0.5",
+    "@types/node": "^22.14.1",
     "concurrently": "^9.1.2",
     "typescript": "^5.8.3",
     "vite": "^6.2.6"
