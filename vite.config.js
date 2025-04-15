@@ -15,7 +15,7 @@ export default defineConfig({
       input: {
         main: "src/entrypoints/index.html",
         anything: "src/entrypoints/anything/index.html",
-        aa: "src/entrypoints/text/aa/index.html",
+        aa: "src/entrypoints/code/aa/index.html",
         rgbextract: "src/entrypoints/image/rgbextract/index.html",
         metaextract: "src/entrypoints/image/metaextract/index.html",
         whoru: "src/entrypoints/file/whoru/index.html",
