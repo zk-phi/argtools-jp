@@ -41,7 +41,8 @@
         "noParameterAssign": "off"
       },
       "suspicious": {
-        "noArrayIndexKey": "warn"
+        "noArrayIndexKey": "warn",
+        "noExplicitAny": "off"
       }
     }
   },

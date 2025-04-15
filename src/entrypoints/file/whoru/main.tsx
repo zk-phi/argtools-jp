@@ -1,5 +1,5 @@
 import { render } from "preact";
-import { useState, useCallback, useMemo } from "preact/hooks";
+import { useState, useCallback } from "preact/hooks";
 import { fileTypeFromBlob } from "file-type";
 
 const App = () => {
