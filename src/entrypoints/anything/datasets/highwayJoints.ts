@@ -1,4 +1,4 @@
-import highwayJoints from "../../../../datasets/N06-23_Joint.geojson.json";
+import highwayJoints from "../../../../resources/N06-23_Joint.geojson.json";
 
 const jointTypes: { [key: string]: string } = {
   1: "一般インターチェンジ",

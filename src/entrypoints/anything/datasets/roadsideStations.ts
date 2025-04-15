@@ -1,4 +1,4 @@
-import roadsideStations from "../../../../datasets/roadside_station.csv";
+import roadsideStations from "../../../../resources/roadside_station.csv";
 
 export const data = roadsideStations.map((row, ix) => ({
   id: ix,

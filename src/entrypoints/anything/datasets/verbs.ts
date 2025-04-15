@@ -1,4 +1,4 @@
-import verbs from "../../../../datasets/verbs?raw";
+import verbs from "../../../../resources/verbs?raw";
 import { formatUnidic } from "../../../utils/formatUnidic";
 
 export const data = formatUnidic(verbs);
