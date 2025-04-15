@@ -9,6 +9,8 @@ const App = () => {
 
   const openFile = useCallback(async (files: FileList | null) => {
     if (files && files.length > 0) {
+      setProcessedImages([]);
+
       const url = await readFileAsDataUrl(files[0]);
 
       const rImg = await applyFilter(url, (arr) => {
