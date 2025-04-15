@@ -29,7 +29,7 @@ export const datasets: { [key: string]: DatasetMeta } = {
   yomigana: {
     import: () => import("./yomigana.ts"),
     url: "https://clrd.ninjal.ac.jp/unidic/",
-    label: "しんらばんしょう（ふりがな）",
+    label: "しんらばんしょう（よみがな）",
     license: "現代書き言葉 UniDic (C) 国立国語研究所 / 修正 BSD ライセンス",
   },
   propers: {
