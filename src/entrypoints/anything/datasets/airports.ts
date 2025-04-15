@@ -1,4 +1,4 @@
-import airports from "../../datasets/airport_japan.csv";
+import airports from "../../../../datasets/airport_japan.csv";
 
 export const data = airports.map((row, ix) => {
   const iata = row["ID"] || "なし";

@@ -1,4 +1,4 @@
-import type { Dataset } from "../datasets";
+import type { Dataset } from "../entrypoints/anything/datasets";
 
 export const formatUnidic = (data: string): Dataset => (
   data.split("\n").filter(line => line.length > 0).map((line, ix) => {

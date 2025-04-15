@@ -1,4 +1,4 @@
-import adminiBoundaries from "../../datasets/AdminiBoundary_CD.csv";
+import adminiBoundaries from "../../../../datasets/AdminiBoundary_CD.csv";
 
 export const adminiBoundaryById = Object.fromEntries(
   adminiBoundaries.map(row => [

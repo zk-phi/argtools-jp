@@ -1,6 +1,6 @@
 import { render, } from "preact";
 import { useState, useCallback, useEffect, useMemo } from "preact/hooks";
-import { datasets, datasetKeys, getDataset, type Dataset } from "../../datasets";
+import { datasets, datasetKeys, getDataset, type Dataset } from "./datasets";
 import { useDebounce } from "../../utils/useDebounce";
 import { gensym } from "../../utils/gensym";
 

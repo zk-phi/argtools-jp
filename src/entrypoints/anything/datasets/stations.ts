@@ -1,4 +1,4 @@
-import stations from "../../datasets/N02-23_Station.geojson.json";
+import stations from "../../../../datasets/N02-23_Station.geojson.json";
 
 export const data = stations.features.map((row, ix) => ({
   id: ix,
