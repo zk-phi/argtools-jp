@@ -167,11 +167,11 @@ const App = () => {
               ※ 最初の 300 件を表示しています
             </p>
           )}
-          <table style={{ borderCollapse: "collapse" }}>
+          <table>
             <tbody>
               {filteredDataset.slice(0, 300).map((row, ix) => (
-                <tr key={row.id} style={{ background: ix % 2 ? "#00000010" : "transparent" }}>
-                  <td style={{ borderRight: "1px dotted" }}>{row.key}</td>
+                <tr key={row.id}>
+                  <td>{row.key}</td>
                   <td>{row.value}</td>
                 </tr>
               ))}
