@@ -14,7 +14,8 @@
     "@preact/signals": "^2.0.3",
     "exifreader": "^4.28.1",
     "file-type": "^20.4.1",
-    "preact": "^10.26.5"
+    "preact": "^10.26.5",
+    "punycode": "^2.3.1"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",

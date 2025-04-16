@@ -37,7 +37,7 @@ const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
   }
 
   effect(() => {
-    updateResult(id, { type: "text", value: alterText(src.value, column.value) });
+    updateResult(id, textData(alterText(src.value, column.value)));
   });
 
   return {

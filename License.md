@@ -1,8 +1,9 @@
 # 公開物に含まれる OSS
 
-- Preact (C) Jason Miller / MIT License
-- file-type (C) Sindre Sorhus / MIT License
 - ExifReader (C) Mattias Wallander / MPL License
+- file-type (C) Sindre Sorhus / MIT License
+- Preact (C) Jason Miller / MIT License
+- punycode (C) Mathias Bynens / MIT License
 - Tiny.css (C) Muhammed Ihsan / MIT License
 
 # このツールのライセンス

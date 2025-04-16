@@ -17,7 +17,6 @@ export default defineConfig({
         anything: "src/entrypoints/anything/index.html",
         drwatson: "src/entrypoints/drwatson/index.html",
         tenji: "src/entrypoints/code/tenji/index.html",
-        metaextract: "src/entrypoints/image/metaextract/index.html",
       },
     },
   },

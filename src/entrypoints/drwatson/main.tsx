@@ -5,7 +5,7 @@ import { gensym } from ".././../utils/gensym";
 import { analyzers, analyzerCategories } from "./analyzers";
 import { importers } from "./importers";
 import { DataViewer } from "./DataViewer";
-import { Data } from "./datatypes";
+import type { Data } from "./datatypes";
 
 /* Encapsulate local state of analyzer modules in a render function as signals,  */
 /* instead of storing [state, Component] in the global stack, */
@@ -105,10 +105,12 @@ const App = () => {
           <summary>実装されている変換器・解析器</summary>
           {analyzerCategories.map(category => (
             <div key={category.category}>
-              <div><b>{category.category}</b></div>
-              <small style={{ marginLeft: "16px" }}>
-                {category.analyzers.map(analyzer => analyzer.label).join("、")}
-              </small>
+              <b>{category.category}</b>
+              <div style={{ marginLeft: "16px" }}>
+                <small>
+                  {category.analyzers.map(analyzer => analyzer.label).join("、")}
+                </small>
+              </div>
             </div>
           ))}
         </details>
@@ -163,16 +165,22 @@ const App = () => {
         <section>
           <DataViewer data={stack.value[0].result} onInspect={pushInspectionFrame} />
           <h3>次にできそうなこと</h3>
-          <ul>
-            {suggestions.value.map(({ reason, module }) => (
-              <li key={module.label}>
-                {reason} →{" "}
-                <button type="button" onClick={() => pushAnalyzerFrame(module)}>
-                  {module.label}
-                </button>
-              </li>
-            ))}
-          </ul>
+          <table>
+            <tbody>
+              {suggestions.value.map(({ reason, module }) => (
+                <tr key={module.label}>
+                  <td style={{ textAlign: "right" }}>
+                    {reason} →
+                  </td>
+                  <td>
+                    <button type="button" onClick={() => pushAnalyzerFrame(module)}>
+                      {module.label}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </section>
       ) : (
         "Waiting ..."

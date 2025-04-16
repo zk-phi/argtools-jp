@@ -3,8 +3,8 @@ import type { AnalyzerModule } from "../../main";
 
 const youtubeId = "[A-z0-9_-]{10,12}";
 const delimitedYoutubeId = `([^A-z0-9_-]|^)${youtubeId}([^A-z0-9_-]|$)`;
-const youtubeIdTester = new RegExp(delimitedYoutubeId);
-const youtubeIdMatcher = new RegExp(delimitedYoutubeId, "g");
+const youtubeIdTester = new RegExp(delimitedYoutubeId, "m");
+const youtubeIdMatcher = new RegExp(delimitedYoutubeId, "mg");
 const youtubeIdTrimmer = new RegExp(youtubeId);
 
 const detect = (data: Data) => {
@@ -17,7 +17,7 @@ const detect = (data: Data) => {
 const instantiate = (_id: number, src: Data) => {
   const matches = src.type === "text" ? src.value.match(youtubeIdMatcher) : null;
   const ids = matches?.map(match => {
-    const trimmed = match.match(youtubeIdTrimmer)!
+    const trimmed = match.match(youtubeIdTrimmer)!;
     return trimmed[0];
   });
   const urls = ids?.map(id => `https://youtube.com/watch?v=${id}`);

@@ -1,4 +1,4 @@
-import { keyValueData, type Data } from "../../datatypes";
+import { keyValueData, binaryData, textData, type Data } from "../../datatypes";
 import type { AnalyzerModule, ResultReporter } from "../../main";
 
 const detect = (data: Data) => {
@@ -9,11 +9,11 @@ const detect = (data: Data) => {
 };
 
 const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
+  if (src.type !== "binary" || !src.value.mime.startsWith("image")) {
+    return { result: textData("UNEXPECTED: not an image.") };
+  };
+
   (async () => {
-    if (src.type !== "binary" || !src.value.mime.startsWith("image")) {
-      updateResult(id, { type: "text", value: "ERROR: unexpedted data type." });
-      return;
-    };
     const { applyFilter } = await import("../../../../utils/image.ts");
     const blob = URL.createObjectURL(new Blob([src.value.array], { type: src.value.mime }));
     const rImg = await applyFilter(blob, (arr) => {
@@ -50,26 +50,11 @@ const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
       }
     });
     const data = keyValueData([
-      ["R 成分のみ抽出", {
-        type: "binary",
-        value: { array: new Uint8Array(await rImg.arrayBuffer()), mime: rImg.type },
-      }],
-      ["G 成分のみ抽出", {
-        type: "binary",
-        value: { array: new Uint8Array(await gImg.arrayBuffer()), mime: gImg.type },
-      }],
-      ["B 成分のみ抽出", {
-        type: "binary",
-        value: { array: new Uint8Array(await bImg.arrayBuffer()), mime: bImg.type },
-      }],
-      ["透明なピクセルを抽出", {
-        type: "binary",
-        value: { array: new Uint8Array(await aImg.arrayBuffer()), mime: aImg.type },
-      }],
-      ["最下位ビットのみ抽出", {
-        type: "binary",
-        value: { array: new Uint8Array(await lsbImg.arrayBuffer()), mime: lsbImg.type },
-      }],
+      ["R 成分のみ抽出", binaryData(new Uint8Array(await rImg.arrayBuffer()), rImg.type)],
+      ["G 成分のみ抽出", binaryData(new Uint8Array(await gImg.arrayBuffer()), gImg.type )],
+      ["B 成分のみ抽出", binaryData(new Uint8Array(await bImg.arrayBuffer()), bImg.type )],
+      ["透明ピクセルを抽出", binaryData(new Uint8Array(await aImg.arrayBuffer()), aImg.type )],
+      ["最下位ビットを抽出", binaryData(new Uint8Array(await lsbImg.arrayBuffer()), lsbImg.type )],
     ]);
     updateResult(id, data);
   })();
@@ -78,7 +63,7 @@ const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
 };
 
 export const steganoAnalyzer: AnalyzerModule = {
-  label: "画像ステガノグラフィ検査",
+  label: "ステガノグラフィ検査",
   detect,
   instantiate,
 };
