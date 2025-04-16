@@ -105,6 +105,10 @@ const App = () => {
   if (stack.value.length === 0) {
     return (
       <section>
+        <details>
+          <summary>実装されている変換器・解析器</summary>
+          {analyzers.map(analyzer => analyzer.label).join("、")}
+        </details>
         <hr />
         <h3>解析対象を選ぶ</h3>
         <ul>

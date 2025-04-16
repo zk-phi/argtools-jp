@@ -24,7 +24,8 @@ const instantiate = (_id: number, src: TargetData) => {
   const component = () => (
     <section>
       <hr />
-      <h3>YouTube 動画の ID かも？</h3>
+      <h3>YouTube 動画の ID 検出</h3>
+      <p>検出された ID のリストです（実際に動画が存在するとは限りません）</p>
       <ul>
         {urls.map(url => (
           <li key={url}>
@@ -39,7 +40,7 @@ const instantiate = (_id: number, src: TargetData) => {
 };
 
 export const youtubeAnalyzer: AnalyzerModule = {
-  label: "YouTube 動画の ID かも？",
+  label: "YouTube 動画の ID 検出",
   detect,
   instantiate,
 };
