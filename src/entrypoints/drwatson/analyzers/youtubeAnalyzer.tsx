@@ -38,7 +38,7 @@ const instantiate = (_id: number, src: TargetData) => {
 };
 
 export const youtubeAnalyzer: AnalyzerModule = {
-  label: "YouTube 動画の ID 検出",
+  label: "YouTube の動画 ID っぽい文字列",
   detect,
   instantiate,
 };

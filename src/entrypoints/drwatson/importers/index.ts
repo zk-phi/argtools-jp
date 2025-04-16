@@ -1,8 +1,8 @@
-import { fileImporter } from "./fileImporter";
 import { textImporter } from "./textImporter";
+import { fileImporter } from "./fileImporter";
 import type { ImporterModule } from "../main";
 
 export const importers: ImporterModule[] = [
-  fileImporter,
   textImporter,
+  fileImporter,
 ];

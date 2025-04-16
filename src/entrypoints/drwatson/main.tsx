@@ -2,7 +2,7 @@ import { render, type FunctionComponent } from "preact";
 import { useCallback, } from "preact/hooks";
 import { useSignal, useComputed } from "@preact/signals";
 import { gensym } from ".././../utils/gensym";
-import { analyzers } from "./analyzers";
+import { analyzers, analyzerCategories } from "./analyzers";
 import { importers } from "./importers";
 import { DataViewer } from "./DataViewer";
 
@@ -115,7 +115,14 @@ const App = () => {
       <section>
         <details>
           <summary>実装されている変換器・解析器</summary>
-          {analyzers.map(analyzer => analyzer.label).join("、")}
+          {analyzerCategories.map(category => (
+            <div key={category.category}>
+              <div><b>{category.category}</b></div>
+              <small style={{ marginLeft: "16px" }}>
+                {category.analyzers.map(analyzer => analyzer.label).join("、")}
+              </small>
+            </div>
+          ))}
         </details>
       </section>
 
@@ -123,15 +130,17 @@ const App = () => {
         <section>
           <hr />
           <h3>解析対象を入力</h3>
-          <ul>
-            {importers.map(module => (
-              <li key={module.label}>
-                <button type="button" onClick={() => pushImporterFrame(module)}>
-                  {module.label}
-                </button>
-              </li>
-            ))}
-          </ul>
+          {importers.map(module => (
+            <>
+              <button
+                  key={module.label}
+                  type="button"
+                  onClick={() => pushImporterFrame(module)}>
+                {module.label}
+              </button>
+              {"　"}
+            </>
+          ))}
         </section>
       ) : (
         <section>
@@ -142,7 +151,7 @@ const App = () => {
       )}
 
       {stack.value.slice(1).reverse().map((frame, ix) => frame.result && (
-        <section>
+        <section key={frame.id}>
           <hr />
           <h3>{frame.label}</h3>
           <DataViewer data={frame.result} />

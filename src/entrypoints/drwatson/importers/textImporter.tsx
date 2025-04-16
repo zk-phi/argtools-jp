@@ -11,14 +11,12 @@ const instantiate = (id: number, updateResult: ResultReporter) => {
   };
 
   const component = () => (
-    <>
-      <textarea
-          value={input.value}
-          rows={20}
-          cols={50}
-          onInput={e => onInput(e.currentTarget.value)}
-      />
-    </>
+    <textarea
+        value={input.value}
+        rows={20}
+        cols={50}
+        onInput={e => onInput(e.currentTarget.value)}
+    />
   );
 
   const initialResult: TextData = { type: "text", value: "" };
