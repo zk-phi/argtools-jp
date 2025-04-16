@@ -3,7 +3,7 @@ import type { TargetData, TableData, AnalyzerModule, ResultReporter } from "../m
 
 const detect = (data: TargetData) => {
   if (data.type === "binary" && data.value.mime.startsWith("image")) {
-    return "画像に埋め込まれた見えない透かしデータを可視化";
+    return "画像に埋め込まれた電子透かしを可視化";
   }
   return null;
 };
