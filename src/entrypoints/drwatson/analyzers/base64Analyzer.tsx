@@ -9,13 +9,13 @@ import type {
 } from "../main";
 
 const base64Body = "([0-9a-zA-Z+/]{4})+(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?";
-const delimitedBase64Body = "([^0-9a-zA-Z+\/]|^)" + base64Body + "([^0-9a-zA-Z+\/]|$)";
+const delimitedBase64Body = `([^0-9a-zA-Z+\/]|^)${base64Body}([^0-9a-zA-Z+\/]|$)`;
 const base64Tester = new RegExp(delimitedBase64Body, "m");
 const base64Matcher = new RegExp(delimitedBase64Body, "mg");
 const base64Trimmer = new RegExp(base64Body);
 
 const detect = (data: TargetData) => {
-  if (data.type == "text" && data.value.match(base64Tester)) {
+  if (data.type === "text" && data.value.match(base64Tester)) {
     return "A〜Z, a〜z, 0〜9, +, /, = が連続する区間があり、その長さが４の倍数";
   }
   return null;

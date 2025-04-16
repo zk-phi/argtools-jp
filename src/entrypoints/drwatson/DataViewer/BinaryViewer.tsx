@@ -1,12 +1,12 @@
 import { useMemo } from "preact/hooks";
-import { ViewContainer } from "./ViewContainer";
+import { ViewerContainer } from "./ViewerContainer";
 import type { BinaryBody } from "../main";
 
 const byteToAscii = (n: number) => (
   n >= 33 && n <= 126 ? String.fromCharCode(n) : "."
 );
 
-const RawBinaryView = ({ value }: { value: BinaryBody }) => {
+const RawBinaryViewer = ({ value }: { value: BinaryBody }) => {
   const hexString = useMemo(() => {
     const fullLines = Math.ceil(value.array.length / 16);
     const lines = Math.min(fullLines, 100);
@@ -25,70 +25,70 @@ const RawBinaryView = ({ value }: { value: BinaryBody }) => {
   }, [value]);
 
   return (
-    <ViewContainer caption={`不明なバイナリ（${value.array.length}バイト）`}>
+    <ViewerContainer caption={`不明なバイナリ（${value.array.length}バイト）`}>
       <pre style={{ maxHeight: 300, overflow: "auto" }}>{hexString}</pre>
-    </ViewContainer>
+    </ViewerContainer>
   );
 };
 
-const ImageView = ({ value }: { value: BinaryBody }) => {
+const ImageViewer = ({ value }: { value: BinaryBody }) => {
   const url = useMemo(() => {
     const blob = new Blob([value.array], { type: value.mime });
     return URL.createObjectURL(blob);
   }, [value]);
 
   return (
-    <ViewContainer caption={`画像ファイル（${value.array.length}バイト）`}>
+    <ViewerContainer caption={`画像ファイル（${value.array.length}バイト）`}>
       <img src={url} style={{ maxHeight: 300 }} />
-    </ViewContainer>
+    </ViewerContainer>
   );
 }
 
-const VideoView = ({ value }: { value: BinaryBody }) => {
+const VideoViewer = ({ value }: { value: BinaryBody }) => {
   const url = useMemo(() => {
     const blob = new Blob([value.array], { type: value.mime });
     return URL.createObjectURL(blob);
   }, [value]);
 
   return (
-    <ViewContainer caption={`動画ファイル（${value.array.length}バイト）`}>
+    <ViewerContainer caption={`動画ファイル（${value.array.length}バイト）`}>
       <video controls={true} style={{ maxHeight: 300 }}>
         <source src={url} type={value.mime} />
       </video>
-    </ViewContainer>
+    </ViewerContainer>
   );
 }
 
-const AudioView = ({ value }: { value: BinaryBody }) => {
+const AudioViewer = ({ value }: { value: BinaryBody }) => {
   const url = useMemo(() => {
     const blob = new Blob([value.array], { type: value.mime });
     return URL.createObjectURL(blob);
   }, [value]);
 
   return (
-    <ViewContainer caption={`音声ファイル（${value.array.length}バイト）`}>
+    <ViewerContainer caption={`音声ファイル（${value.array.length}バイト）`}>
       <audio controls={true} src={url} />
-    </ViewContainer>
+    </ViewerContainer>
   );
 }
 
-export const BinaryView = ({ value }: { value: BinaryBody }) => {
+export const BinaryViewer = ({ value }: { value: BinaryBody }) => {
   if (value.mime.startsWith("image")) {
     return (
-      <ImageView value={value} />
+      <ImageViewer value={value} />
     );
   }
   if (value.mime.startsWith("video")) {
     return (
-      <VideoView value={value} />
+      <VideoViewer value={value} />
     );
   }
   if (value.mime.startsWith("audio")) {
     return (
-      <AudioView value={value} />
+      <AudioViewer value={value} />
     );
   }
   return (
-    <RawBinaryView value={value} />
+    <RawBinaryViewer value={value} />
   );
 };

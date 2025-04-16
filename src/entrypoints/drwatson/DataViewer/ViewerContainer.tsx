@@ -1,6 +1,6 @@
-import { ComponentChildren } from "preact";
+import type { ComponentChildren } from "preact";
 
-export const ViewContainer = ({ children, caption }: {
+export const ViewerContainer = ({ children, caption }: {
   children: ComponentChildren,
   caption: string,
 }) => (

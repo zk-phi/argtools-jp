@@ -1,18 +1,18 @@
-import { ViewContainer } from "./ViewContainer";
-import { DataView } from ".";
-import type { TableData, TargetData } from "../main";
+import { ViewerContainer } from "./ViewerContainer";
+import { DataViewer } from ".";
+import type { TargetData } from "../main";
 
-export const TableView = ({ value, onInspect }: {
+export const TableViewer = ({ value, onInspect }: {
   value: [string, TargetData][],
   onInspect?: (data: TargetData) => void,
 }) => (
-  <ViewContainer caption={`表（${value.length}項目）`}>
+  <ViewerContainer caption={`表（${value.length}項目）`}>
     <table>
       <tbody>
         {value.map(([key, data]) => (
           <tr key={key}>
             <td>{key}</td>
-            <td><DataView data={data} /></td>
+            <td><DataViewer data={data} /></td>
             {onInspect && (
               <td>
                 <button type="button" onClick={() => onInspect(data)}>
@@ -24,5 +24,5 @@ export const TableView = ({ value, onInspect }: {
         ))}
       </tbody>
     </table>
-  </ViewContainer>
+  </ViewerContainer>
 );

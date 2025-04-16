@@ -4,7 +4,7 @@ import { useSignal, useComputed } from "@preact/signals";
 import { gensym } from ".././../utils/gensym";
 import { analyzers } from "./analyzers";
 import { importers } from "./importers";
-import { DataView } from "./DataView";
+import { DataViewer } from "./DataViewer";
 
 export type BinaryBody = { array: Uint8Array, mime: string };
 export type TextData = { type: "text", value: string };
@@ -88,7 +88,7 @@ const App = () => {
       { id, label: "この項目を精査", result: data },
       ...stack.peek(),
     ];
-  }, [stack, updateResult]);
+  }, [stack]);
 
   const wayback = useCallback((ix: number) => {
     const currentStack = stack.peek();
@@ -145,7 +145,7 @@ const App = () => {
         <section>
           <hr />
           <h3>{frame.label}</h3>
-          <DataView data={frame.result} />
+          <DataViewer data={frame.result} />
           <div>
             <button type="button" onClick={() => wayback(stack.value.length - 1 - ix)}>
               ここまで戻る
@@ -158,13 +158,13 @@ const App = () => {
         <section>
           <hr />
           <h3>{stack.value[0].label}</h3>
-          {stack.value[0].component && stack.value[0].component({})}
+          {stack.value[0]?.component?.({})}
         </section>
       )}
 
       {stack.value[0]?.result ? (
         <section>
-          <DataView data={stack.value[0].result} onInspect={pushInspectionFrame} />
+          <DataViewer data={stack.value[0].result} onInspect={pushInspectionFrame} />
           <h3>次にできそうなこと</h3>
           <ul>
             {suggestions.value.map(({ reason, module }) => (
