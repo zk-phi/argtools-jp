@@ -5,11 +5,9 @@ const instantiate = (id: number, updateResult: ResultReporter) => {
   const openFile = async (files: FileList | null) => {
     if (files && files.length > 0) {
       const buffer = await readFileAsBuffer(files[0]);
+      const array = new Uint8Array(buffer);
       const mime = files[0].type;
-      const result: BinaryData = {
-        type: "binary",
-        value: { label: files[0].name, buffer, mime },
-      };
+      const result: BinaryData = { type: "binary", value: { array, mime } };
       updateResult(id, result);
     }
   };

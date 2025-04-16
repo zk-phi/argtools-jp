@@ -14,7 +14,7 @@ const getMatches = (data: TargetData): string[] | null => {
   if (data.type !== "text") {
     return null;
   }
-  const matches = data.value.match(base64Matcher);
+  const matches = data.value.match(base64Matcher)?.filter(match => match.length > 0);
   if (!matches || matches.length === 0) {
     return null;
   }
@@ -33,27 +33,22 @@ const instantiate = (id: number, src: TargetData, updateResult: ResultReporter) 
     const matches = getMatches(src);
     if (!matches) return;
     const strings = matches.map(match => atob(match));
-    const bodies = await Promise.all(
+    const datum = await Promise.all(
       strings.map(async (string, ix) => {
-        const buffer = Uint8Array.from(string, s => s.charCodeAt(0)).buffer;
-        const fileType = await fileTypeFromBuffer(buffer);
-        const mime = fileType ? fileType.mime : null;
-        return {
-          label: `Base64 デコードしたデータ (${ix + 1})`,
-          buffer,
-          mime,
-        };
+        const array = Uint8Array.from(string, s => s.charCodeAt(0));
+        const fileType = await fileTypeFromBuffer(array);
+        const mime = fileType ? fileType.mime : "";
+        const data: [string, BinaryData] = [
+          `Base64 で読み取れた部分 ${ix + 1}`,
+          { type: "binary", value: { array, mime } },
+        ];
+        return data;
       })
     );
-    if (bodies.length === 1) {
-      const result: BinaryData = { type: "binary", value: bodies[0] };
-      updateResult(id, result);
+    if (datum.length === 1) {
+      updateResult(id, datum[0][1]);
     } else {
-      const datum: BinaryData[] = bodies.map(body => ({ type: "binary", value: body }));
-      const result: TableData = {
-        type: "table",
-        value: datum.map((data, ix) => [ix.toString(10), data]),
-      };
+      const result: TableData = { type: "table", value: datum };
       updateResult(id, result);
     }
   })();

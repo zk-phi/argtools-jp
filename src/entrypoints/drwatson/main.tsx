@@ -6,7 +6,7 @@ import { analyzers } from "./analyzers";
 import { importers } from "./importers";
 import { Result } from "./Result";
 
-export type BinaryBody = { buffer: ArrayBuffer, label: string, mime: string | null };
+export type BinaryBody = { array: Uint8Array, mime: string };
 export type TextData = { type: "text", value: string };
 export type BinaryData = { type: "binary", value: BinaryBody };
 export type IntegerData = { type: "integer", value: number };
