@@ -1,13 +1,15 @@
 import { signal } from "@preact/signals";
+import { debouncer } from "../../../utils/debouncer";
 import type { TextData, ImporterModule, ResultReporter } from "../main";
 
 const instantiate = (id: number, updateResult: ResultReporter) => {
   const input = signal<string>("");
+  const withDebounce = debouncer(100);
 
   const onInput = (value: string) => {
     const result: TextData = { type: "text", value };
     input.value = value;
-    updateResult(id, result);
+    withDebounce(() => updateResult(id, result));
   };
 
   const component = () => (
