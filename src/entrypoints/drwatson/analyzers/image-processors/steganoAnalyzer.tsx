@@ -63,7 +63,7 @@ const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
 };
 
 export const steganoAnalyzer: AnalyzerModule = {
-  label: "ステガノグラフィ検査",
+  label: "画像ステガノグラフィ検査",
   detect,
   instantiate,
 };
