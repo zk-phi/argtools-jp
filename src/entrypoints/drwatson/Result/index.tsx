@@ -14,8 +14,10 @@ export const Result = ({ label, data, onWayback }: {
         <h3>{label}</h3>
       </>
     )}
-    {data.type === "text" && <TextView value={data.value} />}
-    {data.type === "binary" && <BinaryView value={data.value} />}
+    <div>
+      {data.type === "text" && <TextView value={data.value} />}
+      {data.type === "binary" && <BinaryView value={data.value} />}
+    </div>
     {onWayback && (
       <div>
         <button type="button" onClick={onWayback}>ここまで戻る</button>

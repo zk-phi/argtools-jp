@@ -60,7 +60,7 @@ const App = () => {
     }
   }, [stack]);
 
-  const pushAnalyzerModule = useCallback((module: AnalyzerModule) => {
+  const pushAnalyzerFrame = useCallback((module: AnalyzerModule) => {
     const currentStack = stack.peek();
     if (currentStack[0]?.result) {
       const id = gensym();
@@ -76,7 +76,7 @@ const App = () => {
     }
   }, [stack, updateResult]);
 
-  const pushImporterModule = useCallback((module: ImporterModule) => {
+  const pushImporterFrame = useCallback((module: ImporterModule) => {
     const id = gensym();
     const { initialResult, component } = module.instantiate(id, updateResult);
     stack.value = [{ id, component, label: module.label, result: initialResult ?? null }];
@@ -114,7 +114,7 @@ const App = () => {
         <ul>
           {importers.map(module => (
             <li key={module.label}>
-              <button type="button" onClick={() => pushImporterModule(module)}>
+              <button type="button" onClick={() => pushImporterFrame(module)}>
                 {module.label}
               </button>
             </li>
@@ -146,7 +146,7 @@ const App = () => {
               {suggestions.value.map(({ reason, module }) => (
                 <li key={module.label}>
                   {reason} →{" "}
-                  <button type="button" onClick={() => pushAnalyzerModule(module)}>
+                  <button type="button" onClick={() => pushAnalyzerFrame(module)}>
                     {module.label}
                   </button>
                 </li>

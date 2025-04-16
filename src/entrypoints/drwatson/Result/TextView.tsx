@@ -1,8 +1,7 @@
-
+import { ViewContainer } from "./ViewContainer";
 
 export const TextView = ({ value }: { value: string }) => (
-  <div style={{ border: "1px dashed" }}>
+  <ViewContainer caption={`文字列（${value.length}文字）`}>
     <pre>{value}</pre>
-    <div><small>Type：文字列（{value.length}文字）</small></div>
-  </div>
+  </ViewContainer>
 );

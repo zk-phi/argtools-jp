@@ -1,4 +1,5 @@
 import { useMemo } from "preact/hooks";
+import { ViewContainer } from "./ViewContainer";
 import type { BinaryBody } from "../main";
 
 const byteToAscii = (n: number) => (
@@ -24,10 +25,9 @@ const RawBinaryView = ({ value }: { value: BinaryBody }) => {
   }, [value]);
 
   return (
-    <div style={{ border: "1px dashed" }}>
-      <pre style={{ maxHeight: 300, overflow: "scroll" }}>{hexString}</pre>
-      <div><small>Type：不明なバイナリ（{value.array.length}バイト）</small></div>
-    </div>
+    <ViewContainer caption={`不明なバイナリ（${value.array.length}バイト）`}>
+      <pre>{hexString}</pre>
+    </ViewContainer>
   );
 };
 
@@ -38,10 +38,9 @@ const ImageView = ({ value }: { value: BinaryBody }) => {
   }, [value]);
 
   return (
-    <div style={{ border: "1px dashed" }}>
+    <ViewContainer caption={`画像ファイル（${value.array.length}バイト）`}>
       <img src={url} style={{ maxHeight: 300 }} />
-      <div><small>Type：画像ファイル（{value.array.length}バイト）</small></div>
-    </div>
+    </ViewContainer>
   );
 }
 
@@ -52,12 +51,11 @@ const VideoView = ({ value }: { value: BinaryBody }) => {
   }, [value]);
 
   return (
-    <div style={{ border: "1px dashed" }}>
+    <ViewContainer caption={`動画ファイル（${value.array.length}バイト）`}>
       <video controls={true} style={{ maxHeight: 300 }}>
         <source src={url} type={value.mime} />
       </video>
-      <div><small>Type：動画ファイル（{value.array.length}バイト）</small></div>
-    </div>
+    </ViewContainer>
   );
 }
 
@@ -68,10 +66,9 @@ const AudioView = ({ value }: { value: BinaryBody }) => {
   }, [value]);
 
   return (
-    <div style={{ border: "1px dashed" }}>
+    <ViewContainer caption={`音声ファイル（${value.array.length}バイト）`}>
       <audio controls={true} src={url} />
-      <div><small>Type：音声ファイル（{value.array.length}バイト）</small></div>
-    </div>
+    </ViewContainer>
   );
 }
 
