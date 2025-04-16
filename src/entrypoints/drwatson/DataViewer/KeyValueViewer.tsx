@@ -1,10 +1,10 @@
 import { ViewerContainer } from "./ViewerContainer";
 import { DataViewer } from ".";
-import type { TargetData } from "../main";
+import type { Data } from "../datatypes";
 
-export const TableViewer = ({ value, onInspect }: {
-  value: [string, TargetData][],
-  onInspect?: (data: TargetData) => void,
+export const KeyValueViewer = ({ value, onInspect }: {
+  value: [string, Data][],
+  onInspect?: (data: Data) => void,
 }) => (
   <ViewerContainer caption={`表（${value.length}項目）`}>
     <table>

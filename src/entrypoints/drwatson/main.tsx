@@ -5,19 +5,7 @@ import { gensym } from ".././../utils/gensym";
 import { analyzers, analyzerCategories } from "./analyzers";
 import { importers } from "./importers";
 import { DataViewer } from "./DataViewer";
-
-export type BinaryBody = { array: Uint8Array, mime: string };
-export type TextData = { type: "text", value: string };
-export type BinaryData = { type: "binary", value: BinaryBody };
-export type IntegerData = { type: "integer", value: number };
-export type IntegersData = { type: "integers", value: number[] };
-export type FloatsData = { type: "floats", value: number[] };
-export type FloatData = { type: "float", value: number };
-export type TableData = { type: "table", value: [string, TargetData][] };
-
-export type TargetData =
-  TextData | BinaryData | TableData |
-  IntegerData | IntegersData | FloatsData | FloatData;
+import { Data } from "./datatypes";
 
 /* Encapsulate local state of analyzer modules in a render function as signals,  */
 /* instead of storing [state, Component] in the global stack, */
@@ -25,17 +13,17 @@ export type TargetData =
 /* https://zenn.dev/uhyo/articles/existential-capsule */
 type Empty = { [key: string]: never };
 export type ModuleInstance = {
-  result?: TargetData,
+  result?: Data,
   component?: FunctionComponent<Empty>,
 };
 export type StackFrame = {
   id: number,
   component?: FunctionComponent<Empty>,
   label: string,
-  result: TargetData | null,
+  result: Data | null,
 };
 
-export type ResultReporter = (id: number, result: TargetData) => void;
+export type ResultReporter = (id: number, result: Data) => void;
 
 export type ImporterModule = {
   label: string,
@@ -44,8 +32,8 @@ export type ImporterModule = {
 
 export type AnalyzerModule = {
   label: string,
-  detect: (suspicious: TargetData) => string | null,
-  instantiate: (id: number, src: TargetData, updateResult: ResultReporter) => ModuleInstance,
+  detect: (suspicious: Data) => string | null,
+  instantiate: (id: number, src: Data, updateResult: ResultReporter) => ModuleInstance,
 };
 
 /* ---- */
@@ -53,7 +41,7 @@ export type AnalyzerModule = {
 const App = () => {
   const stack = useSignal<StackFrame[]>([]);
 
-  const updateResult = useCallback((id: number, result: TargetData) => {
+  const updateResult = useCallback((id: number, result: Data) => {
     const currentStack = stack.peek();
     if (id === currentStack[0]?.id) {
       stack.value = [{ ...currentStack[0], result }, ...currentStack.slice(1)];
@@ -82,7 +70,7 @@ const App = () => {
     stack.value = [{ id, component, label: module.label, result: result ?? null }];
   }, [stack, updateResult]);
 
-  const pushInspectionFrame = useCallback((data: TargetData) => {
+  const pushInspectionFrame = useCallback((data: Data) => {
     const id = gensym();
     stack.value = [
       { id, label: "この項目を精査", result: data },

@@ -1,8 +1,9 @@
 import { signal, effect } from "@preact/signals";
-import type { TextData, TargetData, AnalyzerModule, ResultReporter } from "../main";
+import { textData, type Data } from "../../datatypes";
+import type { AnalyzerModule, ResultReporter } from "../../main";
 
 const asciiStrMatcher = /^[\x00-\x7F]*$/;
-const detect = (data: TargetData) => {
+const detect = (data: Data) => {
   if (data.type === "text" && data.value.match(asciiStrMatcher) && data.value.length > 30) {
     return "長い ASCII 文字列";
   }
@@ -15,7 +16,7 @@ const alterText = (str: string, cols: number): string => {
   return altered ?? "";
 };
 
-const instantiate = (id: number, src: TargetData, updateResult: ResultReporter) => {
+const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
   const column = signal(5);
 
   const component = () => (
@@ -32,16 +33,17 @@ const instantiate = (id: number, src: TargetData, updateResult: ResultReporter) 
   );
 
   if (src.type !== "text") {
-    const result: TextData = { type: "text", value: "ERROR: unexpedted data type." };
-    return { result, component };
+    return { result: textData("ERROR: unexpedted data type.") };
   }
 
-  const result: TextData = { type: "text", value: alterText(src.value, column.value) };
   effect(() => {
     updateResult(id, { type: "text", value: alterText(src.value, column.value) });
   });
 
-  return { result, component };
+  return {
+    result: textData(alterText(src.value, column.value)),
+    component,
+  };
 };
 
 export const aaAnalyzer: AnalyzerModule = {

@@ -1,7 +1,7 @@
-import { base64Analyzer } from "./base64Analyzer";
-import { aaAnalyzer } from "./aaAnalyzer";
-import { youtubeAnalyzer } from "./youtubeAnalyzer.tsx";
-import { steganoAnalyzer } from "./steganoAnalyzer.tsx";
+import { base64Analyzer } from "./decoders/base64Analyzer";
+import { aaAnalyzer } from "./text-processors/aaAnalyzer";
+import { steganoAnalyzer } from "./image-processors/steganoAnalyzer.tsx";
+import { youtubeAnalyzer } from "./extractors/youtubeAnalyzer.tsx";
 import type { AnalyzerModule } from "../main";
 
 type AnalyzerCategory = { category: string, analyzers: AnalyzerModule[] };

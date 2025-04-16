@@ -1,6 +1,6 @@
 import { useMemo } from "preact/hooks";
 import { ViewerContainer } from "./ViewerContainer";
-import type { BinaryBody } from "../main";
+import type { BinaryBody } from "../datatypes";
 
 const byteToAscii = (n: number) => (
   n >= 33 && n <= 126 ? String.fromCharCode(n) : "."

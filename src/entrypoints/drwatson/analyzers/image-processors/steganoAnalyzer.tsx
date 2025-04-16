@@ -1,19 +1,20 @@
-import type { TargetData, TableData, AnalyzerModule, ResultReporter } from "../main";
+import { keyValueData, type Data } from "../../datatypes";
+import type { AnalyzerModule, ResultReporter } from "../../main";
 
-const detect = (data: TargetData) => {
+const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("image")) {
     return "画像に埋め込まれた電子透かしを可視化";
   }
   return null;
 };
 
-const instantiate = (id: number, src: TargetData, updateResult: ResultReporter) => {
+const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
   (async () => {
     if (src.type !== "binary" || !src.value.mime.startsWith("image")) {
       updateResult(id, { type: "text", value: "ERROR: unexpedted data type." });
       return;
     };
-    const { applyFilter } = await import("../../../utils/image.ts");
+    const { applyFilter } = await import("../../../../utils/image.ts");
     const blob = URL.createObjectURL(new Blob([src.value.array], { type: src.value.mime }));
     const rImg = await applyFilter(blob, (arr) => {
       for (let i = 0; i < arr.length; i += 4) {
@@ -48,31 +49,28 @@ const instantiate = (id: number, src: TargetData, updateResult: ResultReporter) 
         arr[i] = (arr[i] & 1) * 255;
       }
     });
-    const data: TableData = {
-      type: "table",
-      value: [
-        ["R 成分のみ抽出", {
-          type: "binary",
-          value: { array: new Uint8Array(await rImg.arrayBuffer()), mime: rImg.type },
-        }],
-        ["G 成分のみ抽出", {
-          type: "binary",
-          value: { array: new Uint8Array(await gImg.arrayBuffer()), mime: gImg.type },
-        }],
-        ["B 成分のみ抽出", {
-          type: "binary",
-          value: { array: new Uint8Array(await bImg.arrayBuffer()), mime: bImg.type },
-        }],
-        ["透明なピクセルを抽出", {
-          type: "binary",
-          value: { array: new Uint8Array(await aImg.arrayBuffer()), mime: aImg.type },
-        }],
-        ["最下位ビットのみ抽出", {
-          type: "binary",
-          value: { array: new Uint8Array(await lsbImg.arrayBuffer()), mime: lsbImg.type },
-        }],
-      ],
-    };
+    const data = keyValueData([
+      ["R 成分のみ抽出", {
+        type: "binary",
+        value: { array: new Uint8Array(await rImg.arrayBuffer()), mime: rImg.type },
+      }],
+      ["G 成分のみ抽出", {
+        type: "binary",
+        value: { array: new Uint8Array(await gImg.arrayBuffer()), mime: gImg.type },
+      }],
+      ["B 成分のみ抽出", {
+        type: "binary",
+        value: { array: new Uint8Array(await bImg.arrayBuffer()), mime: bImg.type },
+      }],
+      ["透明なピクセルを抽出", {
+        type: "binary",
+        value: { array: new Uint8Array(await aImg.arrayBuffer()), mime: aImg.type },
+      }],
+      ["最下位ビットのみ抽出", {
+        type: "binary",
+        value: { array: new Uint8Array(await lsbImg.arrayBuffer()), mime: lsbImg.type },
+      }],
+    ]);
     updateResult(id, data);
   })();
 

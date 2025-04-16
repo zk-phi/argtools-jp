@@ -1,17 +1,17 @@
 import { TextViewer } from "./TextViewer";
 import { BinaryViewer } from "./BinaryViewer";
-import { TableViewer } from "./TableViewer";
-import type { TargetData } from "../main";
+import { KeyValueViewer } from "./KeyValueViewer";
+import type { Data } from "../datatypes";
 
 export const DataViewer = ({ data, onInspect }: {
-  data: TargetData,
-  onInspect?: (data: TargetData) => void,
+  data: Data,
+  onInspect?: (data: Data) => void,
 }) => data.type === "text" ? (
   <TextViewer value={data.value} />
 ) : data.type === "binary" ? (
   <BinaryViewer value={data.value} />
-) : data.type === "table" ? (
-  <TableViewer value={data.value} onInspect={onInspect} />
+) : data.type === "keyvalue" ? (
+  <KeyValueViewer value={data.value} onInspect={onInspect} />
 ) : (
   null
 );
