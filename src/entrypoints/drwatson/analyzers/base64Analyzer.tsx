@@ -1,20 +1,20 @@
-
 import { fileTypeFromBuffer } from "file-type";
 import type {
-  BinariesData,
   BinaryData,
+  TableData,
   TargetData,
   AnalyzerModule,
   ResultReporter,
 } from "../main";
 
+const base64Matcher =
+  /^([0-9a-zA-Z+\/]{4})*(([0-9a-zA-Z+\/]{2}==)|([0-9a-zA-Z+\/]{3}=))?$/g;
+
 const getMatches = (data: TargetData): string[] | null => {
   if (data.type !== "text") {
     return null;
   }
-  const matches = data.value.match(/[A-z0-9+\/]+={0,2}/g)?.filter(
-    match => match.length % 4 === 0
-  );
+  const matches = data.value.match(base64Matcher);
   if (!matches || matches.length === 0) {
     return null;
   }
@@ -49,17 +49,23 @@ const instantiate = (id: number, src: TargetData, updateResult: ResultReporter) 
       const result: BinaryData = { type: "binary", value: bodies[0] };
       updateResult(id, result);
     } else {
-      const result: BinariesData = { type: "binaries", value: bodies };
+      const datum: BinaryData[] = bodies.map(body => ({ type: "binary", value: body }));
+      const result: TableData = {
+        type: "table",
+        value: datum.map((data, ix) => [ix.toString(10), data]),
+      };
       updateResult(id, result);
     }
   })();
 
-  return () => (
+  const component = () => (
     <section>
       <hr />
       <h3>Base64 としてデコード</h3>
     </section>
   );
+
+  return { component };
 };
 
 export const base64Analyzer: AnalyzerModule = {

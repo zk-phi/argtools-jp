@@ -8,16 +8,15 @@ import { Result } from "./Result";
 
 export type BinaryBody = { buffer: ArrayBuffer, label: string, mime: string | null };
 export type TextData = { type: "text", value: string };
-export type TextsData = { type: "texts", value: string[] };
 export type BinaryData = { type: "binary", value: BinaryBody };
-export type BinariesData = { type: "binaries", value: BinaryBody[] };
 export type IntegerData = { type: "integer", value: number };
 export type IntegersData = { type: "integers", value: number[] };
 export type FloatsData = { type: "floats", value: number[] };
 export type FloatData = { type: "float", value: number };
+export type TableData = { type: "table", value: [string, TargetData][] };
 
 export type TargetData =
-  TextData | TextsData | BinaryData | BinariesData |
+  TextData | BinaryData | TableData |
   IntegerData | IntegersData | FloatsData | FloatData;
 
 /* Encapsulate local state of analyzer modules in a render function as signals,  */
@@ -25,10 +24,13 @@ export type TargetData =
 /* in order to avoid existencial types (that is unsupported in TypeScript). */
 /* https://zenn.dev/uhyo/articles/existential-capsule */
 type Empty = { [key: string]: never };
-export type ModuleInstance = FunctionComponent<Empty>;
+export type ModuleInstance = {
+  initialResult?: TargetData,
+  component: FunctionComponent<Empty>,
+};
 export type StackFrame = {
   id: number,
-  instance: ModuleInstance,
+  component: FunctionComponent<Empty>,
   label: string,
   result: TargetData | null,
 };
@@ -52,30 +54,37 @@ const App = () => {
   const stack = useSignal<StackFrame[]>([]);
 
   const updateResult = useCallback((id: number, result: TargetData) => {
-    if (id === stack.value[0]?.id) {
-      stack.value = [{ ...stack.value[0], result }, ...stack.value.slice(1)];
+    const currentStack = stack.peek();
+    if (id === currentStack[0]?.id) {
+      stack.value = [{ ...currentStack[0], result }, ...currentStack.slice(1)];
     }
   }, [stack]);
 
   const pushAnalyzerModule = useCallback((module: AnalyzerModule) => {
-    if (stack.value[0]?.result) {
+    const currentStack = stack.peek();
+    if (currentStack[0]?.result) {
       const id = gensym();
-      const instance = module.instantiate(id, stack.value[0]?.result, updateResult);
+      const { initialResult, component } = module.instantiate(
+        id,
+        currentStack[0]?.result,
+        updateResult,
+      );
       stack.value = [
-        { id, instance, label: module.label, result: null },
-        ...stack.value,
+        { id, component, label: module.label, result: initialResult ?? null },
+        ...currentStack,
       ];
     }
   }, [stack, updateResult]);
 
   const pushImporterModule = useCallback((module: ImporterModule) => {
     const id = gensym();
-    const instance = module.instantiate(id, updateResult);
-    stack.value = [{ id, instance, label: module.label, result: null }];
+    const { initialResult, component } = module.instantiate(id, updateResult);
+    stack.value = [{ id, component, label: module.label, result: initialResult ?? null }];
   }, [stack, updateResult]);
 
   const wayback = useCallback((ix: number) => {
-    stack.value = stack.value.slice(ix);
+    const currentStack = stack.peek();
+    stack.value = currentStack.slice(ix);
   }, [stack]);
 
   const suggestions = useComputed(() => {
@@ -98,19 +107,24 @@ const App = () => {
       <section>
         <hr />
         <h3>解析対象を選ぶ</h3>
-        {importers.map(module => (
-          <div key={module.label}>
-            <button type="button" onClick={() => pushImporterModule(module)}>
-              {module.label}
-            </button>
-          </div>
-        ))}
+        <ul>
+          {importers.map(module => (
+            <li key={module.label}>
+              <button type="button" onClick={() => pushImporterModule(module)}>
+                {module.label}
+              </button>
+            </li>
+          ))}
+        </ul>
       </section>
     );
   }
 
   return (
     <>
+      <button type="button" onClick={() => { stack.value = []; }}>
+        最初に戻る
+      </button>
       {stack.value.slice(1).reverse().map((frame, ix) => frame.result && (
         <Result
             label={frame.label}
@@ -118,7 +132,7 @@ const App = () => {
             onWayback={() => wayback(stack.value.length - 1 - ix)}
         />
       ))}
-      {stack.value[0].instance({})}
+      {stack.value[0].component({})}
       {stack.value[0].result && (
         <>
           <Result data={stack.value[0].result} />
@@ -127,7 +141,7 @@ const App = () => {
             <ul>
               {suggestions.value.map(({ reason, module }) => (
                 <li key={module.label}>
-                  {reason} →
+                  {reason} →{" "}
                   <button type="button" onClick={() => pushAnalyzerModule(module)}>
                     {module.label}
                   </button>

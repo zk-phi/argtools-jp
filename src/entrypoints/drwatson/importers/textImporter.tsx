@@ -10,17 +10,21 @@ const instantiate = (id: number, updateResult: ResultReporter) => {
     updateResult(id, result);
   };
 
-  return () => (
+  const component = () => (
     <section>
       <hr />
       <h3>文字列を解読</h3>
-      <input
-          type="text"
-          onInput={e => onInput(e.currentTarget.value)}
+      <textarea
           value={input.value}
+          rows={20}
+          cols={50}
+          onInput={e => onInput(e.currentTarget.value)}
       />
     </section>
   );
+
+  const initialResult: TextData = { type: "text", value: "" };
+  return { initialResult, component };
 };
 
 export const textImporter: ImporterModule = {

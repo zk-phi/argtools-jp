@@ -21,7 +21,8 @@
       "all": true,
       "a11y": {
         "useAltText": "off",
-        "useKeyWithClickEvents": "off"
+        "useKeyWithClickEvents": "off",
+        "useMediaCaption": "off"
       },
       "correctness": {
         "noUndeclaredVariables": "off",
@@ -42,6 +43,7 @@
       },
       "suspicious": {
         "noArrayIndexKey": "warn",
+        "noControlCharactersInRegex": "off",
         "noExplicitAny": "off"
       }
     }
