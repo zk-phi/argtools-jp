@@ -13,6 +13,7 @@
   "dependencies": {
     "@preact/signals": "^2.0.3",
     "exifreader": "^4.28.1",
+    "file-saver": "^2.0.5",
     "file-type": "^20.4.1",
     "preact": "^10.26.5",
     "punycode": "^2.3.1"
@@ -21,6 +22,7 @@
     "@biomejs/biome": "^1.9.4",
     "@preact/preset-vite": "^2.10.1",
     "@rollup/plugin-dsv": "^3.0.5",
+    "@types/file-saver": "^2.0.7",
     "@types/node": "^22.14.1",
     "concurrently": "^9.1.2",
     "typescript": "^5.8.3",

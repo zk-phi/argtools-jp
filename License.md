@@ -1,6 +1,7 @@
 # 公開物に含まれる OSS
 
 - ExifReader (C) Mattias Wallander / MPL License
+- FileSaver.js (C) Eli Grey / MIT License
 - file-type (C) Sindre Sorhus / MIT License
 - Preact (C) Jason Miller / MIT License
 - punycode (C) Mathias Bynens / MIT License

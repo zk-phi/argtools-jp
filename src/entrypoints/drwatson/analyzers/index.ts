@@ -4,7 +4,8 @@ import { punycodeDecoder } from "./decoders/punycodeDecoder";
 import { urlDecoder } from "./decoders/urlDecoder";
 import { pagerDecoder } from "./decoders/pagerDecoder";
 
-import { aaAnalyzer } from "./text-processors/aaAnalyzer";
+import { concatLines } from "./text-processors/concatLines";
+import { alterLines } from "./text-processors/alterLines";
 
 import { steganoAnalyzer } from "./image-processors/steganoAnalyzer";
 import { exifAnalyzer } from "./image-processors/exifAnalyzer";
@@ -45,7 +46,8 @@ export const analyzerCategories: AnalyzerCategory[] = [{
 }, {
   category: "テキスト処理",
   analyzers: [
-    aaAnalyzer,
+    concatLines,
+    alterLines,
   ],
 }, {
   category: "画像処理",
@@ -53,6 +55,9 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     steganoAnalyzer,
     exifAnalyzer,
   ],
+}, {
+  category: "音声処理",
+  analyzers: [],
 }, {
   category: "バイナリ処理",
   analyzers: [

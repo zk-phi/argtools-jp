@@ -46,7 +46,7 @@ const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
   };
 };
 
-export const aaAnalyzer: AnalyzerModule = {
+export const alterLines: AnalyzerModule = {
   label: "○○文字目で改行（もしかして AA かも？）",
   detect,
   instantiate,

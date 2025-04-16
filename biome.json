@@ -22,7 +22,8 @@
       "a11y": {
         "useAltText": "off",
         "useKeyWithClickEvents": "off",
-        "useMediaCaption": "off"
+        "useMediaCaption": "off",
+        "useValidAnchor": "off"
       },
       "correctness": {
         "noUndeclaredVariables": "off",

@@ -36,15 +36,15 @@ export const keyValueData = (value: [string, Data][]): KeyValueData => (
   { type: "keyvalue", id: gensym(), value }
 );
 
-export type TextTableData = { type: "table/text", id: number, value: [string][][] };
-export const textTableData = (value: [string][][]): TextTableData => (
-  { type: "table/text", id: gensym(), value }
-);
+// export type TextTableData = { type: "table/text", id: number, value: [string][][] };
+// export const textTableData = (value: [string][][]): TextTableData => (
+//   { type: "table/text", id: gensym(), value }
+// );
 
-export type NumberTableData = { type: "table/number", id: number, value: [number][][] };
-export const numberTableData = (value: [number][][]): NumberTableData => (
-  { type: "table/number", id: gensym(), value }
-);
+// export type NumberTableData = { type: "table/number", id: number, value: [number][][] };
+// export const numberTableData = (value: [number][][]): NumberTableData => (
+//   { type: "table/number", id: gensym(), value }
+// );
 
 export type MelodyData = { type: "mml", id: number, value: string };
 export const melodyData = (value: string): MelodyData => (
@@ -53,4 +53,6 @@ export const melodyData = (value: string): MelodyData => (
 
 export type Data =
   TextData | BinaryData | IntegerData | IntegersData | FloatsData | FloatData |
-  KeyValueData | TextTableData | NumberTableData | MelodyData;
+  KeyValueData | MelodyData
+// | TextTableData | NumberTableData
+;

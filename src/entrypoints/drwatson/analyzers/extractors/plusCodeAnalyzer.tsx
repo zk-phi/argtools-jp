@@ -24,7 +24,8 @@ const instantiate = (_id: number, src: Data) => {
 
   const component = () => (
     <>
-      <p>Google が開発した、短い英数字のコードで地球上の地点を特定する技術です。</p>
+      <p>検出された OLC 候補の一覧です</p>
+      <p>※ OLC は、Google が開発した、短いコードで地球上の地点を特定する技術です。</p>
       <ul>
         {urls?.map(url => (
           <li key={url}>
