@@ -1,6 +1,6 @@
+import type { Data } from "../datatypes";
 import { ViewerContainer } from "./ViewerContainer";
 import { DataViewer } from ".";
-import type { Data } from "../datatypes";
 
 export const KeyValueViewer = ({ value, onInspect }: {
   value: [string, Data][],

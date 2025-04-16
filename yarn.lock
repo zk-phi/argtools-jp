@@ -1197,6 +1197,11 @@ vite@^6.2.6:
   optionalDependencies:
     fsevents "~2.3.3"
 
+wavesurfer.js@^7.9.4:
+  version "7.9.4"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-7.9.4.tgz#fab2e52a4bf8e256f6f13dd85cdfed2bc7487d7d"
+  integrity sha512-ahOMvrOKo5jULNnXq8Ske8v/ZStoNNTDjYohvgLNerUFuh+6fJSt7wlxFesEXmnlcTnjMy5/tIzhn9KusjO6bg==
+
 wrap-ansi@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
