@@ -1,10 +1,5 @@
 import { signal, effect } from "@preact/signals";
-import type {
-  TextData,
-  TargetData,
-  AnalyzerModule,
-  ResultReporter,
-} from "../main";
+import type { TextData, TargetData, AnalyzerModule, ResultReporter } from "../main";
 
 const asciiStrMatcher = /^[\x00-\x7F]*$/;
 const detect = (data: TargetData) => {

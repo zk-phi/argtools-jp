@@ -1,4 +1,3 @@
-import { applyFilter } from "../../../utils/image";
 import type { TargetData, TableData, AnalyzerModule, ResultReporter } from "../main";
 
 const detect = (data: TargetData) => {
@@ -14,6 +13,7 @@ const instantiate = (id: number, src: TargetData, updateResult: ResultReporter) 
       updateResult(id, { type: "text", value: "ERROR: unexpedted data type." });
       return;
     };
+    const { applyFilter } = await import("../../../utils/image.ts");
     const blob = URL.createObjectURL(new Blob([src.value.array], { type: src.value.mime }));
     const rImg = await applyFilter(blob, (arr) => {
       for (let i = 0; i < arr.length; i += 4) {
