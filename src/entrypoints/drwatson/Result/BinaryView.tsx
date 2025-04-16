@@ -33,7 +33,7 @@ const RawBinaryView = ({ value }: { value: BinaryBody }) => {
 
 const ImageView = ({ value }: { value: BinaryBody }) => {
   const url = useMemo(() => {
-    const blob = new Blob([value.array], { type: value.mime! });
+    const blob = new Blob([value.array], { type: value.mime });
     return URL.createObjectURL(blob);
   }, [value]);
 
@@ -47,14 +47,14 @@ const ImageView = ({ value }: { value: BinaryBody }) => {
 
 const VideoView = ({ value }: { value: BinaryBody }) => {
   const url = useMemo(() => {
-    const blob = new Blob([value.array], { type: value.mime! });
+    const blob = new Blob([value.array], { type: value.mime });
     return URL.createObjectURL(blob);
   }, [value]);
 
   return (
     <div style={{ border: "1px dashed" }}>
       <video controls={true} style={{ maxHeight: 300 }}>
-        <source src={url} type={value.mime!} />
+        <source src={url} type={value.mime} />
       </video>
       <div><small>Type：動画ファイル（{value.array.length}バイト）</small></div>
     </div>
@@ -63,7 +63,7 @@ const VideoView = ({ value }: { value: BinaryBody }) => {
 
 const AudioView = ({ value }: { value: BinaryBody }) => {
   const url = useMemo(() => {
-    const blob = new Blob([value.array], { type: value.mime! });
+    const blob = new Blob([value.array], { type: value.mime });
     return URL.createObjectURL(blob);
   }, [value]);
 
