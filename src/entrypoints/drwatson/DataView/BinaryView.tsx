@@ -26,7 +26,7 @@ const RawBinaryView = ({ value }: { value: BinaryBody }) => {
 
   return (
     <ViewContainer caption={`不明なバイナリ（${value.array.length}バイト）`}>
-      <pre>{hexString}</pre>
+      <pre style={{ maxHeight: 300, overflow: "auto" }}>{hexString}</pre>
     </ViewContainer>
   );
 };
@@ -72,21 +72,18 @@ const AudioView = ({ value }: { value: BinaryBody }) => {
   );
 }
 
-const imageMimeMatcher = /^image/;
-const videoMimeMatcher = /^video/;
-const audioMimeMatcher = /^audio/;
 export const BinaryView = ({ value }: { value: BinaryBody }) => {
-  if (value.mime?.match(imageMimeMatcher)) {
+  if (value.mime.startsWith("image")) {
     return (
       <ImageView value={value} />
     );
   }
-  if (value.mime?.match(videoMimeMatcher)) {
+  if (value.mime.startsWith("video")) {
     return (
       <VideoView value={value} />
     );
   }
-  if (value.mime?.match(audioMimeMatcher)) {
+  if (value.mime.startsWith("audio")) {
     return (
       <AudioView value={value} />
     );

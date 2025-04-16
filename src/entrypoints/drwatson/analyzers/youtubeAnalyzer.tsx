@@ -1,39 +1,37 @@
-import type {
-  TargetData,
-  AnalyzerModule,
-} from "../main";
+import type { TargetData, AnalyzerModule } from "../main";
 
-const youtubeIdMatcher = /([^A-z0-9_-]|^)((\??v)?=)?([A-z0-9_-]{10,12})([^A-z0-9_-]|$)/g;
-const youtubeIdOnlyMatcher = /[A-z0-9_-]{10,12}/;
+const youtubeId = "[A-z0-9_-]{10,12}";
+const delimitedYoutubeId = "([^A-z0-9_-]|^)" + youtubeId + "([^A-z0-9_-]|$)";
+const youtubeIdTester = new RegExp(delimitedYoutubeId);
+const youtubeIdMatcher = new RegExp(delimitedYoutubeId, "g");
+const youtubeIdTrimmer = new RegExp(youtubeId);
 
 const detect = (data: TargetData) => {
-  if (data.type === "text" && data.value.match(youtubeIdMatcher)) {
+  if (data.type === "text" && data.value.match(youtubeIdTester)) {
     return "11 文字前後の英数字または -, _";
   }
   return null;
 };
 
 const instantiate = (_id: number, src: TargetData) => {
-  if (src.type !== "text") {
-    throw new Error("Unexpected error: given data is not a text");
-  }
-  const matches = src.value.match(youtubeIdMatcher)!;
-  const ids = matches.map(match => match.match(youtubeIdOnlyMatcher)![0]);
-  const urls = ids.map(id => `https://youtube.com/watch?v=${id}`);
+  const matches = src.type === "text" && src.value.match(youtubeIdMatcher);
+  const ids = matches && matches.map(match => {
+    const trimmed = match.match(youtubeIdTrimmer)!
+    return trimmed[0];
+  });
+  const urls = ids && ids.map(id => `https://youtube.com/watch?v=${id}`);
 
   const component = () => (
-    <section>
-      <hr />
-      <h3>YouTube 動画の ID 検出</h3>
-      <p>検出された ID のリストです（実際に動画が存在するとは限りません）</p>
+    <>
+      <p>検出された ID 候補の一覧です（実際に動画が存在するとは限りません）</p>
       <ul>
-        {urls.map(url => (
+        {urls && urls.map(url => (
           <li key={url}>
             <a href={url} target="_blank" rel="noreferrer">{url}</a>
           </li>
         ))}
       </ul>
-    </section>
+    </>
   );
 
   return { component };

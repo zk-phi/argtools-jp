@@ -21,20 +21,10 @@ const alterText = (str: string, cols: number): string => {
 };
 
 const instantiate = (id: number, src: TargetData, updateResult: ResultReporter) => {
-  if (src.type !== "text") {
-    throw new Error("Unexpected error: data is not a text.");
-  }
-
   const column = signal(5);
 
-  effect(() => {
-    updateResult(id, { type: "text", value: alterText(src.value, column.value) });
-  });
-
   const component = () => (
-    <section>
-      <hr />
-      <h3>○○文字目で改行（もしかして AA かも？）</h3>
+    <>
       <input
           type="range"
           value={column.value}
@@ -43,11 +33,20 @@ const instantiate = (id: number, src: TargetData, updateResult: ResultReporter) 
           min="1"
           max="100" />
       {column.value}文字目で改行
-    </section>
+    </>
   );
 
-  const initialResult: TextData = { type: "text", value: alterText(src.value, column.value) };
-  return { initialResult, component };
+  if (src.type !== "text") {
+    const result: TextData = { type: "text", value: "ERROR: unexpedted data type." };
+    return { result, component };
+  }
+
+  const result: TextData = { type: "text", value: alterText(src.value, column.value) };
+  effect(() => {
+    updateResult(id, { type: "text", value: alterText(src.value, column.value) });
+  });
+
+  return { result, component };
 };
 
 export const aaAnalyzer: AnalyzerModule = {

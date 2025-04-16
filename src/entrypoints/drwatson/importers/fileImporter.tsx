@@ -13,11 +13,9 @@ const instantiate = (id: number, updateResult: ResultReporter) => {
   };
 
   const component = () => (
-    <section>
-      <hr />
-      <h3>ファイルを解析</h3>
+    <>
       <input type="file" onChange={e => openFile(e.currentTarget.files)} />
-    </section>
+    </>
   );
 
   return { component }

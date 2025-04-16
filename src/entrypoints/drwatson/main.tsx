@@ -4,7 +4,7 @@ import { useSignal, useComputed } from "@preact/signals";
 import { gensym } from ".././../utils/gensym";
 import { analyzers } from "./analyzers";
 import { importers } from "./importers";
-import { Result } from "./Result";
+import { DataView } from "./DataView";
 
 export type BinaryBody = { array: Uint8Array, mime: string };
 export type TextData = { type: "text", value: string };
@@ -25,12 +25,12 @@ export type TargetData =
 /* https://zenn.dev/uhyo/articles/existential-capsule */
 type Empty = { [key: string]: never };
 export type ModuleInstance = {
-  initialResult?: TargetData,
-  component: FunctionComponent<Empty>,
+  result?: TargetData,
+  component?: FunctionComponent<Empty>,
 };
 export type StackFrame = {
   id: number,
-  component: FunctionComponent<Empty>,
+  component?: FunctionComponent<Empty>,
   label: string,
   result: TargetData | null,
 };
@@ -64,13 +64,13 @@ const App = () => {
     const currentStack = stack.peek();
     if (currentStack[0]?.result) {
       const id = gensym();
-      const { initialResult, component } = module.instantiate(
+      const { result, component } = module.instantiate(
         id,
         currentStack[0]?.result,
         updateResult,
       );
       stack.value = [
-        { id, component, label: module.label, result: initialResult ?? null },
+        { id, component, label: module.label, result: result ?? null },
         ...currentStack,
       ];
     }
@@ -78,8 +78,16 @@ const App = () => {
 
   const pushImporterFrame = useCallback((module: ImporterModule) => {
     const id = gensym();
-    const { initialResult, component } = module.instantiate(id, updateResult);
-    stack.value = [{ id, component, label: module.label, result: initialResult ?? null }];
+    const { result, component } = module.instantiate(id, updateResult);
+    stack.value = [{ id, component, label: module.label, result: result ?? null }];
+  }, [stack, updateResult]);
+
+  const pushInspectionFrame = useCallback((data: TargetData) => {
+    const id = gensym();
+    stack.value = [
+      { id, label: "この項目を精査", result: data },
+      ...stack.peek(),
+    ];
   }, [stack, updateResult]);
 
   const wayback = useCallback((ix: number) => {
@@ -102,58 +110,75 @@ const App = () => {
     return [];
   });
 
-  if (stack.value.length === 0) {
-    return (
+  return (
+    <>
       <section>
         <details>
           <summary>実装されている変換器・解析器</summary>
           {analyzers.map(analyzer => analyzer.label).join("、")}
         </details>
-        <hr />
-        <h3>解析対象を選ぶ</h3>
-        <ul>
-          {importers.map(module => (
-            <li key={module.label}>
-              <button type="button" onClick={() => pushImporterFrame(module)}>
-                {module.label}
-              </button>
-            </li>
-          ))}
-        </ul>
       </section>
-    );
-  }
 
-  return (
-    <>
-      <button type="button" onClick={() => { stack.value = []; }}>
-        最初に戻る
-      </button>
+      {stack.value.length === 0 ? (
+        <section>
+          <hr />
+          <h3>解析対象を入力</h3>
+          <ul>
+            {importers.map(module => (
+              <li key={module.label}>
+                <button type="button" onClick={() => pushImporterFrame(module)}>
+                  {module.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : (
+        <section>
+          <button type="button" onClick={() => { stack.value = []; }}>
+            最初に戻る
+          </button>
+        </section>
+      )}
+
       {stack.value.slice(1).reverse().map((frame, ix) => frame.result && (
-        <Result
-            label={frame.label}
-            data={frame.result}
-            onWayback={() => wayback(stack.value.length - 1 - ix)}
-        />
+        <section>
+          <hr />
+          <h3>{frame.label}</h3>
+          <DataView data={frame.result} />
+          <div>
+            <button type="button" onClick={() => wayback(stack.value.length - 1 - ix)}>
+              ここまで戻る
+            </button>
+          </div>
+        </section>
       ))}
-      {stack.value[0].component({})}
-      {stack.value[0].result && (
-        <>
-          <Result data={stack.value[0].result} />
-          <section>
-            <h3>次のステップ</h3>
-            <ul>
-              {suggestions.value.map(({ reason, module }) => (
-                <li key={module.label}>
-                  {reason} →{" "}
-                  <button type="button" onClick={() => pushAnalyzerFrame(module)}>
-                    {module.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </>
+
+      {stack.value.length > 0 && (
+        <section>
+          <hr />
+          <h3>{stack.value[0].label}</h3>
+          {stack.value[0].component && stack.value[0].component({})}
+        </section>
+      )}
+
+      {stack.value[0]?.result ? (
+        <section>
+          <DataView data={stack.value[0].result} onInspect={pushInspectionFrame} />
+          <h3>次にできそうなこと</h3>
+          <ul>
+            {suggestions.value.map(({ reason, module }) => (
+              <li key={module.label}>
+                {reason} →{" "}
+                <button type="button" onClick={() => pushAnalyzerFrame(module)}>
+                  {module.label}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : (
+        "Waiting ..."
       )}
     </>
   );

@@ -13,59 +13,69 @@ const App = () => {
 
       const url = await readFileAsDataUrl(files[0]);
 
-      const rImg = await applyFilter(url, (arr) => {
-        for (let i = 0; i < arr.length; i += 4) {
-          arr[i + 1] = arr[i + 0];
-          arr[i + 2] = arr[i + 0];
-          arr[i + 3] = 255;
-        }
-      });
+      const rImg = URL.createObjectURL(
+        await applyFilter(url, (arr) => {
+          for (let i = 0; i < arr.length; i += 4) {
+            arr[i + 1] = arr[i + 0];
+            arr[i + 2] = arr[i + 0];
+            arr[i + 3] = 255;
+          }
+        })
+      );
       setProcessedImages(processedImages => [
         ...processedImages,
         ["R 成分のみ抽出", rImg]
       ]);
 
-      const gImg = await applyFilter(url, (arr) => {
-        for (let i = 0; i < arr.length; i += 4) {
-          arr[i + 0] = arr[i + 1];
-          arr[i + 2] = arr[i + 1];
-          arr[i + 3] = 255;
-        }
-      });
+      const gImg = URL.createObjectURL(
+        await applyFilter(url, (arr) => {
+          for (let i = 0; i < arr.length; i += 4) {
+            arr[i + 0] = arr[i + 1];
+            arr[i + 2] = arr[i + 1];
+            arr[i + 3] = 255;
+          }
+        })
+      );
       setProcessedImages(processedImages => [
         ...processedImages,
         ["G 成分のみ抽出", gImg]
       ]);
 
-      const bImg = await applyFilter(url, (arr) => {
-        for (let i = 0; i < arr.length; i += 4) {
-          arr[i + 0] = arr[i + 2];
-          arr[i + 1] = arr[i + 2];
-          arr[i + 3] = 255;
-        }
-      });
+      const bImg = URL.createObjectURL(
+        await applyFilter(url, (arr) => {
+          for (let i = 0; i < arr.length; i += 4) {
+            arr[i + 0] = arr[i + 2];
+            arr[i + 1] = arr[i + 2];
+            arr[i + 3] = 255;
+          }
+        })
+      );
       setProcessedImages(processedImages => [
         ...processedImages,
         ["B 成分のみ抽出", bImg]
       ]);
 
-      const aImg = await applyFilter(url, (arr) => {
-        for (let i = 0; i < arr.length; i += 4) {
-          arr[i + 0] = arr[i + 3];
-          arr[i + 1] = arr[i + 3];
-          arr[i + 2] = arr[i + 3];
-        }
-      });
+      const aImg = URL.createObjectURL(
+        await applyFilter(url, (arr) => {
+          for (let i = 0; i < arr.length; i += 4) {
+            arr[i + 0] = arr[i + 3];
+            arr[i + 1] = arr[i + 3];
+            arr[i + 2] = arr[i + 3];
+          }
+        })
+      );
       setProcessedImages(processedImages => [
         ...processedImages,
         ["透明なピクセルを抽出", aImg]
       ]);
 
-      const lsbImg = await applyFilter(url, (arr) => {
-        for (let i = 0; i < arr.length; i += 1) {
-          arr[i] = (arr[i] & 1) * 255;
-        }
-      });
+      const lsbImg = URL.createObjectURL(
+        await applyFilter(url, (arr) => {
+          for (let i = 0; i < arr.length; i += 1) {
+            arr[i] = (arr[i] & 1) * 255;
+          }
+        })
+      );
       setProcessedImages(processedImages => [
         ...processedImages,
         ["最下位ビットのみ抽出", lsbImg]

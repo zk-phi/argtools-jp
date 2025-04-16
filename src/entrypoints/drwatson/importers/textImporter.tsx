@@ -11,16 +11,14 @@ const instantiate = (id: number, updateResult: ResultReporter) => {
   };
 
   const component = () => (
-    <section>
-      <hr />
-      <h3>文字列を解読</h3>
+    <>
       <textarea
           value={input.value}
           rows={20}
           cols={50}
           onInput={e => onInput(e.currentTarget.value)}
       />
-    </section>
+    </>
   );
 
   const initialResult: TextData = { type: "text", value: "" };

@@ -25,14 +25,14 @@ const imgToCanvas = (img: Img): [Canvas, CanvasRenderingContext2D] => {
 }
 
 export type Filter = (arr: Uint8ClampedArray) => void;
-export const applyFilter = (url: string, filter: Filter): Promise<string> => (
+export const applyFilter = (url: string, filter: Filter): Promise<Blob> => (
   new Promise((resolve) => {
     urlToImg(url).then(img => {
       const [canvas, ctx] = imgToCanvas(img);
       const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
       filter(data.data);
       ctx.putImageData(data, 0, 0);
-      canvas.toBlob(blob => resolve(URL.createObjectURL(blob!)));
+      canvas.toBlob(blob => resolve(blob!));
     })
   })
 );
