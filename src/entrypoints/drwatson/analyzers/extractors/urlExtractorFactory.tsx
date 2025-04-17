@@ -1,6 +1,6 @@
 import type { ComponentChildren } from "preact";
 import { textData, type Data } from "../../datatypes";
-import type { AnalyzerModule } from "../../main";
+import type { AnalyzerModule } from "../../state";
 
 export const urlExtractorFactory = ({
   label,
@@ -23,13 +23,13 @@ export const urlExtractorFactory = ({
     data.type === "text" && data.value.match(detector) ? hint : null
   );
 
-  const instantiate = (_: any, src: Data) => {
+  const instantiate = (src: Data, id: number) => {
     if (src.type !== "text") {
-      return { result: textData("UNEXPECTED: data is not a text.") };
+      return { initialResult: textData("UNEXPECTED: data is not a text.") };
     }
     const matches = src.value.match(extractor);
     if (!matches) {
-      return { result: textData("UNEXPECTED: no matches.") };
+      return { initialResult: textData("UNEXPECTED: no matches.") };
     }
     const trimmed = matches.map(match => match.match(trimmer)![0]);
     const urls = trimmed.map(urlConstructor);

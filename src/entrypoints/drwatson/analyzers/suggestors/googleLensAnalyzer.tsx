@@ -1,5 +1,5 @@
 import type { Data } from "../../datatypes";
-import type { AnalyzerModule } from "../../main";
+import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("image")) {

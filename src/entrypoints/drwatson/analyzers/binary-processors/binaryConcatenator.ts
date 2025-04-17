@@ -1,5 +1,5 @@
 import { binaryData, textData, type Data, type BinaryBody } from "../../datatypes";
-import type { AnalyzerModule, ResultReporter } from "../../main";
+import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "keyvalue" && data.value.every(([_, {type}]) => type ===  "binary")) {
@@ -8,12 +8,13 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
+const instantiate = (src: Data, id: number) => {
   if (src.type !== "keyvalue" || src.value.some(([_, {type}]) => type !== "binary")) {
-    return { result: textData("UNEXPECTED: not a binary set.") };
+    return { initialResult: textData("UNEXPECTED: not a binary set.") };
   };
 
   (async () => {
+    setBusy(id, true);
     const { fileTypeFromBuffer } = await import("file-type");
     const arrays = src.value.map(([_, {value}]) => (value as BinaryBody).array!);
     const merged = new Uint8Array(arrays.reduce((l, r) => l + r.length, 0));
@@ -23,6 +24,7 @@ const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
     }
     const fileType = await fileTypeFromBuffer(merged);
     const mime = fileType ? fileType.mime : "";
+    setBusy(id, false);
     updateResult(id, binaryData(merged, mime));
   })();
 

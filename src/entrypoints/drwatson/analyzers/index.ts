@@ -18,7 +18,7 @@ import { youtubeAnalyzer } from "./extractors/youtubeAnalyzer";
 import { chatGptAnalyzer } from "./suggestors/chatGptAnalyzer";
 import { googleLensAnalyzer } from "./suggestors/googleLensAnalyzer";
 
-import type { AnalyzerModule } from "../main";
+import type { AnalyzerModule } from "../state";
 
 type AnalyzerCategory = { category: string, analyzers: AnalyzerModule[] };
 

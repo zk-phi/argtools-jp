@@ -1,6 +1,6 @@
 import { signal, effect } from "@preact/signals";
 import { textData, type Data } from "../../datatypes";
-import type { AnalyzerModule, ResultReporter } from "../../main";
+import { updateResult, type AnalyzerModule } from "../../state";
 
 const asciiStrMatcher = /^[\x00-\x7F]*$/;
 const detect = (data: Data) => {
@@ -16,7 +16,7 @@ const alterText = (str: string, cols: number): string => {
   return altered ?? "";
 };
 
-const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
+const instantiate = (src: Data, id: number) => {
   const column = signal(5);
 
   const component = () => (

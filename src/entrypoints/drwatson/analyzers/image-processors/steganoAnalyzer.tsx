@@ -1,5 +1,5 @@
 import { keyValueData, binaryData, textData, type Data } from "../../datatypes";
-import type { AnalyzerModule, ResultReporter } from "../../main";
+import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("image")) {
@@ -8,12 +8,13 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
+const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("image")) {
-    return { result: textData("UNEXPECTED: not an image.") };
+    return { initialResult: textData("UNEXPECTED: not an image.") };
   };
 
   (async () => {
+    setBusy(id, true);
     const { applyFilter } = await import("../../../../utils/image.ts");
     const blob = URL.createObjectURL(new Blob([src.value.array], { type: src.value.mime }));
     const rImg = await applyFilter(blob, (arr) => {
@@ -56,6 +57,7 @@ const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
       ["透明ピクセルを抽出", binaryData(new Uint8Array(await aImg.arrayBuffer()), aImg.type )],
       ["最下位ビットを抽出", binaryData(new Uint8Array(await lsbImg.arrayBuffer()), lsbImg.type )],
     ]);
+    setBusy(id, false);
     updateResult(id, data);
   })();
 

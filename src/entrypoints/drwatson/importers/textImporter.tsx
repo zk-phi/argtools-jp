@@ -1,9 +1,9 @@
 import { signal } from "@preact/signals";
 import { debouncer } from "../../../utils/debouncer";
 import { textData } from "../datatypes";
-import type { ImporterModule, ResultReporter } from "../main";
+import { updateResult, type ImporterModule } from "../state";
 
-const instantiate = (id: number, updateResult: ResultReporter) => {
+const instantiate = (id: number) => {
   const input = signal<string>("");
   const withDebounce = debouncer(100);
 

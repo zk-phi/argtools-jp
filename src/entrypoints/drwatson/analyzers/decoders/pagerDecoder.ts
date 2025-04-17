@@ -5,7 +5,7 @@ import { textData } from "../../datatypes";
 /* require at least 3 letters */
 const code = "(\\*2\\*2)?([0-9]{2}){3,}(##)?";
 const delimited = `([^0-9]|^)${code}([^0-9]|$)`;
-const trimmer = /([0-9]{2})+([^0-9]|##|$)/;
+const trimmer = /([0-9]{2})+(?=[^0-9]|##|$)/;
 const divider = /.{2}/g;
 
 const pagerCharTable =

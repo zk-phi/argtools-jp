@@ -1,5 +1,5 @@
 import { textData, type Data } from "../../datatypes";
-import type { AnalyzerModule } from "../../main";
+import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "text" && data.value.includes("\n")) {
@@ -8,11 +8,11 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (_: number, src: Data) => {
+const instantiate = (src: Data) => {
   if (src.type !== "text") {
-    return { result: textData("UNEXPECTED: not a text.") };
+    return { initialResult: textData("UNEXPECTED: not a text.") };
   }
-  return { result: textData(src.value.replace(/(\r\n|\n|\r)/gm, "")) };
+  return { initialResult: textData(src.value.replace(/(\r\n|\n|\r)/gm, "")) };
 };
 
 export const concatLines: AnalyzerModule = {

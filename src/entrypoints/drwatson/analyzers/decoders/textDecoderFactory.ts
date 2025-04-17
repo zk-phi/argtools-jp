@@ -1,5 +1,5 @@
 import { textData, keyValueData, type Data } from "../../datatypes";
-import type { AnalyzerModule, ResultReporter } from "../../main";
+import { updateResult, type AnalyzerModule } from "../../state";
 import { ellipsis } from "../../../../utils/string";
 
 type TextDecoratorFactoryProps = {
@@ -8,7 +8,7 @@ type TextDecoratorFactoryProps = {
   detector: RegExp,
   extractor: RegExp,
   trimmer: RegExp,
-  decoder: (str: string) => Data,
+  decoder: (str: string, id: number) => Data,
 };
 
 type AsyncTextDecoratorFactoryProps = {
@@ -17,7 +17,7 @@ type AsyncTextDecoratorFactoryProps = {
   detector: RegExp,
   extractor: RegExp,
   trimmer: RegExp,
-  decoder: (str: string) => Promise<Data>,
+  decoder: (str: string, id: number) => Promise<Data>,
 };
 
 export const textDecoderFactory = (
@@ -27,19 +27,19 @@ export const textDecoderFactory = (
     data.type === "text" && data.value.match(detector) ? hint : null
   );
 
-  const instantiate = (_: any, src: Data) => {
+  const instantiate = (src: Data, id: number) => {
     if (src.type !== "text") {
-      return { result: textData("UNEXPECTED: data is not a text.") };
+      return { initialResult: textData("UNEXPECTED: data is not a text.") };
     }
     const matches = src.value.match(extractor);
     if (!matches) {
-      return { result: textData("UNEXPECTED: no matches.") };
+      return { initialResult: textData("UNEXPECTED: no matches.") };
     }
     const trimmed = matches.map(match => match.match(trimmer)![0]);
     const datum = trimmed.map((str): [string, Data] => (
-      [`${ellipsis(str, 8)} のデコード結果`, decoder(str)]
+      [`${ellipsis(str, 8)} のデコード結果`, decoder(str, id)]
     ));
-    return { result: keyValueData(datum) };
+    return { initialResult: keyValueData(datum) };
   };
 
   return { label, detect, instantiate };
@@ -52,18 +52,18 @@ export const asyncTextDecoderFactory = (
     data.type === "text" && data.value.match(detector) ? hint : null
   );
 
-  const instantiate = (id: any, src: Data, updateResult: ResultReporter) => {
+  const instantiate = (src: Data, id: any) => {
     if (src.type !== "text") {
-      return { result: textData("UNEXPECTED: data is not a text.") };
+      return { initialResult: textData("UNEXPECTED: data is not a text.") };
     }
     const matches = src.value.match(extractor);
     if (!matches) {
-      return { result: textData("UNEXPECTED: no matches.") };
+      return { initialResult: textData("UNEXPECTED: no matches.") };
     }
     const trimmed = matches.map(match => match.match(trimmer)![0]);
     Promise.all(
       trimmed.map(async (str): Promise<[string, Data]> => (
-        [`${ellipsis(str, 8)} のデコード結果`, await decoder(str)]
+        [`${ellipsis(str, 8)} のデコード結果`, await decoder(str, id)]
       ))
     ).then(datum => {
       updateResult(id, keyValueData(datum));

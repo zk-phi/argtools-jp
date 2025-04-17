@@ -1,4 +1,5 @@
 import { asyncTextDecoderFactory } from "./textDecoderFactory";
+import { setBusy } from "../../state";
 import { binaryData } from "../../datatypes";
 
 const body = "([0-9a-zA-Z+/]{4})+(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?";
@@ -10,12 +11,14 @@ export const base64Decoder = asyncTextDecoderFactory({
   detector: new RegExp(delimited, "m"),
   extractor: new RegExp(delimited, "mg"),
   trimmer: new RegExp(body),
-  decoder: async (str: string) => {
+  decoder: async (str: string, id: number) => {
+    setBusy(id, true);
     const { fileTypeFromBuffer } = await import("file-type");
     const binaryString = atob(str);
     const array = Uint8Array.from(binaryString, s => s.charCodeAt(0));
     const fileType = await fileTypeFromBuffer(array);
     const mime = fileType ? fileType.mime : "";
+    setBusy(id, false);
     return binaryData(array, mime);
   },
 });

@@ -1,10 +1,11 @@
 import { readFileAsBuffer } from "../../../utils/file";
 import { binaryData, keyValueData, type BinaryData } from "../datatypes";
-import type { ImporterModule, ResultReporter } from "../main";
+import { setBusy, updateResult, type ImporterModule } from "../state";
 
-const instantiate = (id: number, updateResult: ResultReporter) => {
+const instantiate = (id: number) => {
   const openFile = async (files: FileList | null) => {
     if (files) {
+      setBusy(id, true);
       const results: [string, BinaryData][] = await Promise.all(
         [...files].map(async file => {
           const buffer = await readFileAsBuffer(file);
@@ -13,6 +14,7 @@ const instantiate = (id: number, updateResult: ResultReporter) => {
           return [file.name, binaryData(array, mime)];
         })
       );
+      setBusy(id, false);
       if (results.length > 1) {
         updateResult(id, keyValueData(results));
       } else if (results.length > 0) {

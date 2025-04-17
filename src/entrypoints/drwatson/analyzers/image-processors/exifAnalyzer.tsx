@@ -1,5 +1,5 @@
 import { keyValueData, textData, type Data, type TextData } from "../../datatypes";
-import type { AnalyzerModule, ResultReporter } from "../../main";
+import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const flattenTags = (tags: any): any => (
   Object.fromEntries(
@@ -22,12 +22,13 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
+const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("image")) {
-    return { result: textData("UNEXPECTED: not an image.") };
+    return { initialResult: textData("UNEXPECTED: not an image.") };
   }
 
   (async () => {
+    setBusy(id, true);
     const ExifReader = await import("exifreader");
     const tags = ExifReader.load(src.value.array.buffer, { expanded: false });
     const flattened = flattenTags(tags);
@@ -36,6 +37,7 @@ const instantiate = (id: number, src: Data, updateResult: ResultReporter) => {
     )).map(key => (
       [key, textData(`${flattened[key]}`)]
     ));
+    setBusy(id, false);
     updateResult(id, keyValueData(tuples));
   })();
 
