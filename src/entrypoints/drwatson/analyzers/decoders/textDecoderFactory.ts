@@ -6,14 +6,14 @@ type TextDecoratorFactoryProps = {
   label: string,
   hint: string,
   pattern: RegExp | string,
-  decoder: (str: string, id: number) => Data,
+  decoder: (str: string) => Data,
 };
 
 type AsyncTextDecoratorFactoryProps = {
   label: string,
   hint: string,
   pattern: RegExp | string,
-  decoder: (str: string, id: number) => Promise<Data>,
+  decoder: (str: string) => Promise<Data>,
 };
 
 export const textDecoderFactory = (
@@ -35,7 +35,7 @@ export const textDecoderFactory = (
       return { initialResult: textData("UNEXPECTED: no matches.") };
     }
     const datum = matches.map((str): [string, Data] => (
-      [`${ellipsis(str, 8)} のデコード結果`, decoder(str, id)]
+      [`${ellipsis(str, 8)} のデコード結果`, decoder(str)]
     ));
     return { initialResult: keyValueData(datum) };
   };
@@ -53,7 +53,7 @@ export const asyncTextDecoderFactory = (
     data.type === "text" && data.value.match(detector) ? hint : null
   );
 
-  const instantiate = (src: Data) => {
+  const instantiate = (src: Data, id: number) => {
     if (src.type !== "text") {
       return { initialResult: textData("UNEXPECTED: data is not a text.") };
     }
@@ -65,7 +65,7 @@ export const asyncTextDecoderFactory = (
     (async () => {
       const datum = await Promise.all(
         matches.map(async (str): Promise<[string, Data]> => (
-          [`${ellipsis(str, 8)} のデコード結果`, await decoder(str, id)]
+          [`${ellipsis(str, 8)} のデコード結果`, await decoder(str)]
         ))
       );
       setBusy(id, false);
