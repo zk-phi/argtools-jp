@@ -1,15 +1,12 @@
-import { render, type FunctionComponent } from "preact";
-import { useCallback, } from "preact/hooks";
+import { render, } from "preact";
 import { computed } from "@preact/signals";
-import { gensym } from ".././../utils/gensym";
 import { analyzers, analyzerCategories } from "./analyzers";
 import { importers } from "./importers";
 import { DataViewer } from "./DataViewer";
 import {
   busy, stack, setImporter, pushAnalyzer, pushInspection, undo, reset,
-  type AnalyzerModule, type ImporterModule, type StackFrame,
+  type AnalyzerModule, type StackFrame,
 } from "./state";
-import type { Data } from "./datatypes";
 
 const App = () => {
   const suggestions = computed<{ reason: string, module: AnalyzerModule}[]>(() => {
