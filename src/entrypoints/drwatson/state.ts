@@ -111,7 +111,7 @@ export const setBusy = (id: number, value: boolean) => {
 };
 
 // Update the active module's output.
-export const updateResult = (id: number, result: Data) => {
+export const updateResult = (id: number, result: Data | null) => {
   const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
   if (id === _stack[0]?.id) {
     stack.value = [{ ..._stack[0], result }, ..._stack.slice(1)];

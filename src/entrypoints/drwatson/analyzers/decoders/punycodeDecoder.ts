@@ -12,7 +12,7 @@ export const punycodeDecoder = asyncTextDecoderFactory({
   label: "punycode としてデコード",
   hint: "xn-- から始まる英数字列",
   pattern: delimited,
-  decoder: async (str: string, id: number) => {
+  decoder: async (str: string) => {
     const punycode = await import("punycode");
     const decoded = punycode.toUnicode(str);
     return textData(decoded);

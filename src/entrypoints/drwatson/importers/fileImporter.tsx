@@ -5,13 +5,13 @@ import { setBusy, updateResult, type ImporterModule } from "../state";
 const instantiate = (id: number) => {
   const openFile = async (files: FileList | null) => {
     if (files) {
+      updateResult(id, null);
       setBusy(id, true);
       const results: [string, BinaryData][] = await Promise.all(
         [...files].map(async file => {
           const buffer = await readFileAsBuffer(file);
           const array = new Uint8Array(buffer);
-          const mime = file.type;
-          return [file.name, binaryData(array, mime)];
+          return [file.name, await binaryData(array)];
         })
       );
       setBusy(id, false);

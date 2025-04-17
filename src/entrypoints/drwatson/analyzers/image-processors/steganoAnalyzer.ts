@@ -50,11 +50,11 @@ const instantiate = (src: Data, id: number) => {
       }
     });
     const data = keyValueData([
-      ["R 成分のみ抽出", binaryData(new Uint8Array(await rImg.arrayBuffer()), rImg.type)],
-      ["G 成分のみ抽出", binaryData(new Uint8Array(await gImg.arrayBuffer()), gImg.type )],
-      ["B 成分のみ抽出", binaryData(new Uint8Array(await bImg.arrayBuffer()), bImg.type )],
-      ["透明ピクセルを抽出", binaryData(new Uint8Array(await aImg.arrayBuffer()), aImg.type )],
-      ["最下位ビットを抽出", binaryData(new Uint8Array(await lsbImg.arrayBuffer()), lsbImg.type )],
+      ["R 成分のみ抽出", await binaryData(new Uint8Array(await rImg.arrayBuffer()))],
+      ["G 成分のみ抽出", await binaryData(new Uint8Array(await gImg.arrayBuffer()))],
+      ["B 成分のみ抽出", await binaryData(new Uint8Array(await bImg.arrayBuffer()))],
+      ["透明ピクセルを抽出", await binaryData(new Uint8Array(await aImg.arrayBuffer()))],
+      ["最下位ビットを抽出", await binaryData(new Uint8Array(await lsbImg.arrayBuffer()))],
     ]);
     setBusy(id, false);
     updateResult(id, data);

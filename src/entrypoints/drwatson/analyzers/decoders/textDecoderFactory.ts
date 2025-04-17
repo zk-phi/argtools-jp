@@ -26,7 +26,7 @@ export const textDecoderFactory = (
     data.type === "text" && data.value.match(detector) ? hint : null
   );
 
-  const instantiate = (src: Data, id: number) => {
+  const instantiate = (src: Data) => {
     if (src.type !== "text") {
       return { initialResult: textData("UNEXPECTED: data is not a text.") };
     }
@@ -53,7 +53,7 @@ export const asyncTextDecoderFactory = (
     data.type === "text" && data.value.match(detector) ? hint : null
   );
 
-  const instantiate = (src: Data, id: any) => {
+  const instantiate = (src: Data) => {
     if (src.type !== "text") {
       return { initialResult: textData("UNEXPECTED: data is not a text.") };
     }
@@ -70,7 +70,7 @@ export const asyncTextDecoderFactory = (
       );
       setBusy(id, false);
       updateResult(id, keyValueData(datum));
-    });
+    })();
 
     return { initialBusy: true };
   };

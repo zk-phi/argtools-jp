@@ -1,5 +1,4 @@
 import { duplicate } from "../../../../utils/buffer";
-import { mapRange } from "../../../../utils/range";
 import { textData, binaryData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
@@ -17,7 +16,6 @@ const instantiate = (src: Data, id: number) => {
 
   (async () => {
     const { default: toWav } = await import("audiobuffer-to-wav");
-    const { fileTypeFromBuffer } = await import("file-type");
     const ctx = new AudioContext();
     // buffer will be "detached" unless duplicated
     // https://qiita.com/generosennin/items/b33d132b49b008b31153
@@ -27,10 +25,9 @@ const instantiate = (src: Data, id: number) => {
       Array.prototype.reverse.call(audioBuffer.getChannelData(i));
     }
     const wavBuffer = toWav(audioBuffer);
-    const fileType = await fileTypeFromBuffer(wavBuffer);
-    const mime = fileType?.mime ?? "";
+    const data = await binaryData(new Uint8Array(wavBuffer));
     setBusy(id, false);
-    updateResult(id, binaryData(new Uint8Array(wavBuffer), mime));
+    updateResult(id, data);
   })();
 
   return { initialBusy: true };

@@ -1,10 +1,20 @@
+import { fileTypeFromBuffer } from "file-type";
 import { gensym } from "../../utils/gensym";
 
-export type BinaryBody = { array: Uint8Array, mime: string };
+export type BinaryBody = { array: Uint8Array, mime: string, ext: string };
 export type BinaryData = { type: "binary", id: number, value: BinaryBody };
-export const binaryData = (array: Uint8Array, mime: string): BinaryData => (
-  { type: "binary", id: gensym(), value: { array, mime } }
-);
+export function binaryData (array: Uint8Array, mime: string, ext: string): BinaryData;
+export function binaryData (array: Uint8Array): Promise<BinaryData>;
+export function binaryData (array: Uint8Array, mime?: string, ext?: string) {
+  if (mime != null) {
+    return { type: "binary", id: gensym(), value: { array, mime, ext } };
+  }
+  return fileTypeFromBuffer(array).then(fileType => {
+    const mime = fileType?.mime ?? "";
+    const ext = fileType?.ext ? `.${fileType.ext}` : "";
+    return binaryData(array, mime, ext);
+  });
+};
 
 export type TextData = { type: "text", id: number, value: string };
 export const textData = (value: string): TextData => (

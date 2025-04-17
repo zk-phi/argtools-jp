@@ -3,7 +3,7 @@ import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "keyvalue" && data.value.every(([_, {type}]) => type ===  "binary")) {
-    return "すべてバイナリデータ";
+    return "壊れたバイナリデータがたくさんあるなら";
   }
   return null;
 };
@@ -14,17 +14,15 @@ const instantiate = (src: Data, id: number) => {
   };
 
   (async () => {
-    const { fileTypeFromBuffer } = await import("file-type");
     const arrays = src.value.map(([_, {value}]) => (value as BinaryBody).array!);
     const merged = new Uint8Array(arrays.reduce((l, r) => l + r.length, 0));
     for (let i = 0, offset = 0; i < arrays.length; i++) {
       merged.set(arrays[i], offset);
       offset += arrays[i].length;
     }
-    const fileType = await fileTypeFromBuffer(merged);
-    const mime = fileType ? fileType.mime : "";
+    const data = await binaryData(merged);
     setBusy(id, false);
-    updateResult(id, binaryData(merged, mime));
+    updateResult(id, data);
   })();
 
   return { initialBusy: true };
