@@ -95,9 +95,7 @@ export type ImporterModule = {
   },
 };
 
-// ----
-
-                             export const busy = signal(false);
+export const busy = signal(false);
 export const stack = signal<StackFrame[]>([]);
 
 // Mark the active module as busy (or not busy).

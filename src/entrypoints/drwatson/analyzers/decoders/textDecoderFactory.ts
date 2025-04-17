@@ -5,24 +5,23 @@ import { ellipsis } from "../../../../utils/string";
 type TextDecoratorFactoryProps = {
   label: string,
   hint: string,
-  detector: RegExp,
-  extractor: RegExp,
-  trimmer: RegExp,
+  pattern: RegExp | string,
   decoder: (str: string, id: number) => Data,
 };
 
 type AsyncTextDecoratorFactoryProps = {
   label: string,
   hint: string,
-  detector: RegExp,
-  extractor: RegExp,
-  trimmer: RegExp,
+  pattern: RegExp | string,
   decoder: (str: string, id: number) => Promise<Data>,
 };
 
 export const textDecoderFactory = (
-  { label, hint, detector, extractor, trimmer, decoder }: TextDecoratorFactoryProps,
+  { label, hint, pattern, decoder }: TextDecoratorFactoryProps,
 ): AnalyzerModule => {
+  const detector = new RegExp(pattern, "m");
+  const matcher = new RegExp(pattern, "mg");
+
   const detect = (data: Data) => (
     data.type === "text" && data.value.match(detector) ? hint : null
   );
@@ -31,12 +30,11 @@ export const textDecoderFactory = (
     if (src.type !== "text") {
       return { initialResult: textData("UNEXPECTED: data is not a text.") };
     }
-    const matches = src.value.match(extractor);
+    const matches = src.value.match(matcher);
     if (!matches) {
       return { initialResult: textData("UNEXPECTED: no matches.") };
     }
-    const trimmed = matches.map(match => match.match(trimmer)![0]);
-    const datum = trimmed.map((str): [string, Data] => (
+    const datum = matches.map((str): [string, Data] => (
       [`${ellipsis(str, 8)} のデコード結果`, decoder(str, id)]
     ));
     return { initialResult: keyValueData(datum) };
@@ -46,8 +44,11 @@ export const textDecoderFactory = (
 };
 
 export const asyncTextDecoderFactory = (
-  { label, hint, detector, extractor, trimmer, decoder }: AsyncTextDecoratorFactoryProps,
+  { label, hint, pattern, decoder }: AsyncTextDecoratorFactoryProps,
 ): AnalyzerModule => {
+  const detector = new RegExp(pattern, "m");
+  const matcher = new RegExp(pattern, "mg");
+
   const detect = (data: Data) => (
     data.type === "text" && data.value.match(detector) ? hint : null
   );
@@ -56,13 +57,12 @@ export const asyncTextDecoderFactory = (
     if (src.type !== "text") {
       return { initialResult: textData("UNEXPECTED: data is not a text.") };
     }
-    const matches = src.value.match(extractor);
+    const matches = src.value.match(matcher);
     if (!matches) {
       return { initialResult: textData("UNEXPECTED: no matches.") };
     }
-    const trimmed = matches.map(match => match.match(trimmer)![0]);
     Promise.all(
-      trimmed.map(async (str): Promise<[string, Data]> => (
+      matches.map(async (str): Promise<[string, Data]> => (
         [`${ellipsis(str, 8)} のデコード結果`, await decoder(str, id)]
       ))
     ).then(datum => {

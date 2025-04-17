@@ -6,19 +6,18 @@ export const urlExtractorFactory = ({
   label,
   hint,
   description,
-  detector,
-  extractor,
-  trimmer,
+  pattern,
   urlConstructor
 } : {
   label: string,
   hint: string,
   description: ComponentChildren,
-  detector: RegExp,
-  extractor: RegExp,
-  trimmer: RegExp,
+  pattern: RegExp | string,
   urlConstructor: (str: string) => string,
 }): AnalyzerModule => {
+  const detector = new RegExp(pattern, "m");
+  const matcher = new RegExp(pattern, "mg");
+
   const detect = (data: Data) => (
     data.type === "text" && data.value.match(detector) ? hint : null
   );
@@ -27,12 +26,11 @@ export const urlExtractorFactory = ({
     if (src.type !== "text") {
       return { initialResult: textData("UNEXPECTED: data is not a text.") };
     }
-    const matches = src.value.match(extractor);
+    const matches = src.value.match(matcher);
     if (!matches) {
       return { initialResult: textData("UNEXPECTED: no matches.") };
     }
-    const trimmed = matches.map(match => match.match(trimmer)![0]);
-    const urls = trimmed.map(urlConstructor);
+    const urls = matches.map(urlConstructor);
 
     const component = () => (
       <>
