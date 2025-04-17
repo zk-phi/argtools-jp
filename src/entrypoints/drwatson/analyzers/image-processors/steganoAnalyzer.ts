@@ -14,7 +14,6 @@ const instantiate = (src: Data, id: number) => {
   };
 
   (async () => {
-    setBusy(id, true);
     const { applyFilter } = await import("../../../../utils/image.ts");
     const blob = URL.createObjectURL(new Blob([src.value.array], { type: src.value.mime }));
     const rImg = await applyFilter(blob, (arr) => {
@@ -61,7 +60,7 @@ const instantiate = (src: Data, id: number) => {
     updateResult(id, data);
   })();
 
-  return {};
+  return { initialBusy: true };
 };
 
 export const steganoAnalyzer: AnalyzerModule = {

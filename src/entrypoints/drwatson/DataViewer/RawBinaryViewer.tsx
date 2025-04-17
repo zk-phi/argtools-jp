@@ -1,5 +1,6 @@
 import { useMemo } from "preact/hooks";
 import type { BinaryBody } from "../datatypes";
+import { mapRange } from "../../../utils/range";
 import { save } from "../../../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
@@ -11,7 +12,7 @@ export const RawBinaryViewer = ({ value }: { value: BinaryBody }) => {
   const hexString = useMemo(() => {
     const fullLines = Math.ceil(value.array.length / 16);
     const lines = Math.min(fullLines, 100);
-    const string = Array.from({ length: lines }, (_: any, ix: number) => {
+    const string = mapRange(lines, (ix: number) => {
       const digest = [...new Uint8Array(
         value.array.buffer,
         ix * 16,

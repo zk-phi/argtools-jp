@@ -1,4 +1,3 @@
-
 import { textDecoderFactory } from "./textDecoderFactory";
 import { textData } from "../../datatypes";
 

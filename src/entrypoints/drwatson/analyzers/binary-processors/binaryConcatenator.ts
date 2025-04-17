@@ -14,7 +14,6 @@ const instantiate = (src: Data, id: number) => {
   };
 
   (async () => {
-    setBusy(id, true);
     const { fileTypeFromBuffer } = await import("file-type");
     const arrays = src.value.map(([_, {value}]) => (value as BinaryBody).array!);
     const merged = new Uint8Array(arrays.reduce((l, r) => l + r.length, 0));
@@ -28,7 +27,7 @@ const instantiate = (src: Data, id: number) => {
     updateResult(id, binaryData(merged, mime));
   })();
 
-  return {};
+  return { initialBusy: true };
 };
 
 export const binaryConcatenator: AnalyzerModule = {

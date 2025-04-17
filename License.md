@@ -1,5 +1,6 @@
 # 公開物に含まれる OSS
 
+- audiobuffer-to-wav (C) Jam3 / MIT License
 - ExifReader (C) Mattias Wallander / MPL License
 - FileSaver.js (C) Eli Grey / MIT License
 - file-type (C) Sindre Sorhus / MIT License

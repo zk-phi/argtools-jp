@@ -25,7 +25,7 @@ const instantiate = () => {
   return { component };
 };
 
-export const googleLensAnalyzer: AnalyzerModule = {
+export const googleLensSuggestor: AnalyzerModule = {
   label: "Google レンズで調べてみる",
   detect,
   instantiate,

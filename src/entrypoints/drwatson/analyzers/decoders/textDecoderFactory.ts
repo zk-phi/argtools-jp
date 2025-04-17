@@ -1,5 +1,5 @@
 import { textData, keyValueData, type Data } from "../../datatypes";
-import { updateResult, type AnalyzerModule } from "../../state";
+import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 import { ellipsis } from "../../../../utils/string";
 
 type TextDecoratorFactoryProps = {
@@ -61,14 +61,18 @@ export const asyncTextDecoderFactory = (
     if (!matches) {
       return { initialResult: textData("UNEXPECTED: no matches.") };
     }
-    Promise.all(
-      matches.map(async (str): Promise<[string, Data]> => (
-        [`${ellipsis(str, 8)} のデコード結果`, await decoder(str, id)]
-      ))
-    ).then(datum => {
+
+    (async () => {
+      const datum = await Promise.all(
+        matches.map(async (str): Promise<[string, Data]> => (
+          [`${ellipsis(str, 8)} のデコード結果`, await decoder(str, id)]
+        ))
+      );
+      setBusy(id, false);
       updateResult(id, keyValueData(datum));
-    })
-    return {};
+    });
+
+    return { initialBusy: true };
   };
 
   return { label, detect, instantiate };

@@ -1,5 +1,4 @@
 import { asyncTextDecoderFactory } from "./textDecoderFactory";
-import { setBusy } from "../../state";
 import { binaryData } from "../../datatypes";
 
 const alphabet = "[0-9A-z+/]";
@@ -15,14 +14,13 @@ export const base64Decoder = asyncTextDecoderFactory({
   label: "Base64 としてデコード",
   hint: "A〜Z, a〜z, 0〜9, +, /, = が連続する区間があり、その長さが４の倍数",
   pattern: delimited,
+  initialBusy: true,
   decoder: async (str: string, id: number) => {
-    setBusy(id, true);
     const { fileTypeFromBuffer } = await import("file-type");
     const binaryString = atob(str);
     const array = Uint8Array.from(binaryString, s => s.charCodeAt(0));
     const fileType = await fileTypeFromBuffer(array);
-    const mime = fileType ? fileType.mime : "";
-    setBusy(id, false);
+    const mime = fileType?.mime ?? "";
     return binaryData(array, mime);
   },
 });

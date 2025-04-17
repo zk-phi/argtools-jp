@@ -1,5 +1,4 @@
 import { asyncTextDecoderFactory } from "./textDecoderFactory";
-import { setBusy } from "../../state";
 import { textData } from "../../datatypes";
 
 const alphabet = "[a-z0-9]"
@@ -14,10 +13,8 @@ export const punycodeDecoder = asyncTextDecoderFactory({
   hint: "xn-- から始まる英数字列",
   pattern: delimited,
   decoder: async (str: string, id: number) => {
-    setBusy(id, true);
     const punycode = await import("punycode");
     const decoded = punycode.toUnicode(str);
-    setBusy(id, false);
     return textData(decoded);
   },
 });

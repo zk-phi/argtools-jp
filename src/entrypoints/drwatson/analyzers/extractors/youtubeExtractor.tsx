@@ -3,7 +3,7 @@ import { urlExtractorFactory } from "./urlExtractorFactory";
 const body = "[A-z0-9_-]{10,12}";
 const delimited = `(?<=[^A-z0-9_-]|^)${body}(?=[^A-z0-9_-]|$)`;
 
-export const youtubeAnalyzer = urlExtractorFactory({
+export const youtubeExtractor = urlExtractorFactory({
   label: "YouTube の動画 ID っぽい文字列",
   hint: "11 文字前後の英数字または -, _",
   description: (

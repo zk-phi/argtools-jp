@@ -28,7 +28,6 @@ const instantiate = (src: Data, id: number) => {
   }
 
   (async () => {
-    setBusy(id, true);
     const ExifReader = await import("exifreader");
     const tags = ExifReader.load(src.value.array.buffer, { expanded: false });
     const flattened = flattenTags(tags);
@@ -41,10 +40,10 @@ const instantiate = (src: Data, id: number) => {
     updateResult(id, keyValueData(tuples));
   })();
 
-  return {};
+  return { initialBusy: true };
 };
 
-export const exifAnalyzer: AnalyzerModule = {
+export const exifExtractor: AnalyzerModule = {
   label: "メタデータ (Exif 等) 抽出",
   detect,
   instantiate,

@@ -25,7 +25,7 @@ const instantiate = () => {
   return { component };
 };
 
-export const chatGptAnalyzer: AnalyzerModule = {
+export const chatGptSuggestor: AnalyzerModule = {
   label: "ChatGPT と相談してみる",
   detect,
   instantiate,

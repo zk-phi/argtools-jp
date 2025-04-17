@@ -8,15 +8,18 @@ import { concatLines } from "./text-processors/concatLines";
 import { alterLines } from "./text-processors/alterLines";
 
 import { steganoAnalyzer } from "./image-processors/steganoAnalyzer";
-import { exifAnalyzer } from "./image-processors/exifAnalyzer";
+import { exifExtractor } from "./image-processors/exifExtractor";
+
+import { audioReverser } from "./audio-processors/audioReverser";
 
 import { binaryConcatenator } from "./binary-processors/binaryConcatenator";
 
-import { plusCodeAnalyzer } from "./extractors/plusCodeAnalyzer";
-import { youtubeAnalyzer } from "./extractors/youtubeAnalyzer";
+import { plusCodeExtractor } from "./extractors/plusCodeExtractor";
+import { youtubeExtractor } from "./extractors/youtubeExtractor";
 
-import { chatGptAnalyzer } from "./suggestors/chatGptAnalyzer";
-import { googleLensAnalyzer } from "./suggestors/googleLensAnalyzer";
+import { chatGptSuggestor } from "./suggestors/chatGptSuggestor";
+import { googleLensSuggestor } from "./suggestors/googleLensSuggestor";
+import { wolframSuggestor } from "./suggestors/wolframSuggestor";
 
 import type { AnalyzerModule } from "../state";
 
@@ -37,8 +40,8 @@ export const analyzerCategories: AnalyzerCategory[] = [{
 }, {
   category: "抽出",
   analyzers: [
-    plusCodeAnalyzer,
-    youtubeAnalyzer,
+    plusCodeExtractor,
+    youtubeExtractor,
   ],
 }, {
   category: "古典暗号",
@@ -53,11 +56,13 @@ export const analyzerCategories: AnalyzerCategory[] = [{
   category: "画像処理",
   analyzers: [
     steganoAnalyzer,
-    exifAnalyzer,
+    exifExtractor,
   ],
 }, {
   category: "音声処理",
-  analyzers: [],
+  analyzers: [
+    audioReverser,
+  ],
 }, {
   category: "バイナリ処理",
   analyzers: [
@@ -69,8 +74,9 @@ export const analyzerCategories: AnalyzerCategory[] = [{
 }, {
   category: "提案",
   analyzers: [
-    googleLensAnalyzer,
-    chatGptAnalyzer,
+    googleLensSuggestor,
+    wolframSuggestor,
+    chatGptSuggestor,
   ],
 }];
 

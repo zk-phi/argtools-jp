@@ -69,10 +69,14 @@ export type StackFrame = {
 // * initialResult
 //   Optional initial output (if analysis is done synchronously during initialization).
 //
+// * initialBusy
+//   Optional initial busy state (if analysis immediately starts after initialization).
+//
 // * component
 //   Optional component to put into the stack frame with his local state .
 //
-// Note that both can be updated later (as long as the module is active).
+// Note that both can also be updated AFTER initialization (as long as it's active),
+// but not DURING initialization (because it's not stacked yet).
 //
 export type AnalyzerModule = {
   // An user-friendly description.
@@ -82,6 +86,7 @@ export type AnalyzerModule = {
   detect: (suspicious: Data) => string | null,
   instantiate: (src: Data, id: number) => {
     initialResult?: Data,
+    initialBusy?: boolean,
     component?: FunctionComponent<Empty>,
   },
 };
@@ -123,9 +128,9 @@ export const updateComponent = (id: number, component: FunctionComponent<Empty>)
 
 // Initialize an importer and the stack.
 export const setImporter = (module: ImporterModule) => {
-  busy.value = false;
   const id = gensym();
   const { initialResult, component } = module.instantiate(id);
+  busy.value = false;
   stack.value = [{ id, component, label: module.label, result: initialResult ?? null }];
 };
 
@@ -135,10 +140,13 @@ export const pushAnalyzer = (module: AnalyzerModule) => {
   if (!_stack[0]?.result) {
     throw new Error("UNEXPECTED: cannot analyze null output");
   }
-  busy.value = false;
+  busy.value = true;
   const id = gensym();
   const src = _stack[0].result;
-  const { initialResult, component } = module.instantiate(src, id);
+  const { initialResult, initialBusy, component } = module.instantiate(src, id);
+  if (!initialBusy) {
+    busy.value = false;
+  }
   stack.value = [
     { id, component, label: module.label, result: initialResult ?? null },
     ..._stack,
