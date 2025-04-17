@@ -28,16 +28,21 @@ const instantiate = (src: Data, id: number) => {
   }
 
   (async () => {
-    const ExifReader = await import("exifreader");
-    const tags = ExifReader.load(src.value.array.buffer, { expanded: false });
-    const flattened = flattenTags(tags);
-    const tuples: [string, TextData][] = Object.keys(flattened).filter(key => (
-      flattened[key]?.length > 0
-    )).map(key => (
-      [key, textData(`${flattened[key]}`)]
-    ));
-    setBusy(id, false);
-    updateResult(id, keyValueData(tuples));
+    try {
+      const ExifReader = await import("exifreader");
+      const tags = ExifReader.load(src.value.array.buffer, { expanded: false });
+      const flattened = flattenTags(tags);
+      const tuples: [string, TextData][] = Object.keys(flattened).filter(key => (
+        flattened[key]?.length > 0
+      )).map(key => (
+        [key, textData(`${flattened[key]}`)]
+      ));
+      setBusy(id, false);
+      updateResult(id, keyValueData(tuples));
+    } catch (e: any) {
+      setBusy(id, false);
+      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+    }
   })();
 
   return { initialBusy: true };

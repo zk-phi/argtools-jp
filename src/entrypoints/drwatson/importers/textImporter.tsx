@@ -25,6 +25,6 @@ const instantiate = (id: number) => {
 };
 
 export const textImporter: ImporterModule = {
-  label: "文字列を解読",
+  label: "文字列を解析",
   instantiate,
 };

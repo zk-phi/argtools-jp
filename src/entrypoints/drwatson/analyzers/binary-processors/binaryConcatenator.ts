@@ -14,15 +14,20 @@ const instantiate = (src: Data, id: number) => {
   };
 
   (async () => {
-    const arrays = src.value.map(([_, {value}]) => (value as BinaryBody).array!);
-    const merged = new Uint8Array(arrays.reduce((l, r) => l + r.length, 0));
-    for (let i = 0, offset = 0; i < arrays.length; i++) {
-      merged.set(arrays[i], offset);
-      offset += arrays[i].length;
+    try {
+      const arrays = src.value.map(([_, {value}]) => (value as BinaryBody).array!);
+      const merged = new Uint8Array(arrays.reduce((l, r) => l + r.length, 0));
+      for (let i = 0, offset = 0; i < arrays.length; i++) {
+        merged.set(arrays[i], offset);
+        offset += arrays[i].length;
+      }
+      const data = await binaryData(merged);
+      setBusy(id, false);
+      updateResult(id, data);
+    } catch (e: any) {
+      setBusy(id, false);
+      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
     }
-    const data = await binaryData(merged);
-    setBusy(id, false);
-    updateResult(id, data);
   })();
 
   return { initialBusy: true };

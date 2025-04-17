@@ -6,11 +6,15 @@ import { pagerDecoder } from "./decoders/pagerDecoder";
 
 import { concatLines } from "./text-processors/concatLines";
 import { alterLines } from "./text-processors/alterLines";
+import { normalizeText } from "./text-processors/normalizeText";
 
 import { steganoAnalyzer } from "./image-processors/steganoAnalyzer";
 import { exifExtractor } from "./image-processors/exifExtractor";
 
 import { audioReverser } from "./audio-processors/audioReverser";
+import { waveformRenderer } from "./audio-processors/waveformRenderer";
+
+import { audioExtractor } from "./video-processors/audioExtractor";
 
 import { binaryConcatenator } from "./binary-processors/binaryConcatenator";
 
@@ -19,6 +23,7 @@ import { youtubeExtractor } from "./extractors/youtubeExtractor";
 
 import { chatGptSuggestor } from "./suggestors/chatGptSuggestor";
 import { googleLensSuggestor } from "./suggestors/googleLensSuggestor";
+import { googleSuggestor } from "./suggestors/googleSuggestor";
 import { wolframSuggestor } from "./suggestors/wolframSuggestor";
 
 import type { AnalyzerModule } from "../state";
@@ -49,6 +54,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
 }, {
   category: "テキスト処理",
   analyzers: [
+    normalizeText,
     concatLines,
     alterLines,
   ],
@@ -62,6 +68,12 @@ export const analyzerCategories: AnalyzerCategory[] = [{
   category: "音声処理",
   analyzers: [
     audioReverser,
+    waveformRenderer,
+  ],
+}, {
+  category: "映像処理",
+  analyzers: [
+    audioExtractor,
   ],
 }, {
   category: "バイナリ処理",
@@ -76,6 +88,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
   analyzers: [
     googleLensSuggestor,
     wolframSuggestor,
+    googleSuggestor,
     chatGptSuggestor,
   ],
 }];

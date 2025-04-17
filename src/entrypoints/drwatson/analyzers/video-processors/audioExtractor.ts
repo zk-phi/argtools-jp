@@ -1,18 +1,17 @@
 import { duplicate } from "../../../../utils/buffer";
-import { withErrorHandling } from "../error";
 import { textData, binaryData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
-  if (data.type === "binary" && data.value.mime.startsWith("audio")) {
-    return "何を言っているかわからない、変な声が入っていたら";
+  if (data.type === "binary" && data.value.mime.startsWith("video")) {
+    return "動画の音声を詳しく解析したければ";
   }
   return null;
 };
 
 const instantiate = (src: Data, id: number) => {
-  if (src.type !== "binary" || !src.value.mime.startsWith("audio")) {
-    return { initialResult: textData("UNEXPECTED: not an audio data.") };
+  if (src.type !== "binary" || !src.value.mime.startsWith("video")) {
+    return { initialResult: textData("UNEXPECTED: not an video data.") };
   }
 
   (async () => {
@@ -23,9 +22,6 @@ const instantiate = (src: Data, id: number) => {
       // https://qiita.com/generosennin/items/b33d132b49b008b31153
       const duplicated = duplicate(src.value.array.buffer);
       const audioBuffer = await ctx.decodeAudioData(duplicated);
-      for (let i = 0; i < audioBuffer.numberOfChannels; i++) {
-        Array.prototype.reverse.call(audioBuffer.getChannelData(i));
-      }
       const wavBuffer = toWav(audioBuffer);
       const data = await binaryData(new Uint8Array(wavBuffer));
       setBusy(id, false);
@@ -39,8 +35,8 @@ const instantiate = (src: Data, id: number) => {
   return { initialBusy: true };
 };
 
-export const audioReverser: AnalyzerModule = {
-  label: "音声を逆再生",
+export const audioExtractor: AnalyzerModule = {
+  label: "音声データを抽出",
   detect,
   instantiate,
 };

@@ -74,7 +74,7 @@ const App = () => {
           <hr />
           <h3>{frame.label}</h3>
           <DataViewer data={frame.result} />
-          <div>
+          <div style={{ marginTop: "1em" }}>
             <button type="button" onClick={() => undo(history.value.length - ix)}>
               ここまで戻る
             </button>
@@ -92,6 +92,7 @@ const App = () => {
 
       {stack.value[0]?.result ? (
         <section>
+          <h5>結果</h5>
           <DataViewer data={stack.value[0].result} onInspect={pushInspection} />
           <h3>次にできそうなこと</h3>
           <table>
