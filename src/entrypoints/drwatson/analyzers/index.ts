@@ -12,6 +12,7 @@ import { textToDecimal } from "./text/textToDecimal";
 import { textToHexBinary } from "./text/textToHexBinary";
 import { textToHexNumber } from "./text/textToHexNumber";
 import { dtmfSounder } from "./text/dtmfSounder";
+import { mojibakeSimulator } from "./text/mojibakeSimulator";
 
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
@@ -87,6 +88,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     plusCodeExtractor,
     youtubeExtractor,
     pagerDecoder,
+    mojibakeSimulator,
     alterLines,
     textToBinary,
     normalizeText,
