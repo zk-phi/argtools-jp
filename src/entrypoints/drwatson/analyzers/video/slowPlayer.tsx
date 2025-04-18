@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "preact/hooks";
 import { textData, type Data } from "../../datatypes";
-import { type AnalyzerModule } from "../../state";
+import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("video")) {
@@ -9,7 +9,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data, id: number) => {
+const instantiate = (src: Data) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("video")) {
     return { initialResult: textData("UNEXPECTED: not an video data.") };
   }
