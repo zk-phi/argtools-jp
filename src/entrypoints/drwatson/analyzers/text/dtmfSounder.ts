@@ -1,9 +1,10 @@
 import { textData, binaryData, keyValueData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
-// require at least 3 digits
-const digits = /[0-9#*]{3,}/;
-const allDigits = /[0-9#*]{3,}/g;
+// require at least 3 digits,
+// at most two delimiter characters are allowed between each digits, like "000, 22, 124"
+const digits = /([0-9#*][^0-9A-z#*]{0,2}){3,}/;
+const allDigits = /([0-9#*][^0-9A-z#*]{0,2}){3,}/g;
 
 const osc1Freqs: { [key: string]: number } = {
   "1": 697,
@@ -79,6 +80,8 @@ const detect = (data: Data) => {
   return null;
 };
 
+const allDelimiters = /[^0-9*#]+/g;
+
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "text") {
     return { initialResult: textData("UNEXPECTED: not a text.") };
@@ -96,7 +99,8 @@ const instantiate = (src: Data, id: number) => {
       const { default: toWav } = await import("audiobuffer-to-wav");
       const datum: [string, Data][] = await Promise.all(
         matches.map(async match => {
-          const audioBuffer = await renderAudio(match);
+          const stripped = match.replaceAll(allDelimiters, "");
+          const audioBuffer = await renderAudio(stripped);
           const wavBuffer = toWav(audioBuffer);
           const data = await binaryData(new Uint8Array(wavBuffer));
           return [`${match}のダイヤル音`, data];

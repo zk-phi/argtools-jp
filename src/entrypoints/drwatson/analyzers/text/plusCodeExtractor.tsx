@@ -1,8 +1,8 @@
 import { urlExtractorFactory } from "../urlExtractorFactory";
 
 const body = "([23456789CFGHJMPQRVWX]{4}){1,2}\\+([23456789CFGHJMPQRVWX]){2,15}";
-// reject abHHCQ+129 ("abHHCQ" is invalid prefix)
-// but accept "=HHCQ+129==" (delimited with "=")
+// reject "abHHCQ+129ue" ("HHCQ+129" part is valid, but "ab" and "ue" parts are invalid)
+// but accept delimiter characters like ",HHCQ+129,"
 const delimited = `(?<=[^A-z0-9]|^)${body}(?=[^A-z0-9]|$)`;
 
 export const plusCodeExtractor = urlExtractorFactory({

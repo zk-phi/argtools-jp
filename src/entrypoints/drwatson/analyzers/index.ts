@@ -1,5 +1,4 @@
 import { base64Decoder } from "./text/base64Decoder";
-import { htmlEscapeDecoder } from "./text/htmlEscapeDecoder";
 import { punycodeDecoder } from "./text/punycodeDecoder";
 import { urlDecoder } from "./text/urlDecoder";
 import { pagerDecoder } from "./text/pagerDecoder";
@@ -13,6 +12,7 @@ import { textToHexBinary } from "./text/textToHexBinary";
 import { textToHexNumber } from "./text/textToHexNumber";
 import { dtmfSounder } from "./text/dtmfSounder";
 import { mojibakeSimulator } from "./text/mojibakeSimulator";
+import { escapedUnicodeDecoder } from "./text/escapedUnicodeDecoder";
 
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
@@ -79,7 +79,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
   analyzers: [
     base64Decoder,
     punycodeDecoder,
-    htmlEscapeDecoder,
+    escapedUnicodeDecoder,
     urlDecoder,
     textToDecimal,
     textToHexNumber,
