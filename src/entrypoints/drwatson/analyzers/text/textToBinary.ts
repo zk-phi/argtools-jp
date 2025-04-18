@@ -3,7 +3,7 @@ import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "text") {
-    return "もし、内容がグチャグチャなら、実は文字コードにヒントがあるかも？";
+    return "もし、内容がグチャグチャなら、実は他の形式のデータかも？";
   }
   return null;
 };
@@ -17,7 +17,7 @@ const instantiate = (src: Data) => {
 };
 
 export const textToBinary: AnalyzerModule = {
-  label: "生バイナリとして解析してみる",
+  label: "生バイナリとして解析",
   detect,
   instantiate,
 };

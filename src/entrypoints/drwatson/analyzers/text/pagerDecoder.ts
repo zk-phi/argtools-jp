@@ -13,7 +13,7 @@ const pagerCharTable =
 
 const divider = /.{2}/g;
 export const pagerDecoder = textDecoderFactory({
-  label: "ポケベル入力としてデコード",
+  label: "ポケベル入力を読み取る",
   hint: "0-9 が偶数文字連続",
   pattern: delimited,
   decoder: (str: string) => textData(

@@ -43,16 +43,13 @@ import type { AnalyzerModule } from "../state";
 type AnalyzerCategory = { category: string, analyzers: AnalyzerModule[] };
 
 export const analyzerCategories: AnalyzerCategory[] = [{
-  category: "古典パズル",
-  analyzers: [],
-}, {
-  category: "画像処理",
+  category: "画像解析",
   analyzers: [
     steganoAnalyzer,
     exifExtractor,
   ],
 }, {
-  category: "音声処理",
+  category: "音声解析",
   analyzers: [
     audioReverser,
     waveformRenderer,
@@ -60,12 +57,12 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     audioMaximizer,
   ],
 }, {
-  category: "映像処理",
+  category: "映像解析",
   analyzers: [
     audioExtractor,
   ],
 }, {
-  category: "バイナリ処理",
+  category: "バイナリ解析",
   analyzers: [
     binaryToAscii,
     binaryToText,
@@ -76,7 +73,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     binaryToNumber,
   ],
 }, {
-  category: "テキスト処理",
+  category: "テキスト解析",
   analyzers: [
     base64Decoder,
     punycodeDecoder,
@@ -95,7 +92,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     reverseText,
   ],
 }, {
-  category: "提案",
+  category: "ヒント",
   analyzers: [
     w3wSuggestor,
     googleLensSuggestor,

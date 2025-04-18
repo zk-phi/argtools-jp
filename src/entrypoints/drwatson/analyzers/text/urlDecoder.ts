@@ -6,7 +6,7 @@ const alphabet = "[0-9A-Fa-f]";
 const body = `(%${alphabet}{2}){2,}`;
 
 export const urlDecoder = textDecoderFactory({
-  label: "パーセントエンコードとしてデコード",
+  label: "パーセントエンコードを読み取る",
   hint: "%**%** 形式の１６進数",
   pattern: body,
   decoder: (str: string) => textData(decodeURI(str)),

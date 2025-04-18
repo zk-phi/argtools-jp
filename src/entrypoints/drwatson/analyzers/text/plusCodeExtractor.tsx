@@ -6,7 +6,7 @@ const body = "([23456789CFGHJMPQRVWX]{4}){1,2}\\+([23456789CFGHJMPQRVWX]){2,15}"
 const delimited = `(?<=[^A-z0-9]|^)${body}(?=[^A-z0-9]|$)`;
 
 export const plusCodeExtractor = urlExtractorFactory({
-  label: "Open Location Code っぽい文字列",
+  label: "plus code を抽出",
   hint: "４または８文字の英数字の後に「+」と、２文字以上の英数字",
   description: (
     <>
