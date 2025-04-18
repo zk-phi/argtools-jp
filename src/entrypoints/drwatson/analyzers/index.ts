@@ -1,45 +1,42 @@
-import { base64Decoder } from "./decoders/base64Decoder";
-import { htmlEscapeDecoder } from "./decoders/htmlEscapeDecoder";
-import { punycodeDecoder } from "./decoders/punycodeDecoder";
-import { urlDecoder } from "./decoders/urlDecoder";
-import { pagerDecoder } from "./decoders/pagerDecoder";
+import { base64Decoder } from "./text/base64Decoder";
+import { htmlEscapeDecoder } from "./text/htmlEscapeDecoder";
+import { punycodeDecoder } from "./text/punycodeDecoder";
+import { urlDecoder } from "./text/urlDecoder";
+import { pagerDecoder } from "./text/pagerDecoder";
+import { concatLines } from "./text/concatLines";
+import { alterLines } from "./text/alterLines";
+import { normalizeText } from "./text/normalizeText";
+import { reverseText } from "./text/reverseText";
+import { textToBinary } from "./text/textToBinary";
+import { textToDecimal } from "./text/textToDecimal";
+import { textToHexBinary } from "./text/textToHexBinary";
+import { textToHexNumber } from "./text/textToHexNumber";
 
-import { concatLines } from "./text-processors/concatLines";
-import { alterLines } from "./text-processors/alterLines";
-import { normalizeText } from "./text-processors/normalizeText";
-import { reverseText } from "./text-processors/reverseText";
+import { steganoAnalyzer } from "./image/steganoAnalyzer";
+import { exifExtractor } from "./image/exifExtractor";
 
-import { steganoAnalyzer } from "./image-processors/steganoAnalyzer";
-import { exifExtractor } from "./image-processors/exifExtractor";
+import { audioReverser } from "./audio/audioReverser";
+import { audioMaximizer } from "./audio/audioMaximizer";
+import { waveformRenderer } from "./audio/waveformRenderer";
+import { spectrogramRenderer } from "./audio/spectrogramRenderer";
 
-import { audioReverser } from "./audio-processors/audioReverser";
-import { audioMaximizer } from "./audio-processors/audioMaximizer";
-import { waveformRenderer } from "./audio-processors/waveformRenderer";
-import { spectrogramRenderer } from "./audio-processors/spectrogramRenderer";
+import { audioExtractor } from "./video/audioExtractor";
 
-import { audioExtractor } from "./video-processors/audioExtractor";
+import { binaryConcatenator } from "./binary/binaryConcatenator";
+import { zlibDecompressor } from "./binary/zlibDecompressor";
+import { zipDecompressor } from "./binary/zipDecompressor";
+import { gzipDecompressor } from "./binary/gzipDecompressor";
+import { binaryToAscii } from "./binary/binaryToAscii";
+import { binaryToText } from "./binary/binaryToText";
+import { binaryToNumber } from "./binary/binaryToNumber";
+import { plusCodeExtractor } from "./text/plusCodeExtractor";
+import { youtubeExtractor } from "./text/youtubeExtractor";
 
-import { binaryConcatenator } from "./binary-processors/binaryConcatenator";
-import { zlibDecompressor } from "./binary-processors/zlibDecompressor";
-import { zipDecompressor } from "./binary-processors/zipDecompressor";
-import { gzipDecompressor } from "./binary-processors/gzipDecompressor";
-import { binaryToAscii } from "./binary-processors/binaryToAscii";
-import { binaryToText } from "./binary-processors/binaryToText";
-
-import { plusCodeExtractor } from "./extractors/plusCodeExtractor";
-import { youtubeExtractor } from "./extractors/youtubeExtractor";
-
-import { textToBinary } from "./converters/textToBinary";
-import { textToDecimal } from "./converters/textToDecimal";
-import { binaryToNumber } from "./converters/binaryToNumber";
-import { textToHexBinary } from "./converters/textToHexBinary";
-import { textToHexNumber } from "./converters/textToHexNumber";
-
-import { chatGptSuggestor } from "./suggestors/chatGptSuggestor";
-import { googleLensSuggestor } from "./suggestors/googleLensSuggestor";
-import { googleSuggestor } from "./suggestors/googleSuggestor";
-import { wolframSuggestor } from "./suggestors/wolframSuggestor";
-import { w3wSuggestor } from "./suggestors/w3wSuggestor";
+import { chatGptSuggestor } from "./suggestions/chatGptSuggestor";
+import { googleLensSuggestor } from "./suggestions/googleLensSuggestor";
+import { googleSuggestor } from "./suggestions/googleSuggestor";
+import { wolframSuggestor } from "./suggestions/wolframSuggestor";
+import { w3wSuggestor } from "./suggestions/w3wSuggestor";
 
 import type { AnalyzerModule } from "../state";
 
@@ -47,24 +44,6 @@ type AnalyzerCategory = { category: string, analyzers: AnalyzerModule[] };
 
 export const analyzerCategories: AnalyzerCategory[] = [{
   category: "古典パズル",
-  analyzers: [],
-}, {
-  category: "デコード",
-  analyzers: [
-    punycodeDecoder,
-    htmlEscapeDecoder,
-    urlDecoder,
-    base64Decoder,
-    pagerDecoder,
-  ],
-}, {
-  category: "抽出",
-  analyzers: [
-    plusCodeExtractor,
-    youtubeExtractor,
-  ],
-}, {
-  category: "古典暗号",
   analyzers: [],
 }, {
   category: "画像処理",
@@ -94,22 +73,25 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     zlibDecompressor,
     zipDecompressor,
     gzipDecompressor,
-  ],
-}, {
-  category: "データ変換",
-  analyzers: [
     binaryToNumber,
-    textToHexBinary,
-    textToHexNumber,
-    textToDecimal,
-    textToBinary,
   ],
 }, {
   category: "テキスト処理",
   analyzers: [
+    base64Decoder,
+    punycodeDecoder,
+    htmlEscapeDecoder,
+    urlDecoder,
+    textToDecimal,
+    textToHexNumber,
+    textToHexBinary,
+    plusCodeExtractor,
+    youtubeExtractor,
+    pagerDecoder,
+    alterLines,
+    textToBinary,
     normalizeText,
     concatLines,
-    alterLines,
     reverseText,
   ],
 }, {
