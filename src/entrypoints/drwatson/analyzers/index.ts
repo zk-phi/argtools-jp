@@ -11,6 +11,7 @@ import { textToBinary } from "./text/textToBinary";
 import { textToDecimal } from "./text/textToDecimal";
 import { textToHexBinary } from "./text/textToHexBinary";
 import { textToHexNumber } from "./text/textToHexNumber";
+import { dtmfSounder } from "./text/dtmfSounder";
 
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
@@ -82,6 +83,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     textToDecimal,
     textToHexNumber,
     textToHexBinary,
+    dtmfSounder,
     plusCodeExtractor,
     youtubeExtractor,
     pagerDecoder,
