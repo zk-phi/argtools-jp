@@ -49,6 +49,7 @@ const App = () => {
         <section>
           <hr />
           <h3>解析対象を入力</h3>
+          <p>まずは何か読ませてみよう！</p>
           {importers.map(module => (
             <>
               <button
