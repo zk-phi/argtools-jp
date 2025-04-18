@@ -42,9 +42,6 @@ export const textDecoderFactory = (
     const datum = matches.map((str): [string, Data] => (
       [`${ellipsis(str, 8)} のデコード結果`, decoder(str)]
     ));
-    if (datum.length === 1) {
-      return { initialResult: datum[0][1], component };
-    }
     return { initialResult: keyValueData(datum), component };
   };
 
@@ -77,11 +74,7 @@ export const asyncTextDecoderFactory = (
         ))
       );
       setBusy(id, false);
-      if (datum.length === 1) {
-        updateResult(id, datum[0][1]);
-      } else {
-        updateResult(id, keyValueData(datum));
-      }
+      updateResult(id, keyValueData(datum));
     })();
 
     return { initialBusy: true, component };

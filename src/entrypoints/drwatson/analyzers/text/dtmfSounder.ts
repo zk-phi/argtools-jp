@@ -107,11 +107,7 @@ const instantiate = (src: Data, id: number) => {
         })
       );
       setBusy(id, false);
-      if (datum.length === 1) {
-        updateResult(id, datum[0][1]);
-      } else {
-        updateResult(id, keyValueData(datum));
-      }
+      updateResult(id, keyValueData(datum));
     } catch (e: any) {
       setBusy(id, false);
       updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
