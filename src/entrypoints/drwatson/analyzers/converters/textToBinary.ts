@@ -1,5 +1,5 @@
 import { textData, binaryData, type Data } from "../../datatypes";
-import { updateResult, type AnalyzerModule } from "../../state";
+import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "text") {
@@ -8,7 +8,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data, id: number) => {
+const instantiate = (src: Data) => {
   if (src.type !== "text") {
     return { initialResult: textData("UNEXPECTED: not a text.") };
   }

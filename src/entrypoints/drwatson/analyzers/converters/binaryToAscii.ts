@@ -32,8 +32,6 @@ const instantiate = (src: Data) => {
     return { initialResult: datum[0][1] };
   }
   return { initialResult: keyValueData(datum) };
-
-  return {};
 };
 
 export const binaryToAscii: AnalyzerModule = {

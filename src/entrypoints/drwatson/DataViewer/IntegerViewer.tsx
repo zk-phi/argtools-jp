@@ -1,4 +1,3 @@
-import { useCallback } from "preact/hooks";
 import { savePlainText } from "../../../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
