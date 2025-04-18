@@ -75,7 +75,7 @@ export type StackFrame = {
 // * component
 //   Optional component to put into the stack frame with his local state .
 //
-// Note that both can also be updated AFTER initialization (as long as it's active),
+// Note that result and busy-state can also be updated AFTER initialization,
 // but not DURING initialization (because it's not stacked yet).
 //
 export type AnalyzerModule = {
@@ -115,14 +115,6 @@ export const updateResult = (id: number, result: Data | null) => {
   const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
   if (id === _stack[0]?.id) {
     stack.value = [{ ..._stack[0], result }, ..._stack.slice(1)];
-  }
-};
-
-// Update the active module's component.
-export const updateComponent = (id: number, component: FunctionComponent<Empty>) => {
-  const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
-  if (id === _stack[0]?.id) {
-    stack.value = [{ ..._stack[0], component }, ..._stack.slice(1)];
   }
 };
 
