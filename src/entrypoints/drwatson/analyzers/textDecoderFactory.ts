@@ -3,6 +3,8 @@ import { textData, keyValueData, type Data } from "../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../state";
 import { ellipsis } from "../../../utils/string";
 
+type Empty = { [key: string]: never };
+
 type TextDecoratorFactoryProps = {
   label: string,
   hint: string,
