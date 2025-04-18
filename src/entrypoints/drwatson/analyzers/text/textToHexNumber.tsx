@@ -10,5 +10,8 @@ export const textToHexNumber = textDecoderFactory({
   label: "数値（十六進数）を読み取る",
   hint: "十六進数っぽい部分が含まれている",
   pattern: delimited,
+  component: () => (
+    <p>※巨大な数値は正しく読み取れない場合があります（オーバーフロー）</p>
+  ),
   decoder: (str: string) => numberData(Number.parseInt(str, 16)),
 });

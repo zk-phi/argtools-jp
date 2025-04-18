@@ -20,5 +20,8 @@ export const textToDecimal = textDecoderFactory({
   label: "数値（十進数）を読み取る",
   hint: "数値っぽい部分が含まれている",
   pattern: number,
+  component: () => (
+    <p>※巨大な数値は正しく読み取れない場合があります（オーバーフロー）</p>
+  ),
   decoder: (str: string) => numberData(Number(str)),
 });

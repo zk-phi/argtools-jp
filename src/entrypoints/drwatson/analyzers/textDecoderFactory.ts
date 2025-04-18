@@ -1,3 +1,4 @@
+import type { FunctionComponent } from "preact";
 import { textData, keyValueData, type Data } from "../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../state";
 import { ellipsis } from "../../../utils/string";
@@ -6,6 +7,7 @@ type TextDecoratorFactoryProps = {
   label: string,
   hint: string,
   pattern: RegExp | string,
+  component?: FunctionComponent<Empty>,
   decoder: (str: string) => Data,
 };
 
@@ -13,11 +15,12 @@ type AsyncTextDecoratorFactoryProps = {
   label: string,
   hint: string,
   pattern: RegExp | string,
+  component?: FunctionComponent<Empty>,
   decoder: (str: string) => Promise<Data>,
 };
 
 export const textDecoderFactory = (
-  { label, hint, pattern, decoder }: TextDecoratorFactoryProps,
+  { label, hint, pattern, component, decoder }: TextDecoratorFactoryProps,
 ): AnalyzerModule => {
   const detector = new RegExp(pattern, "m");
   const matcher = new RegExp(pattern, "mg");
@@ -38,16 +41,16 @@ export const textDecoderFactory = (
       [`${ellipsis(str, 8)} のデコード結果`, decoder(str)]
     ));
     if (datum.length === 1) {
-      return { initialResult: datum[0][1] };
+      return { initialResult: datum[0][1], component };
     }
-    return { initialResult: keyValueData(datum) };
+    return { initialResult: keyValueData(datum), component };
   };
 
   return { label, detect, instantiate };
 };
 
 export const asyncTextDecoderFactory = (
-  { label, hint, pattern, decoder }: AsyncTextDecoratorFactoryProps,
+  { label, hint, pattern, component, decoder }: AsyncTextDecoratorFactoryProps,
 ): AnalyzerModule => {
   const detector = new RegExp(pattern, "m");
   const matcher = new RegExp(pattern, "mg");
@@ -79,7 +82,7 @@ export const asyncTextDecoderFactory = (
       }
     })();
 
-    return { initialBusy: true };
+    return { initialBusy: true, component };
   };
 
   return { label, detect, instantiate };
