@@ -114,7 +114,7 @@ const instantiate = (src: Data, id: number) => {
     }
   })();
 
-  return { };
+  return { initialBusy: true };
 };
 
 export const dtmfSounder: AnalyzerModule = {
