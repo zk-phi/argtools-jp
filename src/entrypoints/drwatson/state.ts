@@ -105,7 +105,8 @@ export const stack = signal<StackFrame[]>([]);
 
 // Mark the active module as busy (or not busy).
 export const setBusy = (id: number, value: boolean) => {
-  if (id === stack.value[0]?.id) {
+  const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
+  if (id === _stack[0]?.id) {
     busy.value = value;
   }
 };
