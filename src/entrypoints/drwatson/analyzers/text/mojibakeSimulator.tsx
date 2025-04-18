@@ -53,17 +53,17 @@ const instantiate = (src: Data, id: number) => {
       <div>
         <select
             value={fromEncoding.value}
-            onChange={(e) => fromEncoding.value = e.currentTarget.value as Encoding}>
+            onChange={(e) => { fromEncoding.value = e.currentTarget.value as Encoding; }}>
           {encodings.map(encoding => (
-            <option value={encoding[1]}>{encoding[0]}</option>
+            <option key={encoding[0]} value={encoding[1]}>{encoding[0]}</option>
           ))}
         </select>
         {" "}に化けたテキストを{" "}
         <select
             value={toEncoding.value}
-            onChange={(e) => toEncoding.value = e.currentTarget.value as Encoding}>
+            onChange={(e) => { toEncoding.value = e.currentTarget.value as Encoding; }}>
           {encodings.map(encoding => (
-            <option value={encoding[1]}>{encoding[0]}</option>
+            <option key={encoding[0]} value={encoding[1]}>{encoding[0]}</option>
           ))}
         </select>
         {" "}に戻す
