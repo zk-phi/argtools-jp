@@ -2151,6 +2151,11 @@ util@^0.12.4, util@^0.12.5:
     is-typed-array "^1.1.3"
     which-typed-array "^1.1.2"
 
+vite-bundle-analyzer@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/vite-bundle-analyzer/-/vite-bundle-analyzer-0.19.0.tgz#1879eebcd9c52333182e44f4bacfb778be95fe13"
+  integrity sha512-kMslGwnRlYpOCYzda+EUI2rRa5DYCdlbvbrVZO7WvwK1suV/uDFgiD1N5e+woHRsePPInt525wUBWYr1mu0oTQ==
+
 vite-plugin-node-polyfills@^0.23.0:
   version "0.23.0"
   resolved "https://registry.yarnpkg.com/vite-plugin-node-polyfills/-/vite-plugin-node-polyfills-0.23.0.tgz#99d0d1524fa75ce5c7bb1fc8af30283379e9c684"
