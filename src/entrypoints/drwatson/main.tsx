@@ -42,6 +42,12 @@ const App = () => {
               </div>
             </div>
           ))}
+          <div>
+            <b>その他</b>
+            <div style={{ marginLeft: "16px" }}>
+              <small>ファイル形式の自動判別</small>
+            </div>
+          </div>
         </details>
       </section>
 

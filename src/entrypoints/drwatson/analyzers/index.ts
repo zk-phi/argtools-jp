@@ -23,6 +23,8 @@ import { binaryConcatenator } from "./binary-processors/binaryConcatenator";
 import { zlibDecompressor } from "./binary-processors/zlibDecompressor";
 import { zipDecompressor } from "./binary-processors/zipDecompressor";
 import { gzipDecompressor } from "./binary-processors/gzipDecompressor";
+import { binaryToAscii } from "./binary-processors/binaryToAscii";
+import { binaryToText } from "./binary-processors/binaryToText";
 
 import { plusCodeExtractor } from "./extractors/plusCodeExtractor";
 import { youtubeExtractor } from "./extractors/youtubeExtractor";
@@ -32,8 +34,6 @@ import { textToDecimal } from "./converters/textToDecimal";
 import { binaryToNumber } from "./converters/binaryToNumber";
 import { textToHexBinary } from "./converters/textToHexBinary";
 import { textToHexNumber } from "./converters/textToHexNumber";
-import { binaryToAscii } from "./converters/binaryToAscii";
-import { binaryToText } from "./converters/binaryToText";
 
 import { chatGptSuggestor } from "./suggestors/chatGptSuggestor";
 import { googleLensSuggestor } from "./suggestors/googleLensSuggestor";
@@ -88,6 +88,8 @@ export const analyzerCategories: AnalyzerCategory[] = [{
 }, {
   category: "バイナリ処理",
   analyzers: [
+    binaryToAscii,
+    binaryToText,
     binaryConcatenator,
     zlibDecompressor,
     zipDecompressor,
@@ -96,8 +98,6 @@ export const analyzerCategories: AnalyzerCategory[] = [{
 }, {
   category: "データ変換",
   analyzers: [
-    binaryToAscii,
-    binaryToText,
     binaryToNumber,
     textToHexBinary,
     textToHexNumber,
