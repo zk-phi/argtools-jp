@@ -32,6 +32,8 @@ import { textToDecimal } from "./converters/textToDecimal";
 import { binaryToNumber } from "./converters/binaryToNumber";
 import { textToHexBinary } from "./converters/textToHexBinary";
 import { textToHexNumber } from "./converters/textToHexNumber";
+import { binaryToAscii } from "./converters/binaryToAscii";
+import { binaryToText } from "./converters/binaryToText";
 
 import { chatGptSuggestor } from "./suggestors/chatGptSuggestor";
 import { googleLensSuggestor } from "./suggestors/googleLensSuggestor";
@@ -94,10 +96,12 @@ export const analyzerCategories: AnalyzerCategory[] = [{
 }, {
   category: "データ変換",
   analyzers: [
+    binaryToAscii,
+    binaryToText,
+    binaryToNumber,
     textToHexBinary,
     textToHexNumber,
     textToDecimal,
-    binaryToNumber,
     textToBinary,
   ],
 }, {

@@ -1,5 +1,5 @@
 import type { FunctionComponent } from "preact";
-import { signal } from "@preact/signals";
+import { signal, effect } from "@preact/signals";
 import { gensym } from ".././../utils/gensym";
 import type { Data } from "./datatypes";
 

@@ -18,6 +18,7 @@ export const base64Decoder = asyncTextDecoderFactory({
     const binaryString = atob(str);
     const array = Uint8Array.from(binaryString, s => s.charCodeAt(0));
     const data = await binaryData(array);
+    console.log(data);
     return data;
   },
 });

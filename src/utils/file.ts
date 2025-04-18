@@ -22,7 +22,12 @@ export const save = ({ array, mime, ext }: {
   mime: string,
   ext: string,
 }) => {
-  const blob = URL.createObjectURL(new Blob([array], { type: mime }));
+  const blob = new Blob([array], { type: mime });
   fileId++;
-  saveAs(blob, `ダウンロード(${fileId})${ext}`);
+  saveAs(blob, `ダウンロード${fileId}${ext}`);
+};
+export const savePlainText = (text: string) => {
+  const blob = new Blob([text], { type: "text/plain" });
+  fileId++;
+  saveAs(blob, `ダウンロード${fileId}.txt`);
 };

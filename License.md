@@ -6,8 +6,10 @@
 - FFT.js (C) Fedor Indutny / MIT License
 - FileSaver.js (C) Eli Grey / MIT License
 - file-type (C) Sindre Sorhus / MIT License
+  - file-type-xml (C) Borewit / MIT License
 - Preact (C) Jason Miller / MIT License
 - punycode (C) Mathias Bynens / MIT License
+- vite-plugin-node-polyfills (C) David R. Myers / MIT License
 - Tiny.css (C) Muhammed Ihsan / MIT License
 
 # このツールのライセンス

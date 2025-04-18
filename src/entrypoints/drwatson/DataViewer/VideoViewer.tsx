@@ -9,9 +9,11 @@ export const VideoViewer = ({ value }: { value: BinaryBody }) => {
     return URL.createObjectURL(blob);
   }, [value]);
 
+  const upcaseExt = useMemo(() => value.ext.slice(1).toUpperCase(), [value]);
+
   const caption = (
     <>
-      動画ファイル（{value.array.length}バイト）
+      {upcaseExt} 動画（{value.array.length}バイト）
       <a href="javascript: void(0)" onClick={() => save(value)}>保存</a>
     </>
   );

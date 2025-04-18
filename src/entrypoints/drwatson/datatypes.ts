@@ -1,5 +1,8 @@
-import { fileTypeFromBuffer } from "file-type";
+import { FileTypeParser } from "file-type";
+import { detectXml } from "@file-type/xml";
 import { gensym } from "../../utils/gensym";
+
+const fileType = new FileTypeParser({ customDetectors: [detectXml] });
 
 export type BinaryBody = { array: Uint8Array, mime: string, ext: string };
 export type BinaryData = { type: "binary", id: number, value: BinaryBody };
@@ -9,10 +12,17 @@ export function binaryData (array: Uint8Array, mime?: string, ext?: string) {
   if (mime != null) {
     return { type: "binary", id: gensym(), value: { array, mime, ext } };
   }
-  return fileTypeFromBuffer(array).then(fileType => {
-    const mime = fileType?.mime ?? "";
-    const ext = fileType?.ext ? `.${fileType.ext}` : "";
-    return binaryData(array, mime, ext);
+  return fileType.fromBuffer(array).then(fileType => {
+    if (fileType) {
+      return binaryData(array, fileType.mime, `.${fileType.ext}`);
+    }
+    const decoder = new TextDecoder("utf-8", { fatal: true });
+    try {
+      const str = decoder.decode(array);
+      return textData(str);
+    } catch (_) {
+      return binaryData(array, "", "");
+    }
   });
 };
 

@@ -94,7 +94,7 @@ const instantiate = (src: Data, id: number) => {
           const spectrum = analyzeSpectrum(audioBuffer.getChannelData(ch), 600);
           const blob = await renderSpectrum(spectrum, 200);
           const data = await binaryData(new Uint8Array(await blob.arrayBuffer()));
-          return [`チャンネル ${ch + 1} のスペクトログラム`, data];
+          return [`Ch ${ch + 1} のスペクトログラム`, data];
         })
       );
       setBusy(id, false);

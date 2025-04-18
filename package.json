@@ -11,6 +11,7 @@
     "fix": "biome lint --write"
   },
   "dependencies": {
+    "@file-type/xml": "^0.4.1",
     "@preact/signals": "^2.0.3",
     "audiobuffer-to-wav": "^1.0.0",
     "exifreader": "^4.28.1",
@@ -20,6 +21,7 @@
     "file-type": "^20.4.1",
     "preact": "^10.26.5",
     "punycode": "^2.3.1",
+    "vite-plugin-node-polyfills": "^0.23.0",
     "wavesurfer.js": "^7.9.4"
   },
   "devDependencies": {

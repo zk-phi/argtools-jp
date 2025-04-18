@@ -29,8 +29,7 @@ export const RawBinaryViewer = ({ value }: { value: BinaryBody }) => {
   const caption = (
     <>
       その他のバイナリ（{value.mime || "形式不明"} {value.array.length}バイト）
-      <a href="javascript: void(0)" onClick={() => save(value)}
-      >保存</a>
+      <a href="javascript: void(0)" onClick={() => save(value)}>保存</a>
     </>
   );
 

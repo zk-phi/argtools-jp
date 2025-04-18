@@ -26,8 +26,8 @@ const instantiate = (src: Data, id: number) => {
       const peak = reduceRange(audioBuffer.numberOfChannels, ((ch, acc) => {
         const channelData = audioBuffer.getChannelData(ch);
         let channelPeak = 0;
-        for (let i = 0; i < channelData.length; i++) {
-          const abs = Math.abs(channelData[i]);
+        for (const value of channelData) {
+          const abs = Math.abs(value);
           if (abs > channelPeak) {
             channelPeak = abs;
           }

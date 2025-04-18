@@ -84,7 +84,7 @@ const instantiate = (src: Data, id: number) => {
           const peaks = getPeaks(arr, 800);
           const blob = await renderChart(800, 200, peaks, "#56c7ff");
           const data = await binaryData(new Uint8Array(await blob.arrayBuffer()));
-          return [`チャンネル ${ch + 1} の波形`, data];
+          return [`Ch ${ch + 1} の波形`, data];
         }))
       );
       setBusy(id, false);

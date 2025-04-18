@@ -9,9 +9,11 @@ export const ImageViewer = ({ value }: { value: BinaryBody }) => {
     return URL.createObjectURL(blob);
   }, [value]);
 
+  const upcaseExt = useMemo(() => value.ext.slice(1).toUpperCase(), [value]);
+
   const caption = (
     <>
-      画像ファイル（{value.array.length}バイト）
+      {upcaseExt} 画像（{value.array.length}バイト）
       <a href="javascript: void(0)" onClick={() => save(value)}>保存</a>
     </>
   );

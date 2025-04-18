@@ -3,7 +3,7 @@ import { updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "text") {
-    return "もし、テキストの内容がグチャグチャなら、実は別の形式のデータかも？";
+    return "もし、内容がグチャグチャなら、実は文字コードにヒントがあるかも？";
   }
   return null;
 };
@@ -12,13 +12,8 @@ const instantiate = (src: Data, id: number) => {
   if (src.type !== "text") {
     return { initialResult: textData("UNEXPECTED: not a text.") };
   }
-
-  (async () => {
-    const decoded = (new TextEncoder()).encode(src.value);
-    updateResult(id, await binaryData(decoded));
-  })();
-
-  return {};
+  const decoded = (new TextEncoder()).encode(src.value);
+  return { initialResult: binaryData(decoded, "text/plain", ".txt") };
 };
 
 export const textToBinary: AnalyzerModule = {
