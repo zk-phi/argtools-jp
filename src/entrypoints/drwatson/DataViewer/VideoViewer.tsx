@@ -22,7 +22,6 @@ export const VideoViewer = ({ value }: { value: BinaryBody }) => {
     <ViewerContainer caption={caption}>
       <video controls={true} style={{ maxHeight: 300 }}>
         <source src={url} type={value.mime} />
-        <small><a href="javascript: void(0)" onClick={() => save(value)}>保存</a></small>
       </video>
     </ViewerContainer>
   );

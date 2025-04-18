@@ -23,6 +23,7 @@ import { waveformRenderer } from "./audio/waveformRenderer";
 import { spectrogramRenderer } from "./audio/spectrogramRenderer";
 
 import { audioExtractor } from "./video/audioExtractor";
+import { slowPlayer } from "./video/slowPlayer";
 
 import { binaryConcatenator } from "./binary/binaryConcatenator";
 import { zlibDecompressor } from "./binary/zlibDecompressor";
@@ -62,6 +63,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
   category: "映像解析",
   analyzers: [
     audioExtractor,
+    slowPlayer,
   ],
 }, {
   category: "バイナリ解析",
