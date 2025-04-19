@@ -13,6 +13,7 @@ import { textToHexNumber } from "./text/textToHexNumber";
 import { dtmfSounder } from "./text/dtmfSounder";
 import { mojibakeSimulator } from "./text/mojibakeSimulator";
 import { escapedUnicodeDecoder } from "./text/escapedUnicodeDecoder";
+import { isbnExtractor } from "./text/isbnExtractor";
 
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
@@ -88,14 +89,15 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     punycodeDecoder,
     escapedUnicodeDecoder,
     urlDecoder,
+    plusCodeExtractor,
+    isbnExtractor,
+    youtubeExtractor,
     textToDecimal,
     textToHexNumber,
     textToHexBinary,
-    dtmfSounder,
-    plusCodeExtractor,
-    youtubeExtractor,
     pagerDecoder,
     mojibakeSimulator,
+    dtmfSounder,
     alterLines,
     textToBinary,
     normalizeText,
