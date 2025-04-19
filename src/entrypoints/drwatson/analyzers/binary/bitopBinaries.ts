@@ -3,9 +3,8 @@ import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "keyvalue" && data.value.length === 2 &&
-      (data.value[0][1].type === "binary" || data.value[0][1].type === "text") &&
-      (data.value[1][1].type === "binary" || data.value[1][1].type === "text")) {
-    return "解析対象のデータがちょうど２つ";
+      data.value[0][1].type === "binary" && data.value[1][1].type === "binary") {
+    return "バイナリデータがちょうど２つ";
   }
   return null;
 };
@@ -18,15 +17,13 @@ const instantiate = (src: Data, id: number) => {
   const dataA = src.value[0][1];
   const dataB = src.value[1][1];
 
-  if ((dataA.type !== "binary" && dataA.type !== "text") ||
-      (dataB.type !== "binary" && dataB.type !== "text")) {
-    return { initialResult: textData("UNEXPECTED: not a binary nor a text.") };
+  if( dataA.type !== "binary" || dataB.type !== "binary") {
+    return { initialResult: textData("UNEXPECTED: not a binary.") };
   }
 
   (async () => {
-    const encoder = new TextEncoder();
-    const arrA = dataA.type === "binary" ? dataA.value.array : encoder.encode(dataA.value);
-    const arrB = dataB.type === "binary" ? dataB.value.array : encoder.encode(dataB.value);
+    const arrA = dataA.value.array
+    const arrB = dataB.value.array
     const lValue = arrA.length >= arrB.length ? arrA : arrB;
     const rValue = arrA.length < arrB.length ? arrA : arrB;
 
@@ -60,7 +57,7 @@ const instantiate = (src: Data, id: number) => {
 };
 
 export const bitopBinary: AnalyzerModule = {
-  label: "２つのデータをビット演算で合成",
+  label: "データをビット演算で合成",
   detect,
   instantiate,
 };
