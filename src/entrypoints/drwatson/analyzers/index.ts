@@ -34,6 +34,7 @@ import { binaryToText } from "./binary/binaryToText";
 import { binaryToNumber } from "./binary/binaryToNumber";
 import { plusCodeExtractor } from "./text/plusCodeExtractor";
 import { youtubeExtractor } from "./text/youtubeExtractor";
+import { bitopBinary } from "./binary/bitopBinaries";
 
 import { chatGptSuggestor } from "./suggestions/chatGptSuggestor";
 import { googleLensSuggestor } from "./suggestions/googleLensSuggestor";
@@ -42,6 +43,7 @@ import { wolframSuggestor } from "./suggestions/wolframSuggestor";
 import { w3wSuggestor } from "./suggestions/w3wSuggestor";
 
 import { fileAdder } from "./importers/fileAdder";
+import { textAdder } from "./importers/textAdder";
 
 import type { AnalyzerModule } from "../state";
 
@@ -77,6 +79,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     zipDecompressor,
     gzipDecompressor,
     binaryToNumber,
+    bitopBinary,
   ],
 }, {
   category: "テキスト解析",
@@ -102,6 +105,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
 }, {
   category: "他",
   analyzers: [
+    textAdder,
     fileAdder,
   ],
 }, {
