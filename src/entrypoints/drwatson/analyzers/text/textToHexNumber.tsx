@@ -8,7 +8,7 @@ const body = `(0x${alphabet}{1,4}|${alphabet}{2,4})`;
 const delimited = `(?<=[^0-9a-fA-F]|^)${body}(?=[^0-9a-fA-F]|$)`;
 
 export const textToHexNumber = textDecoderFactory({
-  label: "数値（十六進数）を読み取る",
+    label: "数値（十六進数）を抽出",
   hint: "十六進数っぽい部分が含まれている",
   pattern: delimited,
   decoder: (str: string) => numberData(Number.parseInt(str, 16)),

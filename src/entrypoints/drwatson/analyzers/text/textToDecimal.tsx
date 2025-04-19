@@ -17,7 +17,7 @@ const delimitedInt = `${signedInt}(?=[^0-9]|$)`;
 const number = `${delimitedUFloat}|${delimitedFloat}|${delimitedUInt}|${delimitedInt}`;
 
 export const textToDecimal = textDecoderFactory({
-  label: "数値（十進数）を読み取る",
+  label: "数値（十進数）を抽出",
   hint: "数値っぽい部分が含まれている",
   pattern: number,
   component: () => (

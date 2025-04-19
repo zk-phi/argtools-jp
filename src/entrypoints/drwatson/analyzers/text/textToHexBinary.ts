@@ -12,7 +12,7 @@ const allDelimiters = /[^0-9A-z]/g;
 const splitter = /[0-9a-fA-F]{2}/g;
 
 export const textToHexBinary = asyncTextDecoderFactory({
-  label: "バイナリ（十六進数）を読み取る",
+    label: "バイナリ（十六進数）を抽出",
   hint: "十六進数っぽい部分が含まれている",
   pattern: delimited,
   decoder: async (str: string) => {
