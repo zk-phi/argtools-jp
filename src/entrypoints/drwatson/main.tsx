@@ -99,7 +99,7 @@ const App = () => {
 
       {stack.value[0]?.result ? (
         <section>
-          <h5>出力データ</h5>
+          <h5>結果</h5>
           <DataViewer data={stack.value[0].result} onInspect={pushInspection} />
           <h3>次にできそうなこと</h3>
           <table>

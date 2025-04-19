@@ -41,6 +41,8 @@ import { googleSuggestor } from "./suggestions/googleSuggestor";
 import { wolframSuggestor } from "./suggestions/wolframSuggestor";
 import { w3wSuggestor } from "./suggestions/w3wSuggestor";
 
+import { fileAdder } from "./importers/fileAdder";
+
 import type { AnalyzerModule } from "../state";
 
 type AnalyzerCategory = { category: string, analyzers: AnalyzerModule[] };
@@ -98,7 +100,12 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     reverseText,
   ],
 }, {
-  category: "ヒント",
+  category: "他",
+  analyzers: [
+    fileAdder,
+  ],
+}, {
+  category: "提案",
   analyzers: [
     w3wSuggestor,
     googleLensSuggestor,
