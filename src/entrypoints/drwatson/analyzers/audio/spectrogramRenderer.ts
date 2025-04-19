@@ -5,6 +5,8 @@ import { infernoColorMap } from "../../../../utils/color";
 import { textData, binaryData, keyValueData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
+// TODO: Try window functions for cleaner results ?
+
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("audio")) {
     return "周波数領域に隠されたデータがあるかも？";
