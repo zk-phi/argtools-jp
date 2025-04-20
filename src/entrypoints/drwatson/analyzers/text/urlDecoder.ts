@@ -10,5 +10,7 @@ export const urlDecoder = textDecoderFactory({
   label: "パーセントエンコードを読み取る",
   hint: "%**%** 形式の１６進数",
   pattern: delimited,
-  decoder: (str: string) => textData(decodeURI(str)),
+  decoder: (str: string, label: string) => (
+    textData(decodeURI(str), label)
+  ),
 });

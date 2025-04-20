@@ -12,14 +12,14 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data) => {
   if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.") };
+    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
   }
   // Replace ALL full-width ascii characters (not only alphabets and numbers)
   // so that we may analyze float value like "１２３．４".
   const replaced = src.value.replaceAll("　", " ").replace(/[\uFF01-\uFF5e]/g, (s) => (
     String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
   ));
-  return { initialResult: textData(replaced) };
+  return { initialResult: textData(replaced, src.label) };
 };
 
 export const normalizeText: AnalyzerModule = {

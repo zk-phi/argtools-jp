@@ -10,9 +10,10 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data) => {
   if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.") };
+    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
   }
-  return { initialResult: textData(Array.from(src.value).reverse().join("")) };
+  const reversed = Array.from(src.value).reverse().join("");
+  return { initialResult: textData(reversed, "反転されたテキスト") };
 };
 
 export const reverseText: AnalyzerModule = {

@@ -25,10 +25,10 @@ export const escapedUnicodeDecoder = textDecoderFactory({
   label: "Unicode の数値参照を読み取る",
   hint: "&#xFF; U+FF \\uFF 0xFF などの１６進数",
   pattern: sequenceDelimited,
-  decoder: (str: string) => {
+  decoder: (str: string, label: string) => {
     const chars = str.match(value);
     if (!chars) {
-      return textData("UNEXPECTED: no matches.");
+      return textData("UNEXPECTED: no matches.", "エラー");
     }
     const string = String.fromCodePoint.apply(null, chars.map(char => {
       if (char.startsWith("#x")) {
@@ -39,6 +39,6 @@ export const escapedUnicodeDecoder = textDecoderFactory({
       }
       return Number.parseInt(char, 16);
     }));
-    return textData(string);
+    return textData(string, label);
   },
 });

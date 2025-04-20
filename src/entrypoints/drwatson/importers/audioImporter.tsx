@@ -35,7 +35,7 @@ const instantiate = (id: number) => {
           const buffer = await blob.arrayBuffer();
           const audioBuffer = await ctx.decodeAudioData(buffer);
           const wavBuffer = toWav(audioBuffer);
-          const data = await binaryData(new Uint8Array(wavBuffer));
+          const data = await binaryData(new Uint8Array(wavBuffer), "集音された音声");
           setBusy(id, false);
           setDecoding(false);
           updateResult(id, data);

@@ -12,7 +12,7 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("audio")) {
-    return { initialResult: textData("UNEXPECTED: not an audio data.") };
+    return { initialResult: textData("UNEXPECTED: not an audio data.", "エラー") };
   }
 
   (async () => {
@@ -42,12 +42,12 @@ const instantiate = (src: Data, id: number) => {
         }
       }
       const wavBuffer = toWav(audioBuffer);
-      const data = await binaryData(new Uint8Array(wavBuffer));
+      const data = await binaryData(new Uint8Array(wavBuffer), src.label);
       setBusy(id, false);
       updateResult(id, data);
     } catch (e: any) {
       setBusy(id, false);
-      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
     }
   })();
 

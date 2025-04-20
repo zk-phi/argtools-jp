@@ -1,18 +1,17 @@
-import type { Data } from "../datatypes";
+import type { AtomicData } from "../datatypes";
 import { ViewerContainer } from "./ViewerContainer";
 import { DataViewer } from ".";
 
-export const KeyValueViewer = ({ value, onInspect }: {
-  value: [string, Data][],
-  onInspect?: (data: Data) => void,
+export const MultipleViewer = ({ datum, onInspect }: {
+  datum: AtomicData[],
+  onInspect?: (data: AtomicData) => void,
 }) => (
-  <ViewerContainer caption={`複数のデータ（${value.length}件）`}>
+  <ViewerContainer caption={`複数のデータ（${datum.length}件）`}>
     <div style={{ maxHeight: 600, overflow: "auto" }}>
       <table>
         <tbody>
-          {value.slice(0, 100).map(([key, data]) => (
+          {datum.slice(0, 100).map((data) => (
             <tr key={data.id}>
-              <td>{key}</td>
               <td><DataViewer data={data} /></td>
               {onInspect && (
                 <td>
@@ -25,7 +24,7 @@ export const KeyValueViewer = ({ value, onInspect }: {
           ))}
         </tbody>
       </table>
-      {value.length > 100 && "... (先頭の 100 件を表示)"}
+      {datum.length > 100 && "... (先頭の 100 件を表示)"}
     </div>
   </ViewerContainer>
 );

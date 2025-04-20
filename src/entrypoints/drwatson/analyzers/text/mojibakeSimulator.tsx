@@ -20,7 +20,7 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.") };
+    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
   }
 
   const fromEncoding = signal<Encoding>("SJIS");
@@ -40,7 +40,7 @@ const instantiate = (src: Data, id: number) => {
         type: "string",
       });
       setBusy(id, false);
-      updateResult(id, textData(str));
+      updateResult(id, textData(str, "復元されたテキスト"));
     }
   });
 

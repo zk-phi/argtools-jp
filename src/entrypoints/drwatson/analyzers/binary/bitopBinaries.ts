@@ -1,24 +1,23 @@
-import { textData,  binaryData, keyValueData, type Data } from "../../datatypes";
+import { textData,  binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
-  if (data.type === "keyvalue" && data.value.length === 2 &&
-      data.value[0][1].type === "binary" && data.value[1][1].type === "binary") {
+  if (data.type === "multiple" && data.datum.length === 2 &&
+      data.datum[0].type === "binary" && data.datum[1].type === "binary") {
     return "バイナリデータがちょうど２つ";
   }
   return null;
 };
 
 const instantiate = (src: Data, id: number) => {
-  if (src.type !== "keyvalue" || src.value.length !== 2) {
-    return { initialResult: textData("UNEXPECTED: not a pair of two datum.") };
+  if (src.type !== "multiple" || src.datum.length !== 2) {
+    return { initialResult: textData("UNEXPECTED: not a pair of two datum.", "エラー") };
   }
 
-  const dataA = src.value[0][1];
-  const dataB = src.value[1][1];
+  const [dataA, dataB] = src.datum;
 
-  if( dataA.type !== "binary" || dataB.type !== "binary") {
-    return { initialResult: textData("UNEXPECTED: not a binary.") };
+  if(dataA.type !== "binary" || dataB.type !== "binary") {
+    return { initialResult: textData("UNEXPECTED: not a binary.", "エラー") };
   }
 
   (async () => {
@@ -40,14 +39,14 @@ const instantiate = (src: Data, id: number) => {
       nand[i] = ~(lValue[i] & rValue[i % rValue.length]);
     }
 
-    const datum: [string, Data][] = [
-      ["bitwise XOR", await binaryData(xor)],
-      ["bitwise AND", await binaryData(and)],
-      ["bitwise OR", await binaryData(or)],
-      ["bitwise NOR", await binaryData(nor)],
-      ["bitwise NAND", await binaryData(nand)],
+    const datum: AtomicData[] = [
+      await binaryData(xor, "bitwise XOR"),
+      await binaryData(and, "bitwise AND"),
+      await binaryData(or, "bitwise OR"),
+      await binaryData(nor, "bitwise NOR"),
+      await binaryData(nand, "bitwise NAND"),
     ];
-    const result = keyValueData(datum);
+    const result = multipleData(datum);
 
     setBusy(id, false);
     updateResult(id, result);

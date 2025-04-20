@@ -1,4 +1,4 @@
-import { textData, binaryData, keyValueData, type Data } from "../../datatypes";
+import { textData, binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 // require at least 3 digits,
@@ -84,33 +84,33 @@ const allDelimiters = /[^0-9*#]+/g;
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.") };
+    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
   }
   const matches = src.value.match(allDigits);
   if (!matches) {
-    return { initialResult: textData("UNEXPECTED: not matches.") };
+    return { initialResult: textData("UNEXPECTED: not matches.", "エラー") };
   }
   if (matches.length > 100) {
-    return { initialResult: textData(`候補が多すぎたので中止しました（${matches.length}件）`) };
+    const msg = `候補が多すぎたので中止しました（${matches.length}件）`;
+    return { initialResult: textData(msg, "エラー") };
   }
 
   (async () => {
     try {
       const { default: toWav } = await import("audiobuffer-to-wav");
-      const datum: [string, Data][] = await Promise.all(
+      const datum: AtomicData[] = await Promise.all(
         matches.map(async match => {
           const stripped = match.replaceAll(allDelimiters, "");
           const audioBuffer = await renderAudio(stripped);
           const wavBuffer = toWav(audioBuffer);
-          const data = await binaryData(new Uint8Array(wavBuffer));
-          return [`${match}のダイヤル音`, data];
+          return await binaryData(new Uint8Array(wavBuffer), `${match}のダイヤル音`);
         })
       );
       setBusy(id, false);
-      updateResult(id, keyValueData(datum));
+      updateResult(id, multipleData(datum));
     } catch (e: any) {
       setBusy(id, false);
-      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
     }
   })();
 

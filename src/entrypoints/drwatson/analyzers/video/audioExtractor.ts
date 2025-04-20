@@ -11,7 +11,7 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("video")) {
-    return { initialResult: textData("UNEXPECTED: not an video data.") };
+    return { initialResult: textData("UNEXPECTED: not a video.", "エラー") };
   }
 
   (async () => {
@@ -23,12 +23,12 @@ const instantiate = (src: Data, id: number) => {
       const duplicated = duplicate(src.value.array.buffer);
       const audioBuffer = await ctx.decodeAudioData(duplicated);
       const wavBuffer = toWav(audioBuffer);
-      const data = await binaryData(new Uint8Array(wavBuffer));
+      const data = await binaryData(new Uint8Array(wavBuffer), "抽出された音声");
       setBusy(id, false);
       updateResult(id, data);
     } catch (e: any) {
       setBusy(id, false);
-      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
     }
   })();
 

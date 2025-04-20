@@ -13,7 +13,7 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary") {
-    return { initialResult: textData("UNEXPECTED: not a binary.") };
+    return { initialResult: textData("UNEXPECTED: not a binary.", "エラー") };
   };
 
   (async () => {
@@ -21,9 +21,9 @@ const instantiate = (src: Data, id: number) => {
     unzlib(src.value.array, {}, async (e, expanded) => {
       if (e) {
         setBusy(id, false);
-        updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+        updateResult(id, textData("message" in e ? e.message : "", "エラー"));
       } else {
-        const data = await binaryData(expanded);
+        const data = await binaryData(expanded, "解凍されたデータ");
         setBusy(id, false);
         updateResult(id, data);
       }

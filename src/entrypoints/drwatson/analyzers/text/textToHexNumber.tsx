@@ -11,5 +11,7 @@ export const textToHexNumber = textDecoderFactory({
     label: "数値（十六進数）を抽出",
   hint: "十六進数っぽい部分が含まれている",
   pattern: delimited,
-  decoder: (str: string) => numberData(Number.parseInt(str, 16)),
+  decoder: (str: string, label: string) => (
+    numberData(Number.parseInt(str, 16), label)
+  ),
 });

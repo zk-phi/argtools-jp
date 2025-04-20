@@ -1,5 +1,5 @@
 import { readFileAsBuffer } from "../../../../utils/file";
-import { binaryData, keyValueData, type Data } from "../../datatypes";
+import { binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = () => (
@@ -11,26 +11,22 @@ export const instantiate = (src: Data | null, id: number) => {
     if (files) {
       updateResult(id, null);
       setBusy(id, true);
-      const results: [string, Data][] = await Promise.all(
+      const datum: AtomicData[] = await Promise.all(
         [...files].map(async file => {
           const buffer = await readFileAsBuffer(file);
           const array = new Uint8Array(buffer);
-          return [file.name, await binaryData(array)];
+          return await binaryData(array, file.name);
         })
       );
       setBusy(id, false);
       if (src) {
-        if (src.type === "keyvalue") {
-          Array.prototype.unshift.apply(results, src.value);
+        if (src.type === "multiple") {
+          Array.prototype.unshift.apply(datum, src.datum);
         } else {
-          results.unshift(["", src]);
+          datum.unshift(src);
         }
       }
-      if (results.length === 1) {
-        updateResult(id, results[0][1]);
-      } else {
-        updateResult(id, keyValueData(results));
-      }
+      updateResult(id, multipleData(datum));
     }
   };
 

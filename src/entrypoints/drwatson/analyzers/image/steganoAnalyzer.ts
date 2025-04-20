@@ -1,4 +1,4 @@
-import { keyValueData, binaryData, textData, type Data } from "../../datatypes";
+import { multipleData, binaryData, textData, type Data, type AtomicData } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
@@ -10,7 +10,7 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("image")) {
-    return { initialResult: textData("UNEXPECTED: not an image.") };
+    return { initialResult: textData("UNEXPECTED: not an image.", "エラー") };
   };
 
   (async () => {
@@ -51,27 +51,18 @@ const instantiate = (src: Data, id: number) => {
           arr[i] = (arr[i] & 1) * 255;
         }
       });
-      const data = keyValueData([[
-        "R 成分のみ抽出",
-         await binaryData(new Uint8Array(await rImg.arrayBuffer())),
-      ], [
-        "G 成分のみ抽出",
-        await binaryData(new Uint8Array(await gImg.arrayBuffer())),
-      ], [
-        "B 成分のみ抽出",
-        await binaryData(new Uint8Array(await bImg.arrayBuffer())),
-      ], [
-        "透明ピクセルを抽出",
-        await binaryData(new Uint8Array(await aImg.arrayBuffer())),
-      ], [
-        "最下位ビットを抽出",
-        await binaryData(new Uint8Array(await lsbImg.arrayBuffer())),
-      ]]);
+      const data = multipleData([
+        await binaryData(new Uint8Array(await rImg.arrayBuffer()), "R 成分のみ抽出"),
+        await binaryData(new Uint8Array(await gImg.arrayBuffer()), "G 成分のみ抽出"),
+        await binaryData(new Uint8Array(await bImg.arrayBuffer()), "B 成分のみ抽出"),
+        await binaryData(new Uint8Array(await aImg.arrayBuffer()), "透明ピクセルを抽出"),
+        await binaryData(new Uint8Array(await lsbImg.arrayBuffer()), "最下位ビットを抽出"),
+      ]);
       setBusy(id, false);
       updateResult(id, data);
     } catch (e: any) {
       setBusy(id, false);
-      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
     }
   })();
 

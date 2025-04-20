@@ -18,10 +18,12 @@ export const pagerDecoder = textDecoderFactory({
   label: "ポケベル入力を読み取る",
   hint: "0-9 が偶数文字連続",
   pattern: delimited,
-  decoder: (str: string) => textData(
-    str.replaceAll(allDelimiters, "").match(divider)!.map(letter => {
+  decoder: (str: string, label: string) => {
+    const letters = str.replaceAll(allDelimiters, "").match(divider)!;
+    const decoded = letters.map(letter => {
       const index = Number.parseInt(letter, 10);
       return Number.isNaN(index) ? "" : pagerCharTable.charAt(index)
-    }).join("")
-  ),
+    }).join("");
+    return textData(decoded, label);
+  },
 });

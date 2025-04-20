@@ -23,5 +23,7 @@ export const textToDecimal = textDecoderFactory({
   component: () => (
     <p>※巨大な数値は正しく読み取れない場合があります（オーバーフロー）</p>
   ),
-  decoder: (str: string) => numberData(Number(str)),
+  decoder: (str: string, label: string) => (
+    numberData(Number(str), label)
+  ),
 });

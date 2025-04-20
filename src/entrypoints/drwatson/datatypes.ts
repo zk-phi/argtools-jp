@@ -5,67 +5,62 @@ import { gensym } from "../../utils/gensym";
 const fileType = new FileTypeParser({ customDetectors: [detectXml] });
 
 export type BinaryBody = { array: Uint8Array, mime: string, ext: string };
-export type BinaryData = { type: "binary", id: number, value: BinaryBody };
-export function binaryData (array: Uint8Array, mime: string, ext: string): BinaryData;
-export function binaryData (array: Uint8Array): Promise<BinaryData>;
-export function binaryData (array: Uint8Array, mime?: string, ext?: string) {
+export type BinaryData = { type: "binary", id: number, label: string, value: BinaryBody };
+export function binaryData (array: Uint8Array, label: string, mime: string, ext: string): BinaryData;
+export function binaryData (array: Uint8Array, label: string): Promise<BinaryData>;
+export function binaryData (array: Uint8Array, label: string, mime?: string, ext?: string) {
   if (mime != null) {
-    return { type: "binary", id: gensym(), value: { array, mime, ext } };
+    return { type: "binary", id: gensym(), label, value: { array, mime, ext } };
   }
   return fileType.fromBuffer(array).then(fileType => {
     if (fileType) {
-      return binaryData(array, fileType.mime, `.${fileType.ext}`);
+      return binaryData(array, label, fileType.mime, `.${fileType.ext}`);
     }
     const decoder = new TextDecoder("utf-8", { fatal: true });
     try {
       const str = decoder.decode(array);
-      return textData(str);
+      return textData(str, label);
     } catch (_) {
-      return binaryData(array, "", "");
+      return binaryData(array, label, "", "");
     }
   });
 };
 
-export type TextData = { type: "text", id: number, value: string };
-export const textData = (value: string): TextData => (
-  { type: "text", id: gensym(), value }
+export type TextData = { type: "text", id: number, label: string, value: string };
+export const textData = (value: string, label: string): TextData => (
+  { type: "text", id: gensym(), label, value }
 );
 
-export type IntegerData = { type: "integer", id: number, value: number };
-export const integerData = (value: number): IntegerData => (
-  { type: "integer", id: gensym(), value }
+export type IntegerData = { type: "integer", id: number, label: string, value: number };
+export const integerData = (value: number, label: string): IntegerData => (
+  { type: "integer", id: gensym(), label, value }
 );
 
-export type FloatData = { type: "float", id: number, value: number };
-export const floatData = (value: number): FloatData => (
-  { type: "float", id: gensym(), value }
+export type FloatData = { type: "float", id: number, label: string, value: number };
+export const floatData = (value: number, label: string): FloatData => (
+  { type: "float", id: gensym(), label, value }
 );
 
-export const numberData = (value: number): IntegerData | FloatData => (
-  Number.isInteger(value) ? integerData(value) : floatData(value)
+export const numberData = (value: number, label: string): IntegerData | FloatData => (
+  Number.isInteger(value) ? integerData(value, label) : floatData(value, label)
 );
 
-export type KeyValueData = { type: "keyvalue", id: number, value: [string, Data][] };
-export const keyValueData = (value: [string, Data][]): KeyValueData => (
-  { type: "keyvalue", id: gensym(), value }
+export type MelodyData = { type: "mml", id: number, label: string, value: string };
+export const melodyData = (value: string, label: string): MelodyData => (
+  { type: "mml", id: gensym(), label, value }
 );
 
-// export type TextTableData = { type: "table/text", id: number, value: [string][][] };
-// export const textTableData = (value: [string][][]): TextTableData => (
-//   { type: "table/text", id: gensym(), value }
-// );
-
-// export type NumberTableData = { type: "table/number", id: number, value: [number][][] };
-// export const numberTableData = (value: [number][][]): NumberTableData => (
-//   { type: "table/number", id: gensym(), value }
-// );
-
-export type MelodyData = { type: "mml", id: number, value: string };
-export const melodyData = (value: string): MelodyData => (
-  { type: "mml", id: gensym(), value }
-);
-
-export type Data =
-  TextData | BinaryData | IntegerData | FloatData | KeyValueData | MelodyData
-// | TextTableData | NumberTableData
+export type AtomicData =
+  TextData | BinaryData | IntegerData | FloatData | MelodyData
+// | TextTableData | NumberTableData | IntegersData | FloatsData
 ;
+
+export type MultipleData = { type: "multiple", datum: AtomicData[] };
+export const multipleData = (datum: AtomicData[]): Data => {
+  if (datum.length === 1) {
+    return datum[0];
+  }
+  return { type: "multiple", datum };
+};
+
+export type Data = AtomicData | MultipleData;

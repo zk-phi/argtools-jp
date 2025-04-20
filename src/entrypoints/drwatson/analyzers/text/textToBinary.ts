@@ -10,10 +10,10 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data) => {
   if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.") };
+    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
   }
   const decoded = (new TextEncoder()).encode(src.value);
-  return { initialResult: binaryData(decoded, "text/plain", ".txt") };
+  return { initialResult: binaryData(decoded, src.label, "text/plain", ".txt") };
 };
 
 export const textToBinary: AnalyzerModule = {

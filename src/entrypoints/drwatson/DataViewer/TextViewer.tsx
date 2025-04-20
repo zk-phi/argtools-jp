@@ -1,18 +1,19 @@
+import type { TextData } from "../datatypes";
 import { savePlainText } from "../../../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const TextViewer = ({ value }: { value: string }) => {
+export const TextViewer = ({ data }: { data: TextData }) => {
   const caption = (
     <>
-      文字列（{value.length}文字）
-      <a href="javascript: void(0)" onClick={() => savePlainText(value)}>保存</a>
+      文字列（{data.value.length}文字）
+      <a href="javascript: void(0)" onClick={() => savePlainText(data.value)}>保存</a>
     </>
   );
 
   return (
-    <ViewerContainer caption={caption}>
+    <ViewerContainer label={data.label} caption={caption}>
       <blockquote style={{ maxHeight: 300, maxWidth: 600, overflow: "auto" }}>
-        <pre>{value}</pre>
+        <pre>{data.value}</pre>
       </blockquote>
     </ViewerContainer>
   )

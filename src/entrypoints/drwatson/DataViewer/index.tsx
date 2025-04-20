@@ -1,24 +1,22 @@
 import { TextViewer } from "./TextViewer";
 import { IntegerViewer } from "./IntegerViewer";
 import { FloatViewer } from "./FloatViewer";
-import { KeyValueViewer } from "./KeyValueViewer";
+import { MultipleViewer } from "./MultipleViewer";
 import { AudioViewer } from "./AudioViewer";
 import { ImageViewer } from "./ImageViewer";
 import { RawBinaryViewer } from "./RawBinaryViewer";
 import { VideoViewer } from "./VideoViewer";
-import type { Data, BinaryBody } from "../datatypes";
+import type { Data, BinaryData } from "../datatypes";
 
-const BinaryViewer = ({ value }: {
-  value: BinaryBody,
-}) => (
-  value.mime.startsWith("image") ? (
-    <ImageViewer value={value} />
-  ) : value.mime.startsWith("video") ? (
-    <VideoViewer value={value} />
-  ) : value.mime.startsWith("audio") ? (
-    <AudioViewer value={value} />
+const BinaryViewer = ({ data }: { data: BinaryData }) => (
+  data.value.mime.startsWith("image") ? (
+    <ImageViewer data={data} />
+  ) : data.value.mime.startsWith("video") ? (
+    <VideoViewer data={data} />
+  ) : data.value.mime.startsWith("audio") ? (
+    <AudioViewer data={data} />
   ) : (
-    <RawBinaryViewer value={value} />
+    <RawBinaryViewer data={data} />
   )
 );
 
@@ -27,15 +25,15 @@ export const DataViewer = ({ data, onInspect }: {
   onInspect?: (data: Data) => void,
 }) => (
   data.type === "text" ? (
-    <TextViewer value={data.value} />
+    <TextViewer data={data} />
   ) : data.type === "integer" ? (
-    <IntegerViewer value={data.value} />
+    <IntegerViewer data={data} />
   ) : data.type === "float" ? (
-    <FloatViewer value={data.value} />
+    <FloatViewer data={data} />
   ) : data.type === "binary" ? (
-    <BinaryViewer value={data.value} />
-  ) : data.type === "keyvalue" ? (
-    <KeyValueViewer value={data.value} onInspect={onInspect} />
+    <BinaryViewer data={data} />
+  ) : data.type === "multiple" ? (
+    <MultipleViewer datum={data.datum} onInspect={onInspect} />
   ) : (
     null
   )

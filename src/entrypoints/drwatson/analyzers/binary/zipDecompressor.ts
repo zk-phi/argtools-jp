@@ -1,10 +1,4 @@
-import {
-  textData,
-  binaryData,
-  keyValueData,
-  type BinaryData,
-  type Data,
-} from "../../datatypes";
+import { textData, binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
@@ -20,7 +14,7 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary") {
-    return { initialResult: textData("UNEXPECTED: not a binary.") };
+    return { initialResult: textData("UNEXPECTED: not a binary.", "エラー") };
   };
 
   (async () => {
@@ -28,19 +22,15 @@ const instantiate = (src: Data, id: number) => {
     unzip(src.value.array, {}, async (e, expanded) => {
       if (e) {
         setBusy(id, false);
-        updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+        updateResult(id, textData("message" in e ? e.message : "", "エラー"));
       } else {
-        const datum: [string, BinaryData][] = await Promise.all(
+        const datum: AtomicData[] = await Promise.all(
           Object.keys(expanded).map(async key => (
-            [key, await binaryData(expanded[key])]
+            await binaryData(expanded[key], key)
           ))
         );
         setBusy(id, false);
-        if (datum.length === 1) {
-          updateResult(id, datum[0][1]);
-        } else {
-          updateResult(id, keyValueData(datum));
-        }
+        updateResult(id, multipleData(datum));
       }
     });
   })();

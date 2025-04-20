@@ -11,7 +11,7 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("video")) {
-    return { initialResult: textData("UNEXPECTED: not an video data.") };
+    return { initialResult: textData("UNEXPECTED: not a video.", "エラー") };
   }
 
   const blob = new Blob([src.value.array], { type: src.value.mime });

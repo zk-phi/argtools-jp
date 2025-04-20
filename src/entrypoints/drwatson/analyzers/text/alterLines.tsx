@@ -33,15 +33,15 @@ const instantiate = (src: Data, id: number) => {
   );
 
   if (src.type !== "text") {
-    return { result: textData("ERROR: unexpedted data type.") };
+    return { result: textData("ERROR: unexpedted data type.", "エラー") };
   }
 
   effect(() => {
-    updateResult(id, textData(alterText(src.value, column.value)));
+    updateResult(id, textData(alterText(src.value, column.value), src.label));
   });
 
   return {
-    result: textData(alterText(src.value, column.value)),
+    result: textData(alterText(src.value, column.value), src.label),
     component,
   };
 };

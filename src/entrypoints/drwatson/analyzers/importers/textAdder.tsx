@@ -1,6 +1,6 @@
 import { signal } from "@preact/signals";
 import { debouncer } from "../../../../utils/debouncer";
-import { textData, keyValueData, type Data } from "../../datatypes";
+import { textData, multipleData, type Data } from "../../datatypes";
 import { updateResult, type AnalyzerModule } from "../../state";
 
 const detect = () => (
@@ -13,12 +13,12 @@ export const instantiate = (src: Data | null, id: number) => {
 
   const toCombinedData = (text: string) => {
     if (!src) {
-      return textData(text);
+      return textData(text, "入力されたデータ");
     }
-    if (src.type === "keyvalue") {
-      return keyValueData([...src.value, ["追加された文字列", textData(text)]]);
+    if (src.type === "multiple") {
+      return multipleData([...src.datum, textData(text, "入力されたデータ")]);
     }
-    return keyValueData([["", src], ["追加された文字列", textData(text)]]);
+    return multipleData([src, textData(text, "入力されたデータ")]);
   };
 
   const onInput = (value: string) => {

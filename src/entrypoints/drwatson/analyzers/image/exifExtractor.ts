@@ -1,4 +1,4 @@
-import { keyValueData, textData, type Data, type TextData } from "../../datatypes";
+import { multipleData, textData, type Data, type AtomicData } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const flattenTags = (tags: any): any => (
@@ -24,7 +24,7 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("image")) {
-    return { initialResult: textData("UNEXPECTED: not an image.") };
+    return { initialResult: textData("UNEXPECTED: not an image.", "エラー") };
   }
 
   (async () => {
@@ -32,16 +32,16 @@ const instantiate = (src: Data, id: number) => {
       const ExifReader = await import("exifreader");
       const tags = ExifReader.load(src.value.array.buffer, { expanded: false });
       const flattened = flattenTags(tags);
-      const tuples: [string, TextData][] = Object.keys(flattened).filter(key => (
+      const datum: AtomicData[] = Object.keys(flattened).filter(key => (
         flattened[key]?.length > 0
       )).map(key => (
-        [key, textData(`${flattened[key]}`)]
+        textData(`${flattened[key]}`, key)
       ));
       setBusy(id, false);
-      updateResult(id, keyValueData(tuples));
+      updateResult(id, multipleData(datum));
     } catch (e: any) {
       setBusy(id, false);
-      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
     }
   })();
 

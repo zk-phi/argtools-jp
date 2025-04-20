@@ -1,6 +1,6 @@
 import { mapRange } from "../../../../utils/range";
 import { duplicate } from "../../../../utils/buffer";
-import { textData, binaryData, keyValueData, type Data } from "../../datatypes";
+import { textData, binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 // TODO: support VERY short samples (samples < 800)
@@ -68,7 +68,7 @@ const renderChart = (
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("audio")) {
-    return { initialResult: textData("UNEXPECTED: not an audio data.") };
+    return { initialResult: textData("UNEXPECTED: not an audio data.", "エラー") };
   }
 
   (async () => {
@@ -78,24 +78,22 @@ const instantiate = (src: Data, id: number) => {
       // https://qiita.com/generosennin/items/b33d132b49b008b31153
       const duplicated = duplicate(src.value.array.buffer);
       const audioBuffer = await ctx.decodeAudioData(duplicated);
-      const datum: [string, Data][] = await Promise.all(
+      const datum: AtomicData[] = await Promise.all(
         mapRange(audioBuffer.numberOfChannels, (async (ch: number) => {
           const arr = audioBuffer.getChannelData(ch);
           const peaks = getPeaks(arr, 800);
           const blob = await renderChart(800, 200, peaks, "#56c7ff");
-          const data = await binaryData(new Uint8Array(await blob.arrayBuffer()));
-          return [`Ch ${ch + 1} の波形`, data];
+          return await binaryData(
+            new Uint8Array(await blob.arrayBuffer()),
+            `Ch ${ch + 1} の波形`,
+          );
         }))
       );
       setBusy(id, false);
-      if (datum.length === 1) {
-        updateResult(id, datum[0][1]);
-      } else {
-        updateResult(id, keyValueData(datum));
-      }
+      updateResult(id, multipleData(datum));
     } catch (e: any) {
       setBusy(id, false);
-      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
     }
   })();
 

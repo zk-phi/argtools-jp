@@ -24,11 +24,11 @@ export const urlExtractorFactory = ({
 
   const instantiate = (src: Data) => {
     if (src.type !== "text") {
-      return { initialResult: textData("UNEXPECTED: data is not a text.") };
+      return { initialResult: textData("UNEXPECTED: data is not a text.", "エラー") };
     }
     const matches = src.value.match(matcher);
     if (!matches) {
-      return { initialResult: textData("UNEXPECTED: no matches.") };
+      return { initialResult: textData("UNEXPECTED: no matches.", "エラー") };
     }
     const urls = matches.map(urlConstructor);
 

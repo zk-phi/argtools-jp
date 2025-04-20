@@ -10,9 +10,10 @@ const detect = (data: Data) => {
 
 const instantiate = (src: Data) => {
   if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.") };
+    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
   }
-  return { initialResult: textData(src.value.replace(/(\r\n|\n|\r)/gm, "")) };
+  const concatenated = src.value.replace(/(\r\n|\n|\r)/gm, "");
+  return { initialResult: textData(concatenated, "結合されたテキスト") };
 };
 
 export const concatLines: AnalyzerModule = {

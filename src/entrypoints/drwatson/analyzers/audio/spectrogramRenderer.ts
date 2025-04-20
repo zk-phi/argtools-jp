@@ -2,7 +2,7 @@ import { mapRange } from "../../../../utils/range";
 import { duplicate } from "../../../../utils/buffer";
 import { clamp, roundUpToPowerOf2, norm, rescaleValueMap1D } from "../../../../utils/math";
 import { infernoColorMap } from "../../../../utils/color";
-import { textData, binaryData, keyValueData, type Data } from "../../datatypes";
+import { textData, binaryData, multipleData, type AtomicData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 // TODO: Try window functions for cleaner results ?
@@ -50,7 +50,7 @@ const renderSpectrum = (spectrum: Float32Array[], h: number): Promise<Blob> => (
 
 const instantiate = (src: Data, id: number) => {
   if (src.type !== "binary" || !src.value.mime.startsWith("audio")) {
-    return { initialResult: textData("UNEXPECTED: not an audio data.") };
+    return { initialResult: textData("UNEXPECTED: not an audio data.", "エラー") };
   }
 
   (async () => {
@@ -91,23 +91,21 @@ const instantiate = (src: Data, id: number) => {
       // https://qiita.com/generosennin/items/b33d132b49b008b31153
       const duplicated = duplicate(src.value.array.buffer);
       const audioBuffer = await ctx.decodeAudioData(duplicated);
-      const datum: [string, Data][] = await Promise.all(
+      const datum: AtomicData[] = await Promise.all(
         mapRange(audioBuffer.numberOfChannels, async (ch: number) => {
           const spectrum = analyzeSpectrum(audioBuffer.getChannelData(ch), 600);
           const blob = await renderSpectrum(spectrum, 200);
-          const data = await binaryData(new Uint8Array(await blob.arrayBuffer()));
-          return [`Ch ${ch + 1} のスペクトログラム`, data];
+          return await binaryData(
+            new Uint8Array(await blob.arrayBuffer()),
+            `Ch ${ch + 1} のスペクトログラム`,
+          );
         })
       );
       setBusy(id, false);
-      if (datum.length === 1) {
-        updateResult(id, datum[0][1]);
-      } else {
-        updateResult(id, keyValueData(datum));
-      }
+      updateResult(id, multipleData(datum));
     } catch (e: any) {
       setBusy(id, false);
-      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
     }
   })();
 

@@ -2,31 +2,31 @@ import { binaryData, textData, type Data, type BinaryBody } from "../../datatype
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
-  if (data.type === "keyvalue" && data.value.every(([_, {type}]) => type ===  "binary")) {
-    return "もし、壊れたバイナリデータがたくさんあるなら";
+  if (data.type === "multiple" && data.datum.every(({type}) => type ===  "binary")) {
+    return "もし、壊れたデータが沢山あるなら、結合するとファイルが完成するかも？";
   }
   return null;
 };
 
 const instantiate = (src: Data, id: number) => {
-  if (src.type !== "keyvalue" || src.value.some(([_, {type}]) => type !== "binary")) {
-    return { initialResult: textData("UNEXPECTED: not a binary set.") };
+  if (src.type !== "multiple" || src.datum.some(({type}) => type !== "binary")) {
+    return { initialResult: textData("UNEXPECTED: not a binary set.", "エラー") };
   };
 
   (async () => {
     try {
-      const arrays = src.value.map(([_, {value}]) => (value as BinaryBody).array!);
+      const arrays = src.datum.map(({value}) => (value as BinaryBody).array!);
       const merged = new Uint8Array(arrays.reduce((l, r) => l + r.length, 0));
       for (let i = 0, offset = 0; i < arrays.length; i++) {
         merged.set(arrays[i], offset);
         offset += arrays[i].length;
       }
-      const data = await binaryData(merged);
+      const data = await binaryData(merged, "結合されたバイナリ");
       setBusy(id, false);
       updateResult(id, data);
     } catch (e: any) {
       setBusy(id, false);
-      updateResult(id, textData(`ERROR: ${"message" in e ? e.message : ""}`));
+      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
     }
   })();
 

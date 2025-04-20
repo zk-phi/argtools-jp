@@ -14,10 +14,10 @@ export const base64Decoder = asyncTextDecoderFactory({
   label: "Base64 を読み取る",
   hint: "A〜Z, a〜z, 0〜9, +, /, = が連続する区間があり、その長さが４の倍数",
   pattern: delimited,
-  decoder: async (str: string) => {
+  decoder: async (str: string, label: string) => {
     const binaryString = atob(str);
     const array = Uint8Array.from(binaryString, s => s.charCodeAt(0));
-    const data = await binaryData(array);
+    const data = await binaryData(array, label);
     return data;
   },
 });
