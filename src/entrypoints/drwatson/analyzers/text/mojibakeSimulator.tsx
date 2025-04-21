@@ -5,7 +5,6 @@ import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 const findSjisUtf8Candidates = async (
   mojibake: Uint8Array,
   fixed: Uint8Array,
-  decoder: (arr: Buffer) => string,
 ): Promise<string[][] | null> => {
   const { UTF_TO_JIS_TABLE } = await import("../../../../../resources/utf8-to-jis-table");
   const allCandidates: string[][] = [];
@@ -45,34 +44,52 @@ const findSjisUtf8Candidates = async (
       }
       targetBytes = mojibake.slice(targetFrom, i);
     }
-    if (!targetBytes || targetBytes.length === 0) {
-      // unexpected: target not found
-      return null;
-    }
-
-    if (targetBytes.length >= 3) {
-      // no 4-byte characters exist in sjis range
+    if (!targetBytes || targetBytes.length === 0 || targetBytes.length >= 3) {
+      // unexpected: invalid target (no 4-byte characters exist in the sjis range)
       allCandidates.push([]);
       continue;
     }
 
-    // find candidates
+    // append/prepend random bytes to find valid utf8 characters
     const candidates: string[] = [];
-    for (let b1 = 0; b1 < 256; b1++) {
+    if (0x80 <= targetBytes[0] && targetBytes[0] <= 0xbf) {
+      // first byte is dropped
       if (targetBytes.length >= 2) {
-        const c1 = UTF_TO_JIS_TABLE[(b1 << 16) | (targetBytes[0] << 8) | targetBytes[1]];
-        const c2 = UTF_TO_JIS_TABLE[(targetBytes[0] << 16) | (targetBytes[1] << 8) | b1];
-        // TODO: optimize to bypass decoder
-        if (c1) candidates.push(decoder(Buffer.from([b1, targetBytes[0], targetBytes[1]])));
-        if (c2) candidates.push(decoder(Buffer.from([targetBytes[0], targetBytes[1], b1])));
-      } else {
-        const c1 = UTF_TO_JIS_TABLE[(b1 << 8) | targetBytes[0]];
-        const c2 = UTF_TO_JIS_TABLE[(targetBytes[0] << 8) | b1];
-        if (c1) candidates.push(decoder(Buffer.from([b1, targetBytes[0]])));
-        if (c2) candidates.push(decoder(Buffer.from([targetBytes[0], b1])));
-        for (let b2 = 0; b2 < 256; b2++) {
-          const c3 = UTF_TO_JIS_TABLE[(b1 << 16) | (targetBytes[0] << 8) | b2];
-          if (c3) candidates.push(decoder(Buffer.from([b1, targetBytes[0], b2])));
+        // add one byte to complete 3-byte char
+        for (let byte = 0xe0; byte <= 0xef; byte++) {
+          const ch = UTF_TO_JIS_TABLE[(byte << 16) | (targetBytes[0] << 8) | targetBytes[1]];
+          if (ch) candidates.push(ch);
+        }
+      } else { // targetBytes.length === 0
+        // add one byte to complete 2-byte char
+        for (let byte = 0xc2; byte <= 0xdf; byte++) {
+          const ch = UTF_TO_JIS_TABLE[(byte << 8) | targetBytes[0]];
+          if (ch) candidates.push(ch);
+        }
+        // add two bytes to copmlete 3-byte char
+        for (let a = 0xe0; a <= 0xef; a++) {
+          for (let b = 0x80; b <= 0xbf; b++) {
+            const ch = UTF_TO_JIS_TABLE[(a << 16) | (targetBytes[0] << 8) | b];
+            if (ch) candidates.push(ch);
+          }
+        }
+      }
+    } else if (0xc2 <= targetBytes[0] && targetBytes[0] <= 0xdf) {
+      // first byte is 0xc2-0xdf (2-byte character)
+      if (targetBytes.length === 1) {
+        // add one byte to complete 2-byte char
+        for (let byte = 0x80; byte <= 0xbf; byte++) {
+          const ch = UTF_TO_JIS_TABLE[(targetBytes[0] << 8) | byte];
+          if (ch) candidates.push(ch);
+        }
+      }
+    } else if (0xe0 <= targetBytes[0] && targetBytes[0] <= 0xef) {
+      // first byte is 0xe0-0xef (3-byte character)
+      if (targetBytes.length === 2) {
+        // add one byte to complete 3-byte char
+        for (let byte = 0x80; byte <= 0xbf; byte++) {
+          const ch = UTF_TO_JIS_TABLE[(targetBytes[0] << 16) | (targetBytes[1] << 8) | byte];
+          if (ch) candidates.push(ch);
         }
       }
     }
@@ -119,28 +136,22 @@ const instantiate = (src: Data, id: number) => {
         // find candidates of broken bytes
         if (fromEncoding.value === "cp932" && toEncoding.value === "utf8") {
           const reEncoded = _iconv.encode(str, toEncoding.value);
-          const allCandidates = await findSjisUtf8Candidates(
-            sjisArr,
-            reEncoded,
-            (arr: Buffer) => _iconv.decode(arr, toEncoding.value),
-          );
+          const allCandidates = await findSjisUtf8Candidates(sjisArr, reEncoded);
           if (allCandidates) {
             let i = 0;
-            const replaced = str.replaceAll(/�+/g, () => `【${i++}】`);
+            const replaced = str.replaceAll(/�+/g, () => `[${i++}]`);
             const data = multipleData([
               textData(replaced, "復元されたテキスト"),
               ...allCandidates.map((candidates, ix) => (
-                textData(candidates.join(", "), `【${ix}】の候補`)
+                textData(candidates.join(", "), `[${ix}]の候補`)
               )),
             ]);
             setBusy(id, false);
             updateResult(id, data);
             return;
           }
-          setBusy(id, false);
-          updateResult(id, textData(str, "復元されたテキスト"));
-          return;
         }
+        // no candidates
         setBusy(id, false);
         updateResult(id, textData(str, "復元されたテキスト"));
       })();
