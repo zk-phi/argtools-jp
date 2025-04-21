@@ -1,14 +1,13 @@
 import { signal, effect } from "@preact/signals";
-import type { Encoding } from "encoding-japanese";
 import { textData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
-const encodings: [string, Encoding][] = [
-  ["EUC-JP", "EUCJP"],
-  ["ISO-2022-JP", "JIS"],
-  ["Shift_JIS", "SJIS"],
-  ["UTF-8", "UTF8"],
-  ["UTF-16", "UTF16"],
+const encodings: [string, string][] = [
+  ["EUC-JP", "eucjp"],
+  // ["ISO-2022-JP", "JIS"],
+  ["Shift_JIS", "cp932"], // support extended shift jis
+  ["UTF-8", "utf8"],
+  ["UTF-16", "utf16"],
 ];
 
 const detect = (data: Data) => {
@@ -23,29 +22,23 @@ const instantiate = (src: Data, id: number) => {
     return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
   }
 
-  const fromEncoding = signal<Encoding>("SJIS");
-  const toEncoding = signal<Encoding>("UTF8");
-  const Encoding = signal<typeof import("encoding-japanese")>();
+  const fromEncoding = signal<string>("cp932");
+  const toEncoding = signal<string>("utf8");
+  const iconv = signal<typeof import("iconv-lite")>();
 
   effect(() => {
-    if (Encoding.value) {
+    if (iconv.value) {
       setBusy(id, true);
-      const arr = Encoding.value.convert(src.value, {
-        from: "UNICODE",
-        to: fromEncoding.value,
-      });
-      const str = Encoding.value.convert(arr, {
-        from: toEncoding.value,
-        to: "UNICODE",
-        type: "string",
-      });
+      const sjisArr = iconv.value.encode(src.value, fromEncoding.value);
+      // encode sjis arr as if it is an utf arr
+      const str = iconv.value.decode(sjisArr, toEncoding.value);
       setBusy(id, false);
       updateResult(id, textData(str, "復元されたテキスト"));
     }
   });
 
   (async () => {
-    Encoding.value = await import("encoding-japanese");
+    iconv.value = await import("iconv-lite");
   })();
 
   const component = () => (
@@ -53,7 +46,7 @@ const instantiate = (src: Data, id: number) => {
       <div>
         <select
             value={fromEncoding.value}
-            onChange={(e) => { fromEncoding.value = e.currentTarget.value as Encoding; }}>
+            onChange={(e) => { fromEncoding.value = e.currentTarget.value; }}>
           {encodings.map(encoding => (
             <option key={encoding[0]} value={encoding[1]}>{encoding[0]}</option>
           ))}
@@ -61,7 +54,7 @@ const instantiate = (src: Data, id: number) => {
         {" "}に化けたテキストを{" "}
         <select
             value={toEncoding.value}
-            onChange={(e) => { toEncoding.value = e.currentTarget.value as Encoding; }}>
+            onChange={(e) => { toEncoding.value = e.currentTarget.value; }}>
           {encodings.map(encoding => (
             <option key={encoding[0]} value={encoding[1]}>{encoding[0]}</option>
           ))}

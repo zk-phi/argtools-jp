@@ -1,13 +1,13 @@
 # バンドルに含まれる OSS
 
 - audiobuffer-to-wav (C) Jam3 / MIT License
-- encoding.js (C) polygonplanet / MIT License
 - ExifReader (C) Mattias Wallander / MPL License
 - fflate (C) Arjun Barrett / MIT License
 - FFT.js (C) Fedor Indutny / MIT License
 - FileSaver.js (C) Eli Grey / MIT License
 - file-type (C) Sindre Sorhus / MIT License
   - file-type-xml (C) Borewit / MIT License
+- iconv-lite (C) Alexander Shtuchkin / MIT License
 - Preact (C) Jason Miller / MIT License
 - punycode (C) Mathias Bynens / MIT License
 - vite-plugin-node-polyfills (C) David R. Myers / MIT License
