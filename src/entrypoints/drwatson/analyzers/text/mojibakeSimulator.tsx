@@ -30,7 +30,7 @@ const instantiate = (src: Data, id: number) => {
     if (iconv.value) {
       setBusy(id, true);
       const sjisArr = iconv.value.encode(src.value, fromEncoding.value);
-      // encode sjis arr as if it is an utf arr
+      // decode sjis arr to a string, as if it is an utf-8 arr
       const str = iconv.value.decode(sjisArr, toEncoding.value);
       setBusy(id, false);
       updateResult(id, textData(str, "復元されたテキスト"));
