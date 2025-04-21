@@ -18,7 +18,7 @@ export const histogram = (str: string): [string, number][] => {
   ));
 }
 
-const needsEscape = new RegExp("[.?*+^$[\\]\\\\(){}|-]", "g");
+const needsEscape = /[.?*+^$[\]\\(){}|-]/g;
 export const quoteRegex = (str: string): string => (
   str.replace(needsEscape, "\\$&")
 );

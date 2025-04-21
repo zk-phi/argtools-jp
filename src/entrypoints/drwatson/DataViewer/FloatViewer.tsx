@@ -1,4 +1,4 @@
-import { type FloatData } from "../datatypes";
+import type { FloatData } from "../datatypes";
 import { savePlainText } from "../../../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 

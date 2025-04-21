@@ -1,4 +1,4 @@
-import { signal, effect } from "@preact/signals";
+import { signal } from "@preact/signals";
 import { histogram, quoteRegex } from "../../../../utils/string";
 import { debouncer } from "../../../../utils/debouncer";
 import { textData, multipleData, type Data } from "../../datatypes";
@@ -165,7 +165,6 @@ const instantiate = (src: Data, id: number) => {
     }
     const chars = matches.map(match => {
       const replaced = match.replaceAll(zs, "・").replaceAll(os, "－");
-      console.log(replaced);
       return [enMorseTable[replaced] ?? "�", jpMorseTable[replaced] ?? "�"];
     });
     return multipleData([

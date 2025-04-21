@@ -1,4 +1,4 @@
-import { textData, numberData, multipleData, type Data, type AtomicData } from "../../datatypes";
+import { textData, numberData, multipleData, type Data } from "../../datatypes";
 import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {

@@ -1,4 +1,4 @@
-import { multipleData, binaryData, textData, type Data, type AtomicData } from "../../datatypes";
+import { multipleData, binaryData, textData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
