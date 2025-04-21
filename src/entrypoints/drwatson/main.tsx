@@ -107,18 +107,18 @@ const App = () => {
         <section>
           <h5>結果</h5>
           <DataViewer data={stack.value[0].result} onInspect={pushInspection} />
-          <h3>次にできそうなこと</h3>
+          <h3>使えるツール</h3>
           <table>
             <tbody>
               {suggestions.value.map(({ reason, module }) => (
                 <tr key={module.label}>
                   <td style={{ textAlign: "right" }}>
-                    {reason} →
-                  </td>
-                  <td>
                     <button type="button" onClick={() => pushAnalyzer(module)}>
                       {module.label}
                     </button>
+                  </td>
+                  <td>
+                    {reason}
                   </td>
                 </tr>
               ))}
