@@ -13,6 +13,8 @@
 - vite-plugin-node-polyfills (C) David R. Myers / MIT License
 - Tiny.css (C) Muhammed Ihsan / MIT License
 
+文字化け解読ツールで使用している Shift_JIS と UTF-8 の対応表は encoding.js (C) polygonplanet / MIT License から生成しています。
+
 # このツールのライセンス
 
 色々なところからデータセットを持ってきていて、権利周りがややこしいので、このツールの再配布等は原則不可とします。

@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "ignore": ["resources/*.json"]
+    "ignore": ["resources/*"]
   },
   "formatter": {
     "enabled": true,
