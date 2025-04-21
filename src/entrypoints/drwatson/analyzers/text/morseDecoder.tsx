@@ -130,7 +130,7 @@ const detect = (data: Data) => {
   }
   const truncated = data.value.slice(0, 100);
   const hist = histogram(truncated);
-  if (hist.length > 2 && hist[1][1] > truncated.length / 5) {
+  if (hist.length > 2 && hist[1][1] > truncated.length / 3) {
     return `${hist[0][0]}, ${hist[1][0]} の二文字が多く出現`;
   }
   return null;
@@ -200,6 +200,9 @@ const instantiate = (src: Data, id: number) => {
           maxLength={1}
           value={oneChar.value}
           onInput={e => onInputOneChar(e.currentTarget.value)} />
+      <div>
+        <small>※無線局運用規則（十二条）で規定されていない文字は�になります</small>
+      </div>
     </>
   );
 
