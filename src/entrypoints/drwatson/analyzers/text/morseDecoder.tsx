@@ -131,7 +131,7 @@ const detect = (data: Data) => {
   const truncated = data.value.slice(0, 100);
   const hist = histogram(truncated);
   if (hist.length > 2 && hist[1][1] > truncated.length / 3) {
-    return `${hist[0][0]}, ${hist[1][0]} の二文字が多く出現`;
+    return `${hist[0][0]}, ${hist[1][0]} の二文字が多く出現 → モールス信号かも？`;
   }
   return null;
 };
@@ -210,7 +210,7 @@ const instantiate = (src: Data, id: number) => {
 };
 
 export const morseDecoder: AnalyzerModule = {
-  label: "モールス信号として読み取る",
+  label: "モールス信号を復号化",
   detect,
   instantiate,
 };

@@ -4,7 +4,7 @@ import type { AnalyzerModule } from "../../state";
 const tripleSlashes = /(?<=[^\/]|^)\/\/\/(?=[^\/]|$)/;
 const detect = (data: Data) => {
   if (data.type === "text" && data.value.match(tripleSlashes)) {
-    return "アイデア：３連続のスラッシュ「///」といえば";
+    return "３連続のスラッシュ「///」→ what3words を表しているかも？";
   }
   return null;
 };
@@ -28,7 +28,7 @@ const instantiate = () => {
 };
 
 export const w3wSuggestor: AnalyzerModule = {
-  label: "what3words を調べてみる",
+  label: "💡 what3words で検索",
   detect,
   instantiate,
 };

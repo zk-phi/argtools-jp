@@ -3,7 +3,7 @@ import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "text") {
-    return "アイデア：なんだかんだ優秀な";
+    return "もしかしたら、 AI に相談すると何かわかるかも？";
   }
   return null;
 };
@@ -26,7 +26,7 @@ const instantiate = () => {
 };
 
 export const chatGptSuggestor: AnalyzerModule = {
-  label: "ChatGPT と相談してみる",
+  label: "💡 ChatGPT と相談",
   detect,
   instantiate,
 };

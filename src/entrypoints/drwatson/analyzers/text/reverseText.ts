@@ -17,7 +17,7 @@ const instantiate = (src: Data) => {
 };
 
 export const reverseText: AnalyzerModule = {
-  label: "テキストを反転する",
+  label: "反転する",
   detect,
   instantiate,
 };

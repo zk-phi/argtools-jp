@@ -3,7 +3,7 @@ import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary") {
-    return "バイナリから読めそうなテキストを発掘してみる";
+    return "もしかしたら、バイナリの中にメッセージが隠されているかも？";
   }
   return null;
 };
@@ -32,7 +32,7 @@ const instantiate = (src: Data) => {
 };
 
 export const binaryToAscii: AnalyzerModule = {
-  label: "文字列を抽出（ASCII）",
+  label: "文字列データを抽出（ASCII）",
   detect,
   instantiate,
 };

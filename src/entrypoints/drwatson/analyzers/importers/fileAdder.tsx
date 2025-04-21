@@ -3,7 +3,7 @@ import { binaryData, multipleData, type Data, type AtomicData } from "../../data
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = () => (
-  "別のファイルと組み合わせることで何かがわかるかも？"
+  "もしかしたら、別のファイルと組み合わせることで何かわかるかも？"
 );
 
 export const instantiate = (src: Data | null, id: number) => {

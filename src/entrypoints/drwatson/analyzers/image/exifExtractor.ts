@@ -17,7 +17,7 @@ const flattenTags = (tags: any): any => (
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("image")) {
-    return "画像のメタデータに撮影地や日時、機材が記録されているかも？";
+    return "もしかしたら、メタデータに撮影地・日時・機材などが記録されているかも？";
   }
   return null;
 };

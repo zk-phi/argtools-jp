@@ -3,7 +3,7 @@ import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("image")) {
-    return "アイデア：マーク、名所、有名人などを特定するなら";
+    return "もし、マーク・名所・有名人などを特定する必要がありそうなら";
   }
   return null;
 };
@@ -26,7 +26,7 @@ const instantiate = () => {
 };
 
 export const googleLensSuggestor: AnalyzerModule = {
-  label: "Google Lens で調べてみる",
+  label: "💡 Google Lens で検索",
   detect,
   instantiate,
 };

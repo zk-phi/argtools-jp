@@ -15,7 +15,7 @@ const pagerCharTable =
 const allDelimiters = /[^0-9]+/g;
 const divider = /.{2}/g;
 export const pagerDecoder = textDecoderFactory({
-  label: "ポケベル入力を読み取る",
+  label: "ポケベル入力を復号化",
   hint: "0-9 が偶数文字連続",
   pattern: delimited,
   decoder: (str: string, label: string) => {

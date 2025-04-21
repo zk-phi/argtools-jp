@@ -3,7 +3,7 @@ import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("image")) {
-    return "画像に見えない透かしデータが埋め込まれているかも？";
+    return "もしかしたら、画像に見えない透かしデータが埋め込まれているかも？";
   }
   return null;
 };

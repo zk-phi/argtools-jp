@@ -3,7 +3,7 @@ import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "multiple" && data.datum.every(({type}) => type ===  "binary")) {
-    return "もし、壊れたデータが沢山あるなら、結合するとファイルが完成するかも？";
+    return "もしかしたら、結合することでファイルが完成するかも？";
   }
   return null;
 };
@@ -34,7 +34,7 @@ const instantiate = (src: Data, id: number) => {
 };
 
 export const binaryConcatenator: AnalyzerModule = {
-  label: "バイナリデータを結合",
+  label: "結合する",
   detect,
   instantiate,
 };

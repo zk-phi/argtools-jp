@@ -3,7 +3,7 @@ import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "text") {
-    return "アイデア：もし、数式などが含まれているなら";
+    return "もし、数式などが含まれているなら";
   }
   return null;
 };
@@ -39,7 +39,7 @@ const instantiate = () => {
 };
 
 export const wolframSuggestor: AnalyzerModule = {
-  label: "Wolfram Alpha で計算してみる",
+  label: "💡 Wolfram Alpha で計算",
   detect,
   instantiate,
 };

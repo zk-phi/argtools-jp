@@ -3,7 +3,7 @@ import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "text" && data.value.includes("\n")) {
-    return "複数行の文字列";
+    return "複数行の文字列 → 結合すると解析できるようになることがあるかも？";
   }
   return null;
 };

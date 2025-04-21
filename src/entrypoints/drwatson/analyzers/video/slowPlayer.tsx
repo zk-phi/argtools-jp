@@ -51,7 +51,7 @@ const instantiate = (src: Data) => {
 };
 
 export const slowPlayer: AnalyzerModule = {
-  label: "動画を超スロー再生",
+  label: "超スロー再生",
   detect,
   instantiate,
 };

@@ -5,7 +5,7 @@ import { updateResult, type AnalyzerModule } from "../../state";
 const asciiStrMatcher = /^[\x00-\x7F]*$/;
 const detect = (data: Data) => {
   if (data.type === "text" && data.value.match(asciiStrMatcher) && data.value.length > 30) {
-    return "長い ASCII 文字列";
+    return "長い ASCII 文字列 → アスキーアートかも？";
   }
   return null;
 };
@@ -47,7 +47,7 @@ const instantiate = (src: Data, id: number) => {
 };
 
 export const alterLines: AnalyzerModule = {
-  label: "○○文字目で改行（もしかして AA かも？）",
+  label: "○○文字目で改行",
   detect,
   instantiate,
 };

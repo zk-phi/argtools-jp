@@ -31,8 +31,8 @@ const body = `(97[89]${d})?(${i1}|${i2}|${i3}|${i4}|${i5}|${i6})`;
 const delimited = `(?<=[^A-z0-9]|^)${body}(?=[^A-z0-9]|$)`;
 
 export const isbnExtractor = urlExtractorFactory({
-  label: "ISBN コードを抽出",
-  hint: "ちょうど 10 または 13 桁の数字列",
+  label: "ISBN 番号を抽出",
+  hint: "ちょうど 10 または 13 桁のハイフン区切り数字列 → たぶん ISBN 番号！",
   description: (
     <>
       <p>抽出できた ISBN（世界中の出版物に振られた識別番号）の一覧です。</p>

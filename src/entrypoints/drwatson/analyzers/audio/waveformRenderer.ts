@@ -7,7 +7,7 @@ import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("audio")) {
-    return "波形が何かの形を表わしているかも？";
+    return "もしかしたら、波形が何かの形を表わしているかも？";
   }
   return null;
 };

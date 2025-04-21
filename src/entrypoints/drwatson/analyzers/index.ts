@@ -54,16 +54,19 @@ type AnalyzerCategory = { category: string, analyzers: AnalyzerModule[] };
 export const analyzerCategories: AnalyzerCategory[] = [{
   category: "画像解析",
   analyzers: [
+    // もしかしたら
     steganoAnalyzer,
     exifExtractor,
   ],
 }, {
   category: "音声解析",
   analyzers: [
+    // もし
+    audioMaximizer,
     audioReverser,
+    // もしかしたら
     waveformRenderer,
     spectrogramRenderer,
-    audioMaximizer,
   ],
 }, {
   category: "映像解析",
@@ -74,51 +77,60 @@ export const analyzerCategories: AnalyzerCategory[] = [{
 }, {
   category: "バイナリ解析",
   analyzers: [
+    // →
+    zipDecompressor, // 確度高め
+    gzipDecompressor, // 確度高め
+    zlibDecompressor, // 確度高め
+    bitopBinary,
+    binaryToNumber,
+    // もしかしたら
     binaryToAscii,
     binaryToText,
     binaryConcatenator,
-    zlibDecompressor,
-    zipDecompressor,
-    gzipDecompressor,
-    binaryToNumber,
-    bitopBinary,
   ],
 }, {
   category: "テキスト解析",
   analyzers: [
-    base64Decoder,
-    punycodeDecoder,
-    escapedUnicodeDecoder,
-    urlDecoder,
+    // →
+    escapedUnicodeDecoder, // 確度高め
+    isbnExtractor, // 確度高め
+    punycodeDecoder, // 確度高め
+    urlDecoder, // 確度高め
+    plusCodeExtractor, // 確度高め
     morseDecoder,
-    plusCodeExtractor,
-    isbnExtractor,
-    youtubeExtractor,
+    base64Decoder,
     textToDecimal,
     textToHexNumber,
     textToHexBinary,
     pagerDecoder,
-    mojibakeSimulator,
+    youtubeExtractor,
     dtmfSounder,
-    alterLines,
-    textToBinary,
+    alterLines, // 確度低め
+    concatLines, // 確度低め
+    // もし
+    mojibakeSimulator,
     normalizeText,
-    concatLines,
     reverseText,
+    textToBinary,
+    // もしかしたら
   ],
 }, {
   category: "他",
   analyzers: [
+    // もしかしたら、
     textAdder,
     fileAdder,
   ],
 }, {
   category: "提案",
   analyzers: [
+    // →
     w3wSuggestor,
-    googleLensSuggestor,
+    // もし
     wolframSuggestor,
     googleSuggestor,
+    googleLensSuggestor,
+    // もしかしたら
     chatGptSuggestor,
   ],
 }];

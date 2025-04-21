@@ -7,7 +7,7 @@ const detect = (data: Data) => {
     data.value.array.length === 2 ||
     data.value.array.length === 4 ||
     data.value.array.length === 8)) {
-    return "ちょうど１、２、４、または８バイトのバイナリ";
+    return `ちょうど ${data.value.array.length} バイトのバイナリ → 数値データかも？`;
   }
   return null;
 };

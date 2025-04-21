@@ -4,7 +4,7 @@ import { textData, multipleData, type Data } from "../../datatypes";
 import { updateResult, type AnalyzerModule } from "../../state";
 
 const detect = () => (
-  "別の文字列と組み合わせることで何かがわかるかも？"
+  "もしかしたら、別のデータと組み合わせることで何かわかるかも？"
 );
 
 export const instantiate = (src: Data | null, id: number) => {

@@ -3,7 +3,7 @@ import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "text") {
-    return "もし、内容がグチャグチャなら、実は他の形式のデータかも？";
+    return "もし、内容がグチャグチャなら、実は別の形式のデータかも？";
   }
   return null;
 };

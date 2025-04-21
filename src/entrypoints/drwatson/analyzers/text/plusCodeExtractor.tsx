@@ -7,7 +7,7 @@ const delimited = `(?<=[^A-z0-9]|^)${body}(?=[^A-z0-9]|$)`;
 
 export const plusCodeExtractor = urlExtractorFactory({
   label: "plus code を抽出",
-  hint: "４または８文字の英数字の後に「+」と、２文字以上の英数字",
+  hint: "????+?? の形の文字列 → plus code かも？",
   description: (
     <>
       <p>検出された OLC 候補の一覧です</p>

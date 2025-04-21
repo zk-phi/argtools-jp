@@ -3,7 +3,7 @@ import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "text") {
-    return "アイデア：もし、意味のわからない単語や、謎の言語のテキストがあるなら";
+    return "もし、意味のわからない単語や、謎の言語のテキストがあるなら";
   }
   return null;
 };
@@ -31,7 +31,7 @@ const instantiate = () => {
 };
 
 export const googleSuggestor: AnalyzerModule = {
-  label: "Google 検索・翻訳にかけてみる",
+  label: "💡 Google で検索・翻訳",
   detect,
   instantiate,
 };

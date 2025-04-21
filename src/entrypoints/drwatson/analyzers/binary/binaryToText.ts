@@ -3,7 +3,7 @@ import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary") {
-    return "さらに範囲を広げてテキストを発掘してみる";
+    return "もしかしたら、バイナリの中にメッセージが隠されているかも？";
   }
   return null;
 };

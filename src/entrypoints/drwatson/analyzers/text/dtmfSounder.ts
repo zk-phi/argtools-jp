@@ -75,7 +75,7 @@ const renderAudio = async (message: string): Promise<AudioBuffer> => {
 
 const detect = (data: Data) => {
   if (data.type === "text" && data.value.match(digits)) {
-    return "０〜９、#、＊の列がメロディを表しているかも？";
+    return "０〜９、#、＊の列 → なにかのメロディを表しているかも？";
   }
   return null;
 };

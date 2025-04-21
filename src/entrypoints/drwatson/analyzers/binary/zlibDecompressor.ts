@@ -3,7 +3,7 @@ import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.array.length > 2 && data.value.array[0] === 0x78) {
-    return "先頭の１バイトが 0x78";
+    return "先頭の１バイトが 0x78 → zlib で圧縮されたデータかも？";
   }
   if (data.type === "binary" && data.value.mime.endsWith("/zlib")) {
     return "zlib 形式の圧縮データ";
@@ -34,7 +34,7 @@ const instantiate = (src: Data, id: number) => {
 };
 
 export const zlibDecompressor: AnalyzerModule = {
-  label: "zilb 圧縮として解凍してみる",
+  label: "zilb データを復号化",
   detect,
   instantiate,
 };

@@ -18,7 +18,7 @@ const number = `${delimitedUFloat}|${delimitedFloat}|${delimitedUInt}|${delimite
 
 export const textToDecimal = textDecoderFactory({
   label: "数値（十進数）を抽出",
-  hint: "数値っぽい部分が含まれている",
+  hint: "0-9, ., +, - の数字列 → なんらかの数値（十進数）かも？",
   pattern: number,
   component: () => (
     <p>※巨大な数値は正しく読み取れない場合があります（オーバーフロー）</p>

@@ -22,8 +22,8 @@ const sequenceDelimited = `${sequence}(?=[^0-9A-z\\#&]|$)`;
 
 const value = /(#x?)?[0-9A-Fa-f]+/g;
 export const escapedUnicodeDecoder = textDecoderFactory({
-  label: "Unicode の数値参照を読み取る",
-  hint: "&#xFF; U+FF \\uFF 0xFF などの１６進数",
+  label: "Unicode の数値参照を復号化",
+  hint: "&#xFF; U+FF \\uFF 0xFF などの１６進数 → たぶん Unicode の文字番号！",
   pattern: sequenceDelimited,
   decoder: (str: string, label: string) => {
     const chars = str.match(value);

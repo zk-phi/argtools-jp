@@ -4,7 +4,7 @@ import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 const detect = (data: Data) => {
   if (data.type === "multiple" && data.datum.length === 2 &&
       data.datum[0].type === "binary" && data.datum[1].type === "binary") {
-    return "バイナリデータがちょうど２つ";
+    return "バイナリがちょうど２つ → 合成したり差分を取ると何か出てくるかも？";
   }
   return null;
 };
@@ -56,7 +56,7 @@ const instantiate = (src: Data, id: number) => {
 };
 
 export const bitopBinary: AnalyzerModule = {
-  label: "データをビット演算で合成",
+  label: "ビット演算で合成",
   detect,
   instantiate,
 };

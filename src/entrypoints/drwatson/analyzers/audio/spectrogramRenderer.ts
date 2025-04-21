@@ -9,7 +9,7 @@ import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("audio")) {
-    return "周波数領域に隠されたデータがあるかも？";
+    return "もしかしたら、周波数領域に隠されたデータがあるかも？";
   }
   return null;
 };

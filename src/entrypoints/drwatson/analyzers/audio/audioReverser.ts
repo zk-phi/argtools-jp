@@ -39,7 +39,7 @@ const instantiate = (src: Data, id: number) => {
 };
 
 export const audioReverser: AnalyzerModule = {
-  label: "音声を逆再生",
+  label: "逆再生する",
   detect,
   instantiate,
 };
