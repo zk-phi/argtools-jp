@@ -14,6 +14,7 @@ import { dtmfSounder } from "./text/dtmfSounder";
 import { mojibakeSimulator } from "./text/mojibakeSimulator";
 import { escapedUnicodeDecoder } from "./text/escapedUnicodeDecoder";
 import { isbnExtractor } from "./text/isbnExtractor";
+import { morseDecoder } from "./text/morseDecoder";
 
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
@@ -89,6 +90,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     punycodeDecoder,
     escapedUnicodeDecoder,
     urlDecoder,
+    morseDecoder,
     plusCodeExtractor,
     isbnExtractor,
     youtubeExtractor,
