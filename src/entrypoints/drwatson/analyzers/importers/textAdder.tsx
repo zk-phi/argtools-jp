@@ -34,12 +34,19 @@ export const instantiate = (src: Data | null, id: number) => {
   };
 
   const component = () => (
-    <textarea
-        value={input.value}
-        rows={20}
-        cols={50}
-        onInput={e => onInput(e.currentTarget.value)}
-    />
+    <>
+      <p>
+        <small>
+          データはすべてローカルで処理され、入力内容がどこかに送信されることはありません。
+        </small>
+      </p>
+      <textarea
+          value={input.value}
+          rows={20}
+          cols={50}
+          onInput={e => onInput(e.currentTarget.value)}
+      />
+    </>
   );
 
   return { initialResult: toCombinedData(""), component };

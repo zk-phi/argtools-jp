@@ -38,7 +38,14 @@ export const instantiate = (src: Data | null, id: number) => {
   };
 
   const component = () => (
-    <input type="file" multiple={true} onChange={e => openFile(e.currentTarget.files)} />
+    <>
+      <p>
+        <small>
+          データはすべてローカルで処理され、開いたファイルがどこかに送信されることはありません。
+        </small>
+      </p>
+      <input type="file" multiple={true} onChange={e => openFile(e.currentTarget.files)} />
+    </>
   );
 
   return { component }

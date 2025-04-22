@@ -54,11 +54,7 @@ const App = () => {
       {stack.value.length === 0 ? (
         <section>
           <hr />
-          <h3>解析対象を入力</h3>
-          <p>
-            データを入れると使えそうなツールの一覧が表示されます。
-            まずは何か読ませてみてね！
-          </p>
+          <h3>ツールを選んでスタート：</h3>
           {importers.map(module => (
             <>
               <button
@@ -71,7 +67,17 @@ const App = () => {
             </>
           ))}
           <p>
-            <small>※データはすべてローカルで処理され、どこかに送信されることはありません</small>
+            <small>
+              Built with ♡ by <a href="https://zk-phi.github.io/" target="_blank">zk-phi</a> (
+              <a href="https://github.com/zk-phi/argtools-jp/blob/main/License.md" target="_blank">
+                ライセンス表示
+              </a>
+              {", "}
+              <a href="https://github.com/zk-phi/argtools-jp/" target="_blank">
+                ソースコード
+              </a>
+              )
+            </small>
           </p>
         </section>
       ) : (
@@ -110,7 +116,7 @@ const App = () => {
           </p>
           {suggestions.value.length > 0 && (
             <>
-              <h3>使えそうなツール</h3>
+              <h3>使えそうなコマンド</h3>
               <table>
                 <tbody>
                   {suggestions.value.map(({ reason, module }) => (
