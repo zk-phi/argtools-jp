@@ -68,12 +68,12 @@ const App = () => {
           ))}
           <p>
             <small>
-              Built with ♡ by <a href="https://zk-phi.github.io/" target="_blank">zk-phi</a> (
-              <a href="https://github.com/zk-phi/argtools-jp/blob/main/License.md" target="_blank">
+              Built with ♡ by <a href="https://zk-phi.github.io/" target="_blank" rel="noreferrer">zk-phi</a> (
+              <a href="https://github.com/zk-phi/argtools-jp/blob/main/License.md" target="_blank" rel="noreferrer">
                 ライセンス表示
               </a>
               {", "}
-              <a href="https://github.com/zk-phi/argtools-jp/" target="_blank">
+              <a href="https://github.com/zk-phi/argtools-jp/" target="_blank" rel="noreferrer">
                 ソースコード
               </a>
               )
