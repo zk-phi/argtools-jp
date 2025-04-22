@@ -21,8 +21,6 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        main: "src/entrypoints/index.html",
-        anything: "src/entrypoints/anything/index.html",
         drwatson: "src/entrypoints/drwatson/index.html",
         tenji: "src/entrypoints/code/tenji/index.html",
       },
