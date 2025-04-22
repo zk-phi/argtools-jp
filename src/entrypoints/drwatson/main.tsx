@@ -105,25 +105,30 @@ const App = () => {
 
       {stack.value[0]?.result ? (
         <section>
-          <h5>結果</h5>
-          <DataViewer data={stack.value[0].result} onInspect={pushInspection} />
-          <h3>使えるツール</h3>
-          <table>
-            <tbody>
-              {suggestions.value.map(({ reason, module }) => (
-                <tr key={module.label}>
-                  <td style={{ textAlign: "right" }}>
-                    <button type="button" onClick={() => pushAnalyzer(module)}>
-                      {module.label}
-                    </button>
-                  </td>
-                  <td>
-                    {reason}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <p>
+            <DataViewer data={stack.value[0].result} onInspect={pushInspection} />
+          </p>
+          {suggestions.value.length > 0 && (
+            <>
+              <h3>使えそうなツール</h3>
+              <table>
+                <tbody>
+                  {suggestions.value.map(({ reason, module }) => (
+                    <tr key={module.label}>
+                      <td style={{ textAlign: "right" }}>
+                        <button type="button" onClick={() => pushAnalyzer(module)}>
+                          {module.label}
+                        </button>
+                      </td>
+                      <td>
+                        {reason}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
         </section>
       ) : busy.value ? (
         "解析中 ..."

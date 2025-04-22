@@ -3,11 +3,18 @@ import { debouncer } from "../../../../utils/debouncer";
 import { textData, multipleData, type Data } from "../../datatypes";
 import { updateResult, type AnalyzerModule } from "../../state";
 
-const detect = () => (
-  "もしかしたら、別のデータと組み合わせることで何かわかるかも？"
-);
+const detect = (src: Data) => {
+  if (src.type !== "wordlist") {
+    return "もしかしたら、別のデータと組み合わせることで何かわかるかも？";
+  }
+  return null;
+};
 
 export const instantiate = (src: Data | null, id: number) => {
+  if (src && src.type === "wordlist") {
+    return { initialResult: textData("UNEXPECTED: wordlist given", "エラー") };
+  }
+
   const input = signal<string>("");
   const withDebounce = debouncer(100);
 

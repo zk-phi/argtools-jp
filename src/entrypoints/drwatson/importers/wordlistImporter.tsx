@@ -1,0 +1,147 @@
+import { signal } from "@preact/signals";
+import { wordlistData, WordlistBody } from "../datatypes";
+import { cacheAsync } from "../../../utils/cache";
+import { updateResult, setBusy, type ImporterModule } from "../state";
+
+type Dataset = {
+  module: () => Promise<{ data: WordlistBody }>,
+  url: string,
+  label: string,
+  license: string,
+};
+
+const datasets: { [key: string]: Dataset } = {
+  nouns: {
+    module: cacheAsync(() => import("../../anything/datasets/nouns")),
+    url: "https://clrd.ninjal.ac.jp/unidic/",
+    label: "森羅万象（人名以外の名詞）",
+    license: "現代書き言葉 UniDic (C) 国立国語研究所 / 修正 BSD ライセンス",
+  },
+  yomigana: {
+    module: cacheAsync(() => import("../../anything/datasets/yomigana")),
+    url: "https://clrd.ninjal.ac.jp/unidic/",
+    label: "しんらばんしょう（よみがな）",
+    license: "現代書き言葉 UniDic (C) 国立国語研究所 / 修正 BSD ライセンス",
+  },
+  propers: {
+    module: cacheAsync(() => import("../../anything/datasets/propers")),
+    url: "https://clrd.ninjal.ac.jp/unidic/",
+    label: "人名",
+    license: "現代書き言葉 UniDic (C) 国立国語研究所 / 修正 BSD ライセンス",
+  },
+  verbs: {
+    module: cacheAsync(() => import("../../anything/datasets/verbs")),
+    url: "https://clrd.ninjal.ac.jp/unidic/",
+    label: "動詞",
+    license: "現代書き言葉 UniDic (C) 国立国語研究所 / 修正 BSD ライセンス",
+  },
+  adjectives: {
+    module: cacheAsync(() => import("../../anything/datasets/adjectives")),
+    url: "https://clrd.ninjal.ac.jp/unidic/",
+    label: "その他・形容詞等",
+    license: "現代書き言葉 UniDic (C) 国立国語研究所 / 修正 BSD ライセンス",
+  },
+  stations: {
+    module: cacheAsync(() => import("../../anything/datasets/stations")),
+    url: "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2023.html",
+    label: "鉄道駅",
+    license: "国土数値情報 (C) 国土交通省 / CC-BY",
+  },
+  roadsideStations: {
+    module: cacheAsync(() => import("../../anything/datasets/roadsideStations")),
+    url: "http://linkdata.org/work/rdf1s2861i",
+    label: "道の駅",
+    license: "道の駅 (C) 国土交通省, 東京福祉専門学校IT医療ソーシャルワーカー科編集 / CC-BY-NC",
+  },
+  airports: {
+    module: cacheAsync(() => import("../../anything/datasets/airports")),
+    url: "http://linkdata.org/work/rdf1s2795i",
+    label: "空港",
+    license: "日本の空港 (CC0 パブリックドメイン)",
+  },
+  highwayJoints: {
+    module: cacheAsync(() => import("../../anything/datasets/highwayJoints")),
+    url: "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N06-2023.html",
+    label: "IC・JCT・PA・SA 等",
+    license: "国土数値情報 (C) 国土交通省 / CC-BY",
+  },
+};
+
+type DatasetKey = keyof typeof datasets;
+type DatasetCategory = { label: string, datasetKeys: DatasetKey[] };
+const datasetCategories: DatasetCategory[] = [{
+  label: "---- 日本語",
+  datasetKeys: [
+    "nouns",
+    "yomigana",
+    "propers",
+    "verbs",
+    "adjectives",
+  ],
+}, {
+  label: "--- 交通",
+  datasetKeys: [
+    "stations",
+    "roadsideStations",
+    "airports",
+    "highwayJoints",
+  ],
+}];
+
+const instantiate = (id: number) => {
+  const datasetKey = signal<string>("");
+
+  const loadDataset = async (key: string) => {
+    if (datasets[key]) {
+      setBusy(id, true);
+      datasetKey.value = key;
+      const { data } = await datasets[key].module();
+      setBusy(id, false);
+      updateResult(id, wordlistData(data, datasets[key].label));
+    }
+  };
+
+  const component = () => (
+    <>
+      <select
+          value={datasetKey.value}
+          onChange={e => loadDataset(e.currentTarget.value)}>
+        <option value="" disabled={true}>
+          データセットを選択してください
+        </option>
+        {datasetCategories.map(category => (
+          <>
+            <option key={category.label} disabled={true}>
+              {category.label}
+            </option>
+            {category.datasetKeys.map(key => (
+              <option key={key} value={key}>
+                {datasets[key].label}
+              </option>
+            ))}
+          </>
+        ))}
+      </select>
+      {datasetKey.value && (
+        <>
+          <p>
+            出典：
+            <a href={datasets[datasetKey.value].url} target="_blank" rel="noreferrer">
+              {datasets[datasetKey.value].license}
+            </a>
+          </p>
+          <p>
+            ※データを転載する際は、上記出典の利用条件にご注意ください。
+          </p>
+        </>
+      )}
+    </>
+  );
+
+  return { component };
+}
+
+export const wordlistImporter: ImporterModule = {
+  label: "単語や地名を特定",
+  instantiate,
+};

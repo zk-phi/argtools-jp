@@ -6,6 +6,7 @@ import { AudioViewer } from "./AudioViewer";
 import { ImageViewer } from "./ImageViewer";
 import { RawBinaryViewer } from "./RawBinaryViewer";
 import { VideoViewer } from "./VideoViewer";
+import { WordlistViewer } from "./WordlistViewer";
 import type { Data, BinaryData } from "../datatypes";
 
 const BinaryViewer = ({ data }: { data: BinaryData }) => (
@@ -34,6 +35,8 @@ export const DataViewer = ({ data, onInspect }: {
     <BinaryViewer data={data} />
   ) : data.type === "multiple" ? (
     <MultipleViewer datum={data.datum} onInspect={onInspect} />
+  ) : data.type === "wordlist" ? (
+    <WordlistViewer value={data.value} />
   ) : (
     null
   )

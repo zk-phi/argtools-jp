@@ -45,6 +45,12 @@ export const numberData = (value: number, label: string): IntegerData | FloatDat
   Number.isInteger(value) ? integerData(value, label) : floatData(value, label)
 );
 
+export type WordlistBody = { key: string, value: string, id: number }[];
+export type WordlistData = { type: "wordlist", id: number, label: string, value: WordlistBody };
+export const wordlistData = (value: WordlistBody, label: string): WordlistData => (
+  { type: "wordlist", id: gensym(), label, value }
+);
+
 export type MelodyData = { type: "mml", id: number, label: string, value: string };
 export const melodyData = (value: string, label: string): MelodyData => (
   { type: "mml", id: gensym(), label, value }
@@ -63,4 +69,4 @@ export const multipleData = (datum: AtomicData[]): Data => {
   return { type: "multiple", datum };
 };
 
-export type Data = AtomicData | MultipleData;
+export type Data = AtomicData | MultipleData | WordlistData;
