@@ -1,19 +1,10 @@
+import { cacheAsync } from "../../../../utils/cache";
 import { multipleData, textData, type Data, type AtomicData } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
-const flattenTags = (tags: any): any => (
-  Object.fromEntries(
-    Object.keys(tags).map(key => (
-      tags[key]?.description ? (
-        [key, tags[key]?.description]
-      ) : typeof tags[key] === "object" ? (
-        [key, flattenTags(tags[key])]
-      ) : (
-        [key, tags[key]]
-      )
-    ))
-  )
-);
+const packages = {
+  exif: cacheAsync(() => import("../../../../utils/exif")),
+}
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("image")) {
@@ -29,13 +20,12 @@ const instantiate = (src: Data, id: number) => {
 
   (async () => {
     try {
-      const ExifReader = await import("exifreader");
-      const tags = ExifReader.load(src.value.array.buffer, { expanded: false });
-      const flattened = flattenTags(tags);
-      const datum: AtomicData[] = Object.keys(flattened).filter(key => (
-        flattened[key]?.length > 0
+      const { getAllTags } = await packages.exif();
+      const tags = getAllTags(src.value.array.buffer);
+      const datum: AtomicData[] = Object.keys(tags).filter(key => (
+        tags[key]?.length > 0
       )).map(key => (
-        textData(`${flattened[key]}`, key)
+        textData(`${tags[key]}`, key)
       ));
       setBusy(id, false);
       updateResult(id, multipleData(datum));

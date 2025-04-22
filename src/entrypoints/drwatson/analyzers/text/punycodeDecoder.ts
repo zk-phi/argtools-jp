@@ -1,5 +1,10 @@
+import { cacheAsync } from "../../../../utils/cache";
 import { asyncTextDecoderFactory } from "../textDecoderFactory";
 import { textData } from "../../datatypes";
+
+const packages = {
+  punycode: cacheAsync(() => import("punycode")),
+};
 
 const alphabet = "[a-z0-9]"
 // require at least 2 digits for each components
@@ -13,7 +18,7 @@ export const punycodeDecoder = asyncTextDecoderFactory({
   hint: "xn-- から始まる英数字列 → たぶん Punycode！",
   pattern: delimited,
   decoder: async (str: string, label: string) => {
-    const punycode = await import("punycode");
+    const punycode = await packages.punycode();
     const decoded = punycode.toUnicode(str);
     return textData(decoded, label);
   },

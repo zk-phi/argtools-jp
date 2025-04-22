@@ -1,6 +1,11 @@
+import { cacheAsync } from "../../../utils/cache";
 import { useState, useCallback } from "preact/hooks";
 import { binaryData } from "../datatypes";
 import { setBusy, updateResult, type ImporterModule } from "../state";
+
+const packages = {
+  audiobufferToWav: cacheAsync(() => import("audiobuffer-to-wav")),
+};
 
 const instantiate = (id: number) => {
   const ctx = new AudioContext();
@@ -31,7 +36,7 @@ const instantiate = (id: number) => {
         setDecoding(true);
         setRecording(false);
         recorder.ondataavailable = (async ({ data: blob }) => {
-          const { default: toWav } = await import("audiobuffer-to-wav");
+          const { default: toWav } = await packages.audiobufferToWav();
           const buffer = await blob.arrayBuffer();
           const audioBuffer = await ctx.decodeAudioData(buffer);
           const wavBuffer = toWav(audioBuffer);

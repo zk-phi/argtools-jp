@@ -1,5 +1,10 @@
+import { cacheAsync } from "../../../../utils/cache";
 import { multipleData, binaryData, textData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+
+const packages = {
+  image: cacheAsync(() => import("../../../../utils/image.ts")),
+}
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("image")) {
@@ -15,7 +20,7 @@ const instantiate = (src: Data, id: number) => {
 
   (async () => {
     try {
-      const { applyFilter } = await import("../../../../utils/image.ts");
+      const { applyFilter } = await packages.image();
       const blob = new Blob([src.value.array], { type: src.value.mime });
       const url = URL.createObjectURL(blob);
       const rImg = await applyFilter(url, (arr) => {

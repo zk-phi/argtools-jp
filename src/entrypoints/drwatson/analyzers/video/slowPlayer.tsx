@@ -17,7 +17,7 @@ const instantiate = (src: Data) => {
   const blob = new Blob([src.value.array], { type: src.value.mime });
   const url = URL.createObjectURL(blob);
 
-    const component = () => {
+  const component = () => {
     const [speed, setSpeed] = useState(0.25);
     const videoRef = useRef<HTMLVideoElement>(null);
 

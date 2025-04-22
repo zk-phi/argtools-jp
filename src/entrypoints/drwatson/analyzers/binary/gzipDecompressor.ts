@@ -1,5 +1,10 @@
+import { cacheAsync } from "../../../../utils/cache";
 import { textData, binaryData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+
+const packages = {
+  fflate: cacheAsync(() => import("fflate")),
+};
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.array.length > 2
@@ -18,7 +23,7 @@ const instantiate = (src: Data, id: number) => {
   };
 
   (async () => {
-    const { gunzip } = await import("fflate");
+    const { gunzip } = await packages.fflate();
     gunzip(src.value.array, {}, async (e, expanded) => {
       if (e) {
         setBusy(id, false);

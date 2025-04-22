@@ -1,6 +1,11 @@
-import { duplicate } from "../../../../utils/buffer";
+import { cacheAsync } from "../../../../utils/cache";
 import { textData, binaryData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+
+const packages = {
+  audio: cacheAsync(() => import("../../../../utils/audio")),
+  audiobufferToWav: cacheAsync(() => import("audiobuffer-to-wav")),
+};
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("video")) {
@@ -16,13 +21,10 @@ const instantiate = (src: Data, id: number) => {
 
   (async () => {
     try {
-      const { default: toWav } = await import("audiobuffer-to-wav");
-      const ctx = new AudioContext();
-      // buffer will be "detached" unless duplicated
-      // https://qiita.com/generosennin/items/b33d132b49b008b31153
-      const duplicated = duplicate(src.value.array.buffer);
-      const audioBuffer = await ctx.decodeAudioData(duplicated);
-      const wavBuffer = toWav(audioBuffer);
+      const { decodeAudio } = await packages.audio();
+      const { default: toWav } = await packages.audiobufferToWav();
+      const buffer = await decodeAudio(src.value.array.buffer);
+      const wavBuffer = toWav(buffer);
       const data = await binaryData(new Uint8Array(wavBuffer), "抽出された音声");
       setBusy(id, false);
       updateResult(id, data);

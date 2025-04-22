@@ -1,5 +1,10 @@
+import { cacheAsync } from "../../../../utils/cache";
 import { textData, binaryData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+
+const packages = {
+  fflate: cacheAsync(() => import("fflate")),
+}
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.array.length > 2 && data.value.array[0] === 0x78) {
@@ -17,7 +22,7 @@ const instantiate = (src: Data, id: number) => {
   };
 
   (async () => {
-    const { unzlib } = await import("fflate");
+    const { unzlib } = await packages.fflate();
     unzlib(src.value.array, {}, async (e, expanded) => {
       if (e) {
         setBusy(id, false);

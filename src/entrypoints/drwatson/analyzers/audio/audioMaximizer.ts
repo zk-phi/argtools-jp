@@ -1,7 +1,11 @@
-import { duplicate } from "../../../../utils/buffer";
-import { reduceRange } from "../../../../utils/range";
+import { cacheAsync } from "../../../../utils/cache";
 import { textData, binaryData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+
+const packages = {
+  audiobufferToWav: cacheAsync(() => import("audiobuffer-to-wav")),
+  audio: cacheAsync(() =>  import("../../../../utils/audio")),
+};
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("audio")) {
@@ -17,30 +21,10 @@ const instantiate = (src: Data, id: number) => {
 
   (async () => {
     try {
-      const { default: toWav } = await import("audiobuffer-to-wav");
-      const ctx = new AudioContext();
-      // buffer will be "detached" unless duplicated
-      // https://qiita.com/generosennin/items/b33d132b49b008b31153
-      const duplicated = duplicate(src.value.array.buffer);
-      const audioBuffer = await ctx.decodeAudioData(duplicated);
-      const peak = reduceRange(audioBuffer.numberOfChannels, ((ch, acc) => {
-        const channelData = audioBuffer.getChannelData(ch);
-        let channelPeak = 0;
-        for (const value of channelData) {
-          const abs = Math.abs(value);
-          if (abs > channelPeak) {
-            channelPeak = abs;
-          }
-        }
-        return Math.max(channelPeak, acc);
-      }), 0);
-      const scaleFactor = 1 / peak;
-      for (let ch = 0; ch < audioBuffer.numberOfChannels; ch++) {
-        const channelData = audioBuffer.getChannelData(ch);
-        for (let i = 0; i < channelData.length; i++) {
-          channelData[i] *= scaleFactor;
-        }
-      }
+      const { decodeAudio, maximizeAudioBuffer } = await packages.audio();
+      const { default: toWav } = await packages.audiobufferToWav();
+      const audioBuffer = await decodeAudio(src.value.array.buffer);
+      maximizeAudioBuffer(audioBuffer);
       const wavBuffer = toWav(audioBuffer);
       const data = await binaryData(new Uint8Array(wavBuffer), src.label);
       setBusy(id, false);
