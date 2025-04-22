@@ -1,5 +1,5 @@
 import { signal } from "@preact/signals";
-import { wordlistData, WordlistBody } from "../datatypes";
+import { wordlistData, type WordlistBody } from "../datatypes";
 import { cacheAsync } from "../../../utils/cache";
 import { updateResult, setBusy, type ImporterModule } from "../state";
 
