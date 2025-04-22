@@ -57,7 +57,7 @@ export const datasets: { [key: string]: DatasetMeta } = {
     import: () => import("./stations.ts"),
     url: "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2023.html",
     label: "鉄道駅",
-    license: "国土数値情報 (C) 国土交通省 / CC-BY",
+    license: "国土数値情報: 鉄道データ (C) 国土交通省 / CC-BY",
   },
   roadsideStations: {
     import: () => import("./roadsideStations.ts"),
@@ -75,7 +75,7 @@ export const datasets: { [key: string]: DatasetMeta } = {
     import: () => import("./highwayJoints.ts"),
     url: "https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N06-2023.html",
     label: "IC・JCT・PA・SA 等",
-    license: "国土数値情報 (C) 国土交通省 / CC-BY",
+    license: "国土数値情報: 高速道路時系列データ (C) 国土交通省 / CC-BY",
   },
 };
 
