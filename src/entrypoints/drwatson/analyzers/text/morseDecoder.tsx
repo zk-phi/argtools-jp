@@ -15,7 +15,7 @@ const detect = (data: Data) => {
   }
   const truncated = data.value.slice(0, 100);
   const hist = histogram(truncated);
-  if (hist.length > 2 && hist[1][1] > truncated.length / 3) {
+  if (hist.length > 2 && hist[1][1] > truncated.length / 4) {
     return `${hist[0][0]}, ${hist[1][0]} の二文字が多く出現 → モールス信号かも？`;
   }
   return null;
