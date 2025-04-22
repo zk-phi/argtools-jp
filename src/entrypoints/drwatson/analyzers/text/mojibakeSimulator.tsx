@@ -2,6 +2,8 @@ import { signal, effect } from "@preact/signals";
 import { textData, multipleData, type Data } from "../../datatypes";
 import { setBusy, updateResult, type AnalyzerModule } from "../../state";
 
+// inspired by https://tmtms.net/mojibake/
+
 const findSjisUtf8Candidates = async (
   mojibake: Uint8Array,
   fixed: Uint8Array,
@@ -10,8 +12,13 @@ const findSjisUtf8Candidates = async (
   const allCandidates: string[][] = [];
 
   for (let i = 0, j = 0; i < mojibake.length && j < fixed.length;) {
-    // skip identical bytes
-    if (mojibake[i] === fixed[j]) {
+    // skip identical bytes (that are not representing a replacement character)
+    if (mojibake[i] === fixed[j] &&
+        // this check is required to find diff like:
+        // - mojibake: 0xef 0x00
+        // -    fixed: 0xef 0xbf 0xbd
+        !(j + 2 < fixed.length && fixed[j + 0] === 0xef &&
+          fixed[j + 1] === 0xbf && fixed[j + 2] === 0xbd)) {
       i++;
       j++;
       continue;
@@ -85,6 +92,15 @@ const findSjisUtf8Candidates = async (
       }
     } else if (0xe0 <= targetBytes[0] && targetBytes[0] <= 0xef) {
       // first byte is 0xe0-0xef (3-byte character)
+      if (targetBytes.length === 1) {
+        // add two bytes to complete 3-byte char
+        for (let b1 = 0x80; b1 <= 0xbf; b1++) {
+          for (let b2 = 0x80; b2 <= 0xbf; b2++) {
+            const ch = UTF_TO_JIS_TABLE[(targetBytes[0] << 16) | (b1 << 8) | b2];
+            if (ch) candidates.push(ch);
+          }
+        }
+      }
       if (targetBytes.length === 2) {
         // add one byte to complete 3-byte char
         for (let byte = 0x80; byte <= 0xbf; byte++) {
@@ -138,12 +154,24 @@ const instantiate = (src: Data, id: number) => {
           const reEncoded = _iconv.encode(str, toEncoding.value);
           const allCandidates = await findSjisUtf8Candidates(sjisArr, reEncoded);
           if (allCandidates) {
-            let i = 0;
-            const replaced = str.replaceAll(/�+/g, () => `[${i++}]`);
+            let i = 0, j = 1;
+            const replaced = str.replaceAll(/�+/g, (match) => {
+              const candidates = allCandidates[i++];
+              return candidates.length === 0 ? (
+                match
+              ) : candidates.length === 1 ? (
+                candidates[0]
+              ) : (
+                `[${j++}]`
+              );
+            });
+            const filteredAllCandidates = allCandidates.filter(candidates => (
+              candidates.length >= 2
+            ));
             const data = multipleData([
               textData(replaced, "復元されたテキスト"),
-              ...allCandidates.map((candidates, ix) => (
-                textData(candidates.join(", "), `[${ix}]の候補`)
+              ...filteredAllCandidates.map((candidates, ix) => (
+                textData(candidates.join(", "), `[${ix + 1}]の候補`)
               )),
             ]);
             setBusy(id, false);

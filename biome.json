@@ -36,6 +36,7 @@
       },
       "style": {
         "useBlockStatements": "off",
+        "useSingleVarDeclarator": "off",
         "noDefaultExport": "off",
         "useNamingConvention": {
           "level": "error",
