@@ -22,7 +22,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         drwatson: "src/entrypoints/drwatson/index.html",
-        tenji: "src/entrypoints/code/tenji/index.html",
       },
     },
   },
