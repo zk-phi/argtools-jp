@@ -86,7 +86,10 @@ const App = () => {
             </div>
           )}
           {frame.result && (
-            <DataViewer data={frame.result} />
+            <DataViewer
+                data={frame.result}
+                onInspect={ix === stack.value.length - 1 ? pushInspection : undefined}
+            />
           )}
           {ix < stack.value.length - 1 && (
             <p>
