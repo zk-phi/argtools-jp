@@ -1,6 +1,6 @@
-import type { Dataset } from "../entrypoints/anything/datasets";
+import type { WordlistBody } from "../entrypoints/drwatson/datatypes";
 
-export const formatUnidic = (data: string): Dataset => (
+export const formatUnidic = (data: string): WordlistBody => (
   data.split("\n").filter(line => line.length > 0).map((line, ix) => {
     const [category, subcategory, subsubcategory, word] = line.split(",");
 
