@@ -5,7 +5,7 @@ import { importers } from "./importers";
 import { DataViewer } from "./DataViewer";
 import {
   busy, stack, setImporter, pushAnalyzer, pushInspection, rollback,
-  type AnalyzerModule, type StackFrame,
+  type AnalyzerModule,
 } from "./state";
 
 const App = () => {
