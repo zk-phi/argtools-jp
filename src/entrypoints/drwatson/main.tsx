@@ -4,13 +4,13 @@ import { analyzers, analyzerCategories } from "./analyzers";
 import { importers } from "./importers";
 import { DataViewer } from "./DataViewer";
 import {
-  busy, stack, setImporter, pushAnalyzer, pushInspection, undo, reset,
+  busy, stack, setImporter, pushAnalyzer, pushInspection, rollback,
   type AnalyzerModule, type StackFrame,
 } from "./state";
 
 const App = () => {
   const suggestions = computed<{ reason: string, module: AnalyzerModule}[]>(() => {
-    const suspicious = stack.value[0]?.result; // this is required for the typeguard to work
+    const suspicious = stack.value[stack.value.length - 1]?.result;
     if (suspicious) {
       return analyzers.map(analyzer => {
         const reason = analyzer.detect(suspicious);
@@ -22,10 +22,6 @@ const App = () => {
     }
     return [];
   });
-
-  const history = computed<StackFrame[]>(() => (
-    stack.value.slice(1).reverse()
-  ));
 
   return (
     <>
@@ -69,62 +65,61 @@ const App = () => {
         </section>
       ) : (
         <section>
-          <button type="button" onClick={reset}>
-            最初に戻る
-          </button>
+          <p>
+            <button type="button" onClick={() => rollback(0)}>
+              最初に戻る
+            </button>
+          </p>
         </section>
       )}
 
-      {history.value.map((frame, ix) => frame.result && (
+      {stack.value.map((frame, ix) => (
         <section key={frame.id}>
           <hr />
           <h3>{frame.label}</h3>
-          <DataViewer data={frame.result} />
-          <div style={{ marginTop: "1em" }}>
-            <button type="button" onClick={() => undo(history.value.length - ix)}>
-              ここまで戻る
-            </button>
-          </div>
+          {frame.component && (
+            <div style={{
+              display: ix === stack.value.length - 1 ? "block" : "none",
+              marginBottom: "1em",
+            }}>
+              {frame.component({})}
+            </div>
+          )}
+          {frame.result && (
+            <DataViewer data={frame.result} />
+          )}
+          {ix < stack.value.length - 1 && (
+            <p>
+              <button type="button" onClick={() => rollback(ix + 1)}>
+                ここまで戻る
+              </button>
+            </p>
+          )}
         </section>
       ))}
 
-      {stack.value.length > 0 && (
-        <section>
-          <hr />
-          <h3>{stack.value[0].label}</h3>
-          {stack.value[0].component?.({})}
-        </section>
-      )}
-
-      {stack.value[0]?.result ? (
-        <section>
-          <p>
-            <DataViewer data={stack.value[0].result} onInspect={pushInspection} />
-          </p>
-          {suggestions.value.length > 0 && (
-            <>
-              <h3>使えそうなコマンド</h3>
-              <table>
-                <tbody>
-                  {suggestions.value.map(({ reason, module }) => (
-                    <tr key={module.label}>
-                      <td style={{ textAlign: "right" }}>
-                        <button type="button" onClick={() => pushAnalyzer(module)}>
-                          {module.label}
-                        </button>
-                      </td>
-                      <td>
-                        {reason}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          )}
-        </section>
-      ) : busy.value ? (
+      {busy.value ? (
         "解析中 ..."
+      ) : suggestions.value.length > 0 ? (
+        <section>
+          <h3>使えそうなコマンド</h3>
+          <table>
+            <tbody>
+              {suggestions.value.map(({ reason, module }) => (
+                <tr key={module.label}>
+                  <td style={{ textAlign: "right" }}>
+                    <button type="button" onClick={() => pushAnalyzer(module)}>
+                      {module.label}
+                    </button>
+                  </td>
+                  <td>
+                    {reason}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
       ) : (
         null
       )}

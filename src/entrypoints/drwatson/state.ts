@@ -106,7 +106,7 @@ export const stack = signal<StackFrame[]>([]);
 // Mark the active module as busy (or not busy).
 export const setBusy = (id: number, value: boolean) => {
   const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
-  if (id === _stack[0]?.id) {
+  if (id === _stack[_stack.length - 1]?.id) {
     busy.value = value;
   }
 };
@@ -114,8 +114,11 @@ export const setBusy = (id: number, value: boolean) => {
 // Update the active module's output.
 export const updateResult = (id: number, result: Data | null) => {
   const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
-  if (id === _stack[0]?.id) {
-    stack.value = [{ ..._stack[0], result }, ..._stack.slice(1)];
+  if (id === _stack[_stack.length - 1]?.id) {
+    stack.value = [
+      ..._stack.slice(0, -1),
+      { ..._stack[_stack.length - 1], result },
+    ];
   }
 };
 
@@ -130,19 +133,19 @@ export const setImporter = (module: ImporterModule) => {
 // Initialize an analyzer and push on to the stack.
 export const pushAnalyzer = (module: AnalyzerModule) => {
   const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
-  if (!_stack[0]?.result) {
+  const src = _stack[_stack.length - 1]?.result;
+  if (!src) {
     throw new Error("UNEXPECTED: cannot analyze null output");
   }
   busy.value = true;
   const id = gensym();
-  const src = _stack[0].result;
   const { initialResult, initialBusy, component } = module.instantiate(src, id);
   if (!initialBusy) {
     busy.value = false;
   }
   stack.value = [
-    { id, component, label: module.label, result: initialResult ?? null },
     ..._stack,
+    { id, component, label: module.label, result: initialResult ?? null },
   ];
 };
 
@@ -153,19 +156,14 @@ export const pushInspection = (data: Data) => {
   const id = gensym();
   const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
   stack.value = [
-    { id, label: "この項目を精査", result: data },
     ..._stack,
+    { id, label: "この項目を精査", result: data },
   ];
 };
 
-// Pop out (at most) N frames to undo.
-export const undo = (n: number) => {
+// Rollback to undo N-th frame (= activate "N-1"-th frame)
+export const rollback = (n: number) => {
   const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
   busy.value = false;
-  stack.value = _stack.slice(n);
-};
-
-// Pop out all frames to reset state.
-export const reset = () => {
-  stack.value = [];
+  stack.value = _stack.slice(0, n);
 };
