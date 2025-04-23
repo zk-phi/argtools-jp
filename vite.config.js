@@ -21,7 +21,7 @@ export default defineConfig({
     emptyOutDir: true,
     rollupOptions: {
       input: {
-        drwatson: "src/entrypoints/drwatson/index.html",
+        drwatson: "src/entrypoints/index.html",
       },
     },
   },
