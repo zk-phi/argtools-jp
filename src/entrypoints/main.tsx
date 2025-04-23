@@ -1,12 +1,12 @@
 import { render, } from "preact";
 import { computed } from "@preact/signals";
-import { analyzers, analyzerCategories } from "./analyzers";
-import { importers } from "./importers";
-import { DataViewer } from "./DataViewer";
+import { analyzers, analyzerCategories } from "../analyzers";
+import { importers } from "../importers";
+import { DataViewer } from "../DataViewer";
 import {
   busy, stack, setImporter, pushAnalyzer, pushInspection, rollback,
   type AnalyzerModule,
-} from "./state";
+} from "../state";
 
 const App = () => {
   const suggestions = computed<{ reason: string, module: AnalyzerModule}[]>(() => {
