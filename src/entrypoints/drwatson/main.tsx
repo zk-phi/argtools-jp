@@ -45,7 +45,7 @@ const App = () => {
           <div>
             <b>その他</b>
             <div style={{ marginLeft: "16px" }}>
-              <small>ファイル形式の自動判別</small>
+              <small>ファイル形式の自動判別、条件に一致する単語や地名の特定</small>
             </div>
           </div>
         </details>
