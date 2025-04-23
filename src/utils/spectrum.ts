@@ -3,7 +3,13 @@ import { clamp, roundUpToPowerOf2, norm, rescaleValueMap1D } from "./math";
 import { infernoColorMap } from "./color";
 
 // TODO: Try window functions for cleaner results ?
+// https://qiita.com/purple_jp/items/7c91a05c547615e9ab89
+// https://moromisenpy.com/python_stft/#STFT%E7%9F%AD%E6%99%82%E9%96%93%E3%83%95%E3%83%BC%E3%83%AA%E3%82%A8%E5%A4%89%E6%8F%9B%E3%81%A8%E3%81%AF
+// https://www.ni.com/ja/shop/data-acquisition/measurement-fundamentals/analog-fundamentals/understanding-ffts-and-windowing.html
+// https://ja.m.wikipedia.org/wiki/%E7%9F%AD%E6%99%82%E9%96%93%E3%83%95%E3%83%BC%E3%83%AA%E3%82%A8%E5%A4%89%E6%8F%9B
+
 // TODO: better handling very short audio ?
+
 const _analyzeSpectrum = (channelData: Float32Array, frames: number): Float32Array[] => {
   if (frames < 2) {
     throw new Error("analyzeSpectrum: frames must be at least 2");
