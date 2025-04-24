@@ -31,7 +31,6 @@ import { binaryConcatenator } from "./binary/binaryConcatenator";
 import { zlibDecompressor } from "./binary/zlibDecompressor";
 import { zipDecompressor } from "./binary/zipDecompressor";
 import { gzipDecompressor } from "./binary/gzipDecompressor";
-import { binaryToAscii } from "./binary/binaryToAscii";
 import { binaryToText } from "./binary/binaryToText";
 import { binaryToNumber } from "./binary/binaryToNumber";
 import { plusCodeExtractor } from "./text/plusCodeExtractor";
@@ -84,7 +83,6 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     bitopBinary,
     binaryToNumber,
     // もしかしたら
-    binaryToAscii,
     binaryToText,
     binaryConcatenator,
   ],
