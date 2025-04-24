@@ -1,6 +1,7 @@
+import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
 import { textData, binaryData, type Data } from "../../datatypes";
-import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
 
 const packages = {
   fflate: cacheAsync(() => import("fflate")),
@@ -16,30 +17,17 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data, id: number) => {
-  if (src.type !== "binary") {
-    return { initialResult: textData("UNEXPECTED: not a binary.", "エラー") };
+const analyze = async (input: Data | null) => {
+  if (!input || input.type !== "binary") {
+    throw new Error("UNEXPECTED: not a binary.");
   };
-
-  (async () => {
-    const { unzlib } = await packages.fflate();
-    unzlib(src.value.array, {}, async (e, expanded) => {
-      if (e) {
-        setBusy(id, false);
-        updateResult(id, textData("message" in e ? e.message : "", "エラー"));
-      } else {
-        const data = await binaryData(expanded, "解凍されたデータ");
-        setBusy(id, false);
-        updateResult(id, data);
-      }
-    });
-  })();
-
-  return { initialBusy: true };
+  const { unzlibSync } = await packages.fflate();
+  const expanded = unzlibSync(input.value.array);
+  return await binaryData(expanded, "解凍されたデータ");
 };
 
-export const zlibDecompressor: AnalyzerModule = {
+export const zlibDecompressor = asyncSimpleAnalyzerFactory({
   label: "zilb データを復号化",
   detect,
-  instantiate,
-};
+  analyze,
+});

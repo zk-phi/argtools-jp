@@ -1,3 +1,4 @@
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { textData, type Data } from "../../datatypes";
 import type { AnalyzerModule } from "../../state";
 
@@ -8,16 +9,16 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data) => {
-  if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
+const analyze = (input: Data | null) => {
+  if (!input || input.type !== "text") {
+    throw new Error("UNEXPECTED: not a text.");
   }
-  const reversed = Array.from(src.value).reverse().join("");
-  return { initialResult: textData(reversed, "反転されたテキスト") };
+  const reversed = Array.from(input.value).reverse().join("");
+  return textData(reversed, "反転されたテキスト");
 };
 
-export const reverseText: AnalyzerModule = {
+export const reverseText = simpleAnalyzerFactory({
   label: "反転する",
   detect,
-  instantiate,
-};
+  analyze,
+});

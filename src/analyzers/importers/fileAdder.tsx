@@ -1,23 +1,24 @@
+import { useState, useEffect } from "preact/hooks";
+import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { readFileAsBuffer } from "../../utils/file";
 import { textData, binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
-import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
 
-const detect = (src: Data) => {
-  if (src.type !== "wordlist") {
+const detect = (data: Data) => {
+  if (data.type !== "wordlist") {
     return "もしかしたら、別のファイルと組み合わせることで何かわかるかも？";
   }
   return null;
 };
 
-export const instantiate = (src: Data | null, id: number) => {
-  if (src && src.type === "wordlist") {
-    return { initialResult: textData("UNEXPECTED: wordlist given", "エラー") };
-  }
+const component = ({ id, input }: { input: Data | null, id: number }) => {
+  const [files, setFiles] = useState<FileList | null>(null);
 
-  const openFile = async (files: FileList | null) => {
+  useAsyncAnalyzerEffect(id, async () => {
+    if (input && input.type === "wordlist") {
+      throw new Error("UNEXPECTED: wordlist given");
+    }
     if (files) {
-      updateResult(id, null);
-      setBusy(id, true);
       const datum: AtomicData[] = await Promise.all(
         [...files].map(async file => {
           const buffer = await readFileAsBuffer(file);
@@ -25,34 +26,32 @@ export const instantiate = (src: Data | null, id: number) => {
           return await binaryData(array, file.name);
         })
       );
-      setBusy(id, false);
-      if (src) {
-        if (src.type === "multiple") {
-          Array.prototype.unshift.apply(datum, src.datum);
+      if (input) {
+        if (input.type === "multiple") {
+          Array.prototype.unshift.apply(datum, input.datum);
         } else {
-          datum.unshift(src);
+          datum.unshift(input);
         }
       }
-      updateResult(id, multipleData(datum));
+      return multipleData(datum);
     }
-  };
+    return null;
+  }, [input, files]);
 
-  const component = () => (
+  return (
     <>
       <p>
         <small>
           データはすべてローカルで処理され、開いたファイルがどこかに送信されることはありません。
         </small>
       </p>
-      <input type="file" multiple={true} onChange={e => openFile(e.currentTarget.files)} />
+      <input type="file" multiple={true} onChange={e => setFiles(e.currentTarget.files)} />
     </>
   );
-
-  return { component }
 };
 
 export const fileAdder: AnalyzerModule = {
   label: "ファイルを追加",
   detect,
-  instantiate,
+  component,
 };

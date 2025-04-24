@@ -1,6 +1,7 @@
+import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
 import { textData, binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
-import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
 
 const packages = {
   fflate: cacheAsync(() => import("fflate")),
@@ -17,34 +18,22 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data, id: number) => {
-  if (src.type !== "binary") {
-    return { initialResult: textData("UNEXPECTED: not a binary.", "エラー") };
+const analyze = async (input: Data | null) => {
+  if (!input || input.type !== "binary") {
+    throw new Error("UNEXPECTED: not a binary.");
   };
-
-  (async () => {
-    const { unzip } = await packages.fflate();
-    unzip(src.value.array, {}, async (e, expanded) => {
-      if (e) {
-        setBusy(id, false);
-        updateResult(id, textData("message" in e ? e.message : "", "エラー"));
-      } else {
-        const datum: AtomicData[] = await Promise.all(
-          Object.keys(expanded).map(async key => (
-            await binaryData(expanded[key], key)
-          ))
-        );
-        setBusy(id, false);
-        updateResult(id, multipleData(datum));
-      }
-    });
-  })();
-
-  return { initialBusy: true };
+  const { unzipSync } = await packages.fflate();
+  const expanded = unzipSync(input.value.array);
+  const datum: AtomicData[] = await Promise.all(
+    Object.keys(expanded).map(async key => (
+      await binaryData(expanded[key], key)
+    ))
+  );
+  return multipleData(datum);
 };
 
-export const zipDecompressor: AnalyzerModule = {
+export const zipDecompressor = asyncSimpleAnalyzerFactory({
   label: "Zip ファイルを解凍",
   detect,
-  instantiate,
-};
+  analyze,
+});

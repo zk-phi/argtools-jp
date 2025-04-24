@@ -4,18 +4,18 @@ import { DataViewer } from ".";
 
 export const MultipleViewer = ({ datum, onInspect }: {
   datum: AtomicData[],
-  onInspect?: (data: AtomicData) => void,
+  onInspect?: (ix: number) => void,
 }) => (
   <ViewerContainer caption={`複数のデータ（${datum.length}件）`}>
     <div style={{ maxHeight: 600, overflow: "auto" }}>
       <table>
         <tbody>
-          {datum.slice(0, 100).map((data) => (
+          {datum.slice(0, 100).map((data, ix) => (
             <tr key={data.id}>
               <td><DataViewer data={data} /></td>
               {onInspect && (
                 <td>
-                  <button type="button" onClick={() => onInspect(data)}>
+                  <button type="button" onClick={() => onInspect(ix)}>
                     このデータを精査
                   </button>
                 </td>

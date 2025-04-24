@@ -1,4 +1,4 @@
-import { textDecoderFactory } from "../textDecoderFactory";
+import { simpleTextDecoderFactory } from "../analyzerFactories";
 import { textData } from "../../datatypes";
 
 const alphabet = "[0-9A-Fa-f]";
@@ -6,7 +6,7 @@ const alphabet = "[0-9A-Fa-f]";
 const body = `(%${alphabet}{2}){2,}`;
 const delimited = `${body}(?=[^0-9A-z]|$)`;
 
-export const urlDecoder = textDecoderFactory({
+export const urlDecoder = simpleTextDecoderFactory({
   label: "パーセントエンコードを復号化",
   hint: "%**%** 形式の１６進数 → たぶんパーセントエンコード！",
   pattern: delimited,

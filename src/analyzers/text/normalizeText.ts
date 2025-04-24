@@ -1,3 +1,4 @@
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { textData, type Data } from "../../datatypes";
 import type { AnalyzerModule } from "../../state";
 
@@ -10,20 +11,20 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data) => {
-  if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
+const analyze = (input: Data | null) => {
+  if (!input || input.type !== "text") {
+    throw new Error("UNEXPECTED: not a text.") ;
   }
   // Replace ALL full-width ascii characters (not only alphabets and numbers)
   // so that we may analyze float value like "１２３．４".
-  const replaced = src.value.replaceAll("　", " ").replace(/[\uFF01-\uFF5e]/g, (s) => (
+  const replaced = input.value.replaceAll("　", " ").replace(/[\uFF01-\uFF5e]/g, (s) => (
     String.fromCharCode(s.charCodeAt(0) - 0xFEE0)
   ));
-  return { initialResult: textData(replaced, src.label) };
+  return textData(replaced, input.label);
 };
 
-export const normalizeText: AnalyzerModule = {
+export const normalizeText = simpleAnalyzerFactory({
   label: "全角英数を半角に統一",
   detect,
-  instantiate,
-};
+  analyze,
+});

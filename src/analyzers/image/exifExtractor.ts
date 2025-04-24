@@ -1,6 +1,7 @@
+import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
 import { multipleData, textData, type Data, type AtomicData } from "../../datatypes";
-import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
 
 const packages = {
   exif: cacheAsync(() => import("../../utils/exif")),
@@ -13,33 +14,22 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data, id: number) => {
-  if (src.type !== "binary" || !src.value.mime.startsWith("image")) {
-    return { initialResult: textData("UNEXPECTED: not an image.", "エラー") };
+const analyze = async (input: Data | null) => {
+  if (!input || input.type !== "binary" || !input.value.mime.startsWith("image")) {
+    throw new Error("UNEXPECTED: not an image.");
   }
-
-  (async () => {
-    try {
-      const { getAllTags } = await packages.exif();
-      const tags = getAllTags(src.value.array.buffer);
-      const datum: AtomicData[] = Object.keys(tags).filter(key => (
-        tags[key]?.length > 0
-      )).map(key => (
-        textData(`${tags[key]}`, key)
-      ));
-      setBusy(id, false);
-      updateResult(id, multipleData(datum));
-    } catch (e: any) {
-      setBusy(id, false);
-      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
-    }
-  })();
-
-  return { initialBusy: true };
+  const { getAllTags } = await packages.exif();
+  const tags = getAllTags(input.value.array.buffer);
+  const datum: AtomicData[] = Object.keys(tags).filter(key => (
+    tags[key]?.length > 0
+  )).map(key => (
+    textData(`${tags[key]}`, key)
+  ));
+  return multipleData(datum);
 };
 
-export const exifExtractor: AnalyzerModule = {
+export const exifExtractor = asyncSimpleAnalyzerFactory({
   label: "メタデータ (Exif 等) 抽出",
   detect,
-  instantiate,
-};
+  analyze,
+});

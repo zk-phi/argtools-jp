@@ -1,3 +1,4 @@
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { textData, type Data } from "../../datatypes";
 import type { AnalyzerModule } from "../../state";
 
@@ -8,16 +9,16 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data) => {
-  if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
+const analyze = (input: Data | null) => {
+  if (!input || input.type !== "text") {
+    throw new Error("UNEXPECTED: not a text.");
   }
-  const concatenated = src.value.replace(/(\r\n|\n|\r)/gm, "");
-  return { initialResult: textData(concatenated, "結合されたテキスト") };
+  const concatenated = input.value.replace(/(\r\n|\n|\r)/gm, "");
+  return textData(concatenated, "結合されたテキスト");
 };
 
-export const concatLines: AnalyzerModule = {
+export const concatLines = simpleAnalyzerFactory({
   label: "１行にまとめる",
   detect,
-  instantiate,
-};
+  analyze,
+});

@@ -1,4 +1,4 @@
-import { urlExtractorFactory } from "../urlExtractorFactory";
+import { urlExtractorFactory } from "../analyzerFactories";
 
 /* elements */
 const d = "[^0-9A-z]?";
@@ -33,7 +33,7 @@ const delimited = `(?<=[^A-z0-9]|^)${body}(?=[^A-z0-9]|$)`;
 export const isbnExtractor = urlExtractorFactory({
   label: "ISBN 番号を抽出",
   hint: "ちょうど 10 または 13 桁のハイフン区切り数字列 → たぶん ISBN 番号！",
-  description: (
+  view: (
     <>
       <p>抽出できた ISBN（世界中の出版物に振られた識別番号）の一覧です。</p>
       <p>リンク先は国会図書館の検索結果です。</p>

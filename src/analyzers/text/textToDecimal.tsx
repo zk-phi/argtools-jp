@@ -1,4 +1,4 @@
-import { textDecoderFactory } from "../textDecoderFactory";
+import { simpleTextDecoderFactory } from "../analyzerFactories";
 import { numberData } from "../../datatypes";
 
 const unsignedFloat = "[0-9]*([0-9]|(\\.[0-9]+))([eE][+-]?[0-9]+)?";
@@ -16,11 +16,11 @@ const delimitedInt = `${signedInt}(?=[^0-9]|$)`;
 
 const number = `${delimitedUFloat}|${delimitedFloat}|${delimitedUInt}|${delimitedInt}`;
 
-export const textToDecimal = textDecoderFactory({
+export const textToDecimal = simpleTextDecoderFactory({
   label: "数値（十進数）を抽出",
   hint: "0-9, ., +, - の数字列 → なんらかの数値（十進数）かも？",
   pattern: number,
-  component: () => (
+  view: (
     <p>※巨大な数値は正しく読み取れない場合があります（オーバーフロー）</p>
   ),
   decoder: (str: string, label: string) => (

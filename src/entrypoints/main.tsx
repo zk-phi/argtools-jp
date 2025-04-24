@@ -3,17 +3,14 @@ import { computed } from "@preact/signals";
 import { analyzers, analyzerCategories } from "../analyzers";
 import { importers } from "../importers";
 import { DataViewer } from "../DataViewer";
-import {
-  busy, stack, setImporter, pushAnalyzer, pushInspection, rollback,
-  type AnalyzerModule,
-} from "../state";
+import { busy, stack, pushAnalyzer, pushInspection, rollback, type AnalyzerModule } from "../state";
 
 const App = () => {
-  const suggestions = computed<{ reason: string, module: AnalyzerModule}[]>(() => {
-    const suspicious = stack.value[stack.value.length - 1]?.result;
+  const suggestions = computed<{ reason: string, module: AnalyzerModule }[]>(() => {
+    const suspicious = stack.value[stack.value.length - 1]?.output;
     if (suspicious) {
       return analyzers.map(analyzer => {
-        const reason = analyzer.detect(suspicious);
+        const reason = analyzer.detect?.(suspicious) ?? null;
         if (reason) {
           return { reason, module: analyzer };
         }
@@ -56,7 +53,7 @@ const App = () => {
               <button
                   key={module.label}
                   type="button"
-                  onClick={() => setImporter(module)}>
+                  onClick={() => pushAnalyzer(module)}>
                 {module.label}
               </button>
               {"　"}
@@ -73,33 +70,35 @@ const App = () => {
         </section>
       )}
 
-      {stack.value.map((frame, ix) => (
-        <section key={frame.id}>
-          <hr />
-          <h3>{frame.label}</h3>
-          {frame.component && (
+      {stack.value.map((frame, ix) => {
+        const Component = frame.module.component;
+        return(
+          <section key={frame.id}>
+            <hr />
+            <h3>{frame.module.label}</h3>
+            {/* render inactive (hidden) components too, to keep their state */}
             <div style={{
               display: ix === stack.value.length - 1 ? "block" : "none",
               marginBottom: "1em",
             }}>
-              {frame.component({})}
+              <Component id={frame.id} input={stack.value[ix - 1]?.output ?? null} />
             </div>
-          )}
-          {frame.result && (
-            <DataViewer
-                data={frame.result}
-                onInspect={ix === stack.value.length - 1 ? pushInspection : undefined}
-            />
-          )}
-          {ix < stack.value.length - 1 && (
-            <p>
-              <button type="button" onClick={() => rollback(ix + 1)}>
-                ここまで戻る
-              </button>
-            </p>
-          )}
-        </section>
-      ))}
+            {frame.output && (
+              <DataViewer
+                  data={frame.output}
+                  onInspect={ix === stack.value.length - 1 ? pushInspection : undefined}
+              />
+            )}
+            {ix < stack.value.length - 1 && (
+              <p>
+                <button type="button" onClick={() => rollback(ix + 1)}>
+                  ここまで戻る
+                </button>
+              </p>
+            )}
+          </section>
+        );
+      })}
 
       {busy.value ? (
         "解析中 ..."

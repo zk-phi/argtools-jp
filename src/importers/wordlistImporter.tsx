@@ -1,7 +1,7 @@
-import { signal } from "@preact/signals";
+import { useState, useCallback } from "preact/hooks";
 import { wordlistData, type WordlistBody } from "../datatypes";
 import { cacheAsync } from "../utils/cache";
-import { updateResult, setBusy, type ImporterModule } from "../state";
+import { reportOutput, reportBusy, type AnalyzerModule } from "../state";
 
 type Dataset = {
   module: () => Promise<{ data: WordlistBody }>,
@@ -9,6 +9,27 @@ type Dataset = {
   label: string,
   license: string,
 };
+type DatasetKey = keyof typeof datasets;
+type DatasetCategory = { label: string, datasetKeys: DatasetKey[] };
+
+const datasetCategories: DatasetCategory[] = [{
+  label: "---- 日本語",
+  datasetKeys: [
+    "nouns",
+    "yomigana",
+    "propers",
+    "verbs",
+    "adjectives",
+  ],
+}, {
+  label: "--- 交通",
+  datasetKeys: [
+    "stations",
+    "roadsideStations",
+    "airports",
+    "highwayJoints",
+  ],
+}];
 
 const datasets: { [key: string]: Dataset } = {
   nouns: {
@@ -67,44 +88,22 @@ const datasets: { [key: string]: Dataset } = {
   },
 };
 
-type DatasetKey = keyof typeof datasets;
-type DatasetCategory = { label: string, datasetKeys: DatasetKey[] };
-const datasetCategories: DatasetCategory[] = [{
-  label: "---- 日本語",
-  datasetKeys: [
-    "nouns",
-    "yomigana",
-    "propers",
-    "verbs",
-    "adjectives",
-  ],
-}, {
-  label: "--- 交通",
-  datasetKeys: [
-    "stations",
-    "roadsideStations",
-    "airports",
-    "highwayJoints",
-  ],
-}];
+const component = ({ id }: { id: number }) => {
+  const [datasetKey, setDatasetKey] = useState("");
 
-const instantiate = (id: number) => {
-  const datasetKey = signal<string>("");
-
-  const loadDataset = async (key: string) => {
+  const loadDataset = useCallback(async (key: string) => {
     if (datasets[key]) {
-      setBusy(id, true);
-      datasetKey.value = key;
+      reportBusy(id, true);
+      setDatasetKey(key);
       const { data } = await datasets[key].module();
-      setBusy(id, false);
-      updateResult(id, wordlistData(data, datasets[key].label));
+      reportOutput(id, wordlistData(data, datasets[key].label));
     }
-  };
+  }, [setDatasetKey]);
 
-  const component = () => (
+  return (
     <>
       <select
-          value={datasetKey.value}
+          value={datasetKey}
           onChange={e => loadDataset(e.currentTarget.value)}>
         <option value="" disabled={true}>
           データセットを選択してください
@@ -122,13 +121,13 @@ const instantiate = (id: number) => {
           </>
         ))}
       </select>
-      {datasetKey.value && (
+      {datasetKey && (
         <>
           <p>
             <small>
               出典：
-              <a href={datasets[datasetKey.value].url} target="_blank" rel="noreferrer">
-                {datasets[datasetKey.value].license}
+              <a href={datasets[datasetKey].url} target="_blank" rel="noreferrer">
+                {datasets[datasetKey].license}
               </a>
             </small>
           </p>
@@ -141,11 +140,9 @@ const instantiate = (id: number) => {
       )}
     </>
   );
-
-  return { component };
 }
 
-export const wordlistImporter: ImporterModule = {
+export const wordlistImporter: AnalyzerModule = {
   label: "単語や地名を特定",
-  instantiate,
+  component,
 };

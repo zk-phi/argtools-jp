@@ -23,7 +23,7 @@ const BinaryViewer = ({ data }: { data: BinaryData }) => (
 
 export const DataViewer = ({ data, onInspect }: {
   data: Data,
-  onInspect?: (data: Data) => void,
+  onInspect?: (ix: number) => void,
 }) => (
   data.type === "text" ? (
     <TextViewer data={data} />

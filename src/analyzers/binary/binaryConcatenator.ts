@@ -1,5 +1,6 @@
+import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { binaryData, textData, type Data, type BinaryBody } from "../../datatypes";
-import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "multiple" && data.datum.every(({type}) => type ===  "binary")) {
@@ -8,33 +9,22 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data, id: number) => {
-  if (src.type !== "multiple" || src.datum.some(({type}) => type !== "binary")) {
-    return { initialResult: textData("UNEXPECTED: not a binary set.", "エラー") };
-  };
+const analyze = async (input: Data | null) => {
+  if (!input || input.type !== "multiple"
+      || input.datum.some(({type}) => type !== "binary")) {
+    throw new Error("UNEXPECTED: not a binary set.");
+  }
+  const arrays = input.datum.map(({value}) => (value as BinaryBody).array!);
+  const merged = new Uint8Array(arrays.reduce((l, r) => l + r.length, 0));
+  for (let i = 0, offset = 0; i < arrays.length; i++) {
+    merged.set(arrays[i], offset);
+    offset += arrays[i].length;
+  }
+  return await binaryData(merged, "結合されたバイナリ");
+}
 
-  (async () => {
-    try {
-      const arrays = src.datum.map(({value}) => (value as BinaryBody).array!);
-      const merged = new Uint8Array(arrays.reduce((l, r) => l + r.length, 0));
-      for (let i = 0, offset = 0; i < arrays.length; i++) {
-        merged.set(arrays[i], offset);
-        offset += arrays[i].length;
-      }
-      const data = await binaryData(merged, "結合されたバイナリ");
-      setBusy(id, false);
-      updateResult(id, data);
-    } catch (e: any) {
-      setBusy(id, false);
-      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
-    }
-  })();
-
-  return { initialBusy: true };
-};
-
-export const binaryConcatenator: AnalyzerModule = {
+export const binaryConcatenator = asyncSimpleAnalyzerFactory({
   label: "結合する",
   detect,
-  instantiate,
-};
+  analyze,
+});

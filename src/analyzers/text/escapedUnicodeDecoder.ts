@@ -1,4 +1,4 @@
-import { textDecoderFactory } from "../textDecoderFactory";
+import { simpleTextDecoderFactory } from "../analyzerFactories";
 import { textData } from "../../datatypes";
 
 const htmlHex = "&#x[0-9A-Fa-f]+;";
@@ -21,14 +21,14 @@ const sequence = `${anyBackwardDelimited}([^0-9A-z\\#&]{0,2}${any})*`;
 const sequenceDelimited = `${sequence}(?=[^0-9A-z\\#&]|$)`;
 
 const value = /(#x?)?[0-9A-Fa-f]+/g;
-export const escapedUnicodeDecoder = textDecoderFactory({
+export const escapedUnicodeDecoder = simpleTextDecoderFactory({
   label: "Unicode の数値参照を復号化",
   hint: "&#xFF; U+FF \\uFF 0xFF などの１６進数 → たぶん Unicode の文字番号！",
   pattern: sequenceDelimited,
   decoder: (str: string, label: string) => {
     const chars = str.match(value);
     if (!chars) {
-      return textData("UNEXPECTED: no matches.", "エラー");
+      throw new Error("UNEXPECTED: no matches.");
     }
     const string = String.fromCodePoint.apply(null, chars.map(char => {
       if (char.startsWith("#x")) {

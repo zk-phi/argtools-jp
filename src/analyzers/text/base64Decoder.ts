@@ -1,4 +1,4 @@
-import { asyncTextDecoderFactory } from "../textDecoderFactory";
+import { asyncSimpleTextDecoderFactory } from "../analyzerFactories";
 import { binaryData } from "../../datatypes";
 
 const alphabet = "[0-9A-z+/]";
@@ -10,7 +10,7 @@ const paddedBody = `(${alphabet}{4})*((${alphabet}{3}=)|(${alphabet}{2}==))`;
 const delimitedPadded = `(?<=[^0-9A-z+/]|^)${paddedBody}(?=[^=]|$)`;
 const delimited = `${delimitedNonPadded}|${delimitedPadded}`;
 
-export const base64Decoder = asyncTextDecoderFactory({
+export const base64Decoder = asyncSimpleTextDecoderFactory({
   label: "Base64 を復号化",
   hint: "A〜Z, a〜z, 0〜9, +, /, = の連続する区間がある → Base64 かも？",
   pattern: delimited,

@@ -1,4 +1,4 @@
-import { textDecoderFactory } from "../textDecoderFactory";
+import { simpleTextDecoderFactory } from "../analyzerFactories";
 import { textData } from "../../datatypes";
 
 // require at least 2 letters
@@ -14,7 +14,7 @@ const pagerCharTable =
 
 const allDelimiters = /[^0-9]+/g;
 const divider = /.{2}/g;
-export const pagerDecoder = textDecoderFactory({
+export const pagerDecoder = simpleTextDecoderFactory({
   label: "ポケベル入力を復号化",
   hint: "0-9 が偶数文字連続",
   pattern: delimited,

@@ -1,3 +1,4 @@
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { textData, binaryData, type Data } from "../../datatypes";
 import type { AnalyzerModule } from "../../state";
 
@@ -8,16 +9,16 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data) => {
-  if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
+const analyze = (input: Data | null) => {
+  if (!input || input.type !== "text") {
+    throw new Error("UNEXPECTED: not a text.") ;
   }
-  const decoded = (new TextEncoder()).encode(src.value);
-  return { initialResult: binaryData(decoded, src.label, "text/plain", ".txt") };
+  const decoded = (new TextEncoder()).encode(input.value);
+  return binaryData(decoded, input.label, "text/plain", ".txt");
 };
 
-export const textToBinary: AnalyzerModule = {
+export const textToBinary = simpleAnalyzerFactory({
   label: "生バイナリとして解析",
   detect,
-  instantiate,
-};
+  analyze,
+});

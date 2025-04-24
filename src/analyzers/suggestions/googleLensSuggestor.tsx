@@ -8,25 +8,21 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = () => {
-  const component = () => (
-    <>
-      <p>検索ボックス右端のボタンをクリックすると、画像で検索できます。</p>
-      <ul>
-        <li>
-          <a href="https://google.com" target="_blank" rel="noreferrer">
-            https://google.com
-          </a>
-        </li>
-      </ul>
-    </>
-  );
-
-  return { component };
-};
+const component = () => (
+  <>
+    <p>検索ボックス右端のボタンをクリックすると、画像で検索できます。</p>
+    <ul>
+      <li>
+        <a href="https://google.com" target="_blank" rel="noreferrer">
+          https://google.com
+        </a>
+      </li>
+    </ul>
+  </>
+);
 
 export const googleLensSuggestor: AnalyzerModule = {
   label: "💡 Google Lens で検索",
   detect,
-  instantiate,
+  component,
 };

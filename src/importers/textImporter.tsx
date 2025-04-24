@@ -1,7 +1,7 @@
-import { instantiate } from "../analyzers/importers/textAdder";
-import type { ImporterModule } from "../state";
+import { textAdder } from "../analyzers/importers/textAdder";
+import type { AnalyzerModule } from "../state";
 
-export const textImporter: ImporterModule = {
+export const textImporter: AnalyzerModule = {
+  ...textAdder,
   label: "文字列・暗号文を解析",
-  instantiate: (id: number) => instantiate(null, id),
 };

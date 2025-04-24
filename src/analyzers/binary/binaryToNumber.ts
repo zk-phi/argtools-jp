@@ -1,5 +1,6 @@
+import { useEffect } from "preact/hooks";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { textData, numberData, multipleData, type Data } from "../../datatypes";
-import type { AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && (
@@ -12,69 +13,65 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data) => {
-  if (src.type !== "binary") {
-    return { initialResult: textData("UNEXPECTED: not a binary.", "エラー") };
+const analyze = (input: Data | null) => {
+  if (!input || input.type !== "binary") {
+    throw new Error("UNEXPECTED: not a binary.");
   }
 
-  if (src.value.array.length === 1) {
-    const intView = new Int8Array(src.value.array.buffer);
-    const uintView = new Uint8Array(src.value.array.buffer);
+  if (input.value.array.length === 1) {
+    const intView = new Int8Array(input.value.array.buffer);
+    const uintView = new Uint8Array(input.value.array.buffer);
     if (intView[0] === uintView[0]) {
-      const data = numberData(intView[0], "整数値として");
-      return { initialResult: data };
+      return numberData(intView[0], "整数値として");
+    } else {
+      return multipleData([
+        numberData(intView[0], "整数値（２の補数）として"),
+        numberData(uintView[0], "整数値（符号なし）として"),
+      ]);
     }
-    const data = multipleData([
-      numberData(intView[0], "整数値（２の補数）として"),
-      numberData(uintView[0], "整数値（符号なし）として"),
-    ]);
-    return { initialResult: data };
   }
 
-  if (src.value.array.length === 2) {
-    const intView = new Int16Array(src.value.array.buffer);
-    const uintView = new Uint16Array(src.value.array.buffer);
+  if (input.value.array.length === 2) {
+    const intView = new Int16Array(input.value.array.buffer);
+    const uintView = new Uint16Array(input.value.array.buffer);
     if (intView[0] === uintView[0]) {
-      const data = numberData(intView[0], "整数値として");
-      return { initialResult: data };
+      return numberData(intView[0], "整数値として");
+    } else {
+      return multipleData([
+        numberData(intView[0], "整数値（２の補数）として"),
+        numberData(uintView[0], "整数値（符号なし）として"),
+      ]);
     }
-    const data = multipleData([
-      numberData(intView[0], "整数値（２の補数）として"),
-      numberData(uintView[0], "整数値（符号なし）として"),
-    ]);
-    return { initialResult: data };
   }
 
-  if (src.value.array.length === 4) {
-    const floatView = new Float32Array(src.value.array.buffer);
-    const intView = new Int32Array(src.value.array.buffer);
-    const uintView = new Uint32Array(src.value.array.buffer);
+  if (input.value.array.length === 4) {
+    const floatView = new Float32Array(input.value.array.buffer);
+    const intView = new Int32Array(input.value.array.buffer);
+    const uintView = new Uint32Array(input.value.array.buffer);
     if (intView[0] === uintView[0]) {
-      const data = multipleData([
+      return multipleData([
         numberData(floatView[0], "小数値（IEEE754）として"),
         numberData(intView[0], "整数値として"),
       ]);
-      return { initialResult: data };
+    } else {
+      return multipleData([
+        numberData(floatView[0], "小数値（IEEE754）として"),
+        numberData(intView[0], "整数値（２の補数）として"),
+        numberData(uintView[0], "整数値（符号なし）として"),
+      ]);
     }
-    const data = multipleData([
-      numberData(floatView[0], "小数値（IEEE754）として"),
-      numberData(intView[0], "整数値（２の補数）として"),
-      numberData(uintView[0], "整数値（符号なし）として"),
-    ]);
-    return { initialResult: data };
   }
 
-  if (src.value.array.length === 8) {
-    const floatView = new Float64Array(src.value.array.buffer);
-    const data = numberData(floatView[0], "小数値（IEEE754）として");
-    return { initialResult: data };
+  if (input.value.array.length === 8) {
+    const floatView = new Float64Array(input.value.array.buffer);
+    return numberData(floatView[0], "小数値（IEEE754）として");
   }
 
-  return { initialResult: textData("UNEXPECTED: not a 4byte nor 8byte binary.", "エラー")};
+  throw new Error("UNEXPECTED: not a 4byte nor 8byte binary.");
 };
 
-export const binaryToNumber: AnalyzerModule = {
+export const binaryToNumber = simpleAnalyzerFactory({
   label: "数値として解釈",
   detect,
-  instantiate,
-};
+  analyze,
+});

@@ -8,25 +8,21 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = () => {
-  const component = () => (
-    <>
-      <p>けっきょくこいつがすごい。</p>
-      <ul>
-        <li>
-          <a href="https://chatgpt.com" target="_blank" rel="noreferrer">
-            https://chatgpt.com
-          </a>
-        </li>
-      </ul>
-    </>
-  );
-
-  return { component };
-};
+const component = () => (
+  <>
+    <p>けっきょくこいつがすごい。</p>
+    <ul>
+      <li>
+        <a href="https://chatgpt.com" target="_blank" rel="noreferrer">
+          https://chatgpt.com
+        </a>
+      </li>
+    </ul>
+  </>
+);
 
 export const chatGptSuggestor: AnalyzerModule = {
   label: "💡 ChatGPT と相談",
   detect,
-  instantiate,
+  component,
 };

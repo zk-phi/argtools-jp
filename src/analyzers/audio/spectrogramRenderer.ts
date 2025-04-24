@@ -1,7 +1,8 @@
+import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { mapRange } from "../../utils/range";
 import { cacheAsync } from "../../utils/cache";
 import { textData, binaryData, multipleData, type AtomicData, type Data } from "../../datatypes";
-import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
 
 const packages = {
   audio: cacheAsync(() => import("../../utils/audio")),
@@ -15,38 +16,27 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data, id: number) => {
-  if (src.type !== "binary" || !src.value.mime.startsWith("audio")) {
-    return { initialResult: textData("UNEXPECTED: not an audio data.", "エラー") };
+const analyze = async (input: Data | null) => {
+  if (!input || input.type !== "binary" || !input.value.mime.startsWith("audio")) {
+    throw new Error("UNEXPECTED: not an audio data.");
   }
-
-  (async () => {
-    const { decodeAudio } = await packages.audio();
-    const { renderSpectrum } = await packages.spectrum();
-    const buffer = await decodeAudio(src.value.array.buffer);
-    try {
-      const datum: AtomicData[] = await Promise.all(
-        mapRange(buffer.numberOfChannels, async ch => {
-          const spectrum = await renderSpectrum(buffer.getChannelData(ch), 600, 200);
-          return await binaryData(
-            new Uint8Array(await spectrum.arrayBuffer()),
-            `Ch ${ch + 1} のスペクトログラム`,
-          );
-        })
+  const { decodeAudio } = await packages.audio();
+  const { renderSpectrum } = await packages.spectrum();
+  const buffer = await decodeAudio(input.value.array.buffer);
+  const datum: AtomicData[] = await Promise.all(
+    mapRange(buffer.numberOfChannels, async ch => {
+      const spectrum = await renderSpectrum(buffer.getChannelData(ch), 600, 200);
+      return await binaryData(
+        new Uint8Array(await spectrum.arrayBuffer()),
+        `Ch ${ch + 1} のスペクトログラム`,
       );
-      setBusy(id, false);
-      updateResult(id, multipleData(datum));
-    } catch (e: any) {
-      setBusy(id, false);
-      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
-    }
-  })();
-
-  return { initialBusy: true };
+    })
+  );
+  return multipleData(datum);
 };
 
-export const spectrogramRenderer: AnalyzerModule = {
+export const spectrogramRenderer = asyncSimpleAnalyzerFactory({
   label: "スペクトログラム解析",
   detect,
-  instantiate,
-};
+  analyze,
+});

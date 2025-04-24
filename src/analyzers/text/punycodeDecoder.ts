@@ -1,5 +1,5 @@
+import { asyncSimpleTextDecoderFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
-import { asyncTextDecoderFactory } from "../textDecoderFactory";
 import { textData } from "../../datatypes";
 
 const packages = {
@@ -13,7 +13,7 @@ const body = `xn--${alphabet}{2,}(\\.xn--${alphabet}{2,})*`;
 // but accept delimiter characters like: ",xn--00,"
 const delimited = `(?<=[^A-z0-9]|^)${body}(?=[^A-z0-9]|$)`
 
-export const punycodeDecoder = asyncTextDecoderFactory({
+export const punycodeDecoder = asyncSimpleTextDecoderFactory({
   label: "Punycode を復号化",
   hint: "xn-- から始まる英数字列 → たぶん Punycode！",
   pattern: delimited,

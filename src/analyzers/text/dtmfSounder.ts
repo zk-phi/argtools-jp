@@ -1,6 +1,7 @@
+import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
 import { textData, binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
-import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
 
 const packages = {
   dtmf: cacheAsync(() => import("../../utils/dtmf")),
@@ -10,7 +11,6 @@ const packages = {
 // require at least 3 digits,
 // at most two delimiter characters are allowed between each digits, like "000, 22, 124"
 const digits = /([0-9#*][^0-9A-z#*]{0,2}){3,}/;
-const allDigits = /([0-9#*][^0-9A-z#*]{0,2}){3,}/g;
 
 const detect = (data: Data) => {
   if (data.type === "text" && data.value.match(digits)) {
@@ -19,46 +19,37 @@ const detect = (data: Data) => {
   return null;
 };
 
+const allDigits = /([0-9#*][^0-9A-z#*]{0,2}){3,}/g;
 const allDelimiters = /[^0-9*#]+/g;
 
-const instantiate = (src: Data, id: number) => {
-  if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
+const analyze = async (input: Data | null) => {
+  if (!input || input.type !== "text") {
+    throw new Error("UNEXPECTED: not a text.");
   }
-  const matches = src.value.match(allDigits);
+
+  const matches = input.value.match(allDigits);
   if (!matches) {
-    return { initialResult: textData("UNEXPECTED: not matches.", "エラー") };
+    throw new Error("UNEXPECTED: not matches.");
   }
   if (matches.length > 100) {
-    const msg = `候補が多すぎたので中止しました（${matches.length}件）`;
-    return { initialResult: textData(msg, "エラー") };
+    throw new Error(`候補が多すぎたので中止しました（${matches.length}件）`);
   }
 
-  (async () => {
-    try {
-      const { renderDtmfSound } = await packages.dtmf();
-      const { default: toWav } = await packages.audiobufferToWav();
-      const datum: AtomicData[] = await Promise.all(
-        matches.map(async match => {
-          const stripped = match.replaceAll(allDelimiters, "");
-          const audioBuffer = await renderDtmfSound(stripped, 0.5);
-          const wavBuffer = toWav(audioBuffer);
-          return await binaryData(new Uint8Array(wavBuffer), `${match}のダイヤル音`);
-        })
-      );
-      setBusy(id, false);
-      updateResult(id, multipleData(datum));
-    } catch (e: any) {
-      setBusy(id, false);
-      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
-    }
-  })();
-
-  return { initialBusy: true };
+  const { renderDtmfSound } = await packages.dtmf();
+  const { default: toWav } = await packages.audiobufferToWav();
+  const datum: AtomicData[] = await Promise.all(
+    matches.map(async match => {
+      const stripped = match.replaceAll(allDelimiters, "");
+      const audioBuffer = await renderDtmfSound(stripped, 0.5);
+      const wavBuffer = toWav(audioBuffer);
+      return await binaryData(new Uint8Array(wavBuffer), `${match}のダイヤル音`);
+    })
+  );
+  return multipleData(datum);
 };
 
-export const dtmfSounder: AnalyzerModule = {
+export const dtmfSounder = asyncSimpleAnalyzerFactory({
   label: "電話のダイヤル音を再現（DTMF）",
   detect,
-  instantiate,
-};
+  analyze,
+});

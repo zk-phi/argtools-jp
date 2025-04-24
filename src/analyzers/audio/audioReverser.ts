@@ -1,6 +1,7 @@
+import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
 import { textData, binaryData, type Data } from "../../datatypes";
-import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
 
 const packages = {
   audio: cacheAsync(() => import("../../utils/audio")),
@@ -14,32 +15,20 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data, id: number) => {
-  if (src.type !== "binary" || !src.value.mime.startsWith("audio")) {
-    return { initialResult: textData("UNEXPECTED: not an audio data.", "エラー") };
+const analyze = async (input: Data | null) => {
+  if (!input || input.type !== "binary" || !input.value.mime.startsWith("audio")) {
+    throw new Error("UNEXPECTED: not an audio data.");
   }
+  const { decodeAudio, reverseAudioBuffer } = await packages.audio();
+  const { default: toWav } = await packages.audiobufferToWav();
+  const buffer = await decodeAudio(input.value.array.buffer);
+  reverseAudioBuffer(buffer);
+  const wavBuffer = toWav(buffer);
+  return await binaryData(new Uint8Array(wavBuffer), "逆再生された音声");
+}
 
-  (async () => {
-    try {
-      const { decodeAudio, reverseAudioBuffer } = await packages.audio();
-      const { default: toWav } = await packages.audiobufferToWav();
-      const buffer = await decodeAudio(src.value.array.buffer);
-      reverseAudioBuffer(buffer);
-      const wavBuffer = toWav(buffer);
-      const data = await binaryData(new Uint8Array(wavBuffer), "逆再生された音声");
-      setBusy(id, false);
-      updateResult(id, data);
-    } catch (e: any) {
-      setBusy(id, false);
-      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
-    }
-  })();
-
-  return { initialBusy: true };
-};
-
-export const audioReverser: AnalyzerModule = {
+export const audioReverser = asyncSimpleAnalyzerFactory({
   label: "逆再生する",
   detect,
-  instantiate,
-};
+  analyze,
+});

@@ -9,26 +9,22 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = () => {
-  const component = () => (
-    <>
-      <p>３つの単語で地球上のあらゆる地点を表せる仕組みです。</p>
-      <p>３連続のスラッシュ「{"///"}」がロゴになっています</p>
-      <ul>
-        <li>
-          <a href="https://what3words.com/" target="_blank" rel="noreferrer">
-            https://what3words.com/
-          </a>
-        </li>
-      </ul>
-    </>
-  );
-
-  return { component };
-};
+const component = () => (
+  <>
+    <p>３つの単語で地球上のあらゆる地点を表せる仕組みです。</p>
+    <p>３連続のスラッシュ「{"///"}」がロゴになっています</p>
+    <ul>
+      <li>
+        <a href="https://what3words.com/" target="_blank" rel="noreferrer">
+          https://what3words.com/
+        </a>
+      </li>
+    </ul>
+  </>
+);
 
 export const w3wSuggestor: AnalyzerModule = {
   label: "💡 what3words で検索",
   detect,
-  instantiate,
+  component,
 };

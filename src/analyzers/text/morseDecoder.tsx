@@ -1,9 +1,9 @@
-import { signal } from "@preact/signals";
+import { useState, useEffect, useMemo } from "preact/hooks";
 import { histogram } from "../../utils/string";
 import { cacheAsync } from "../../utils/cache";
 import { debouncer } from "../../utils/debouncer";
 import { textData, multipleData, type Data } from "../../datatypes";
-import { setBusy, updateResult, type AnalyzerModule } from "../../state";
+import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
 
 const packages = {
   morse: cacheAsync(() => import("../../utils/morse")),
@@ -21,78 +21,63 @@ const detect = (data: Data) => {
   return null;
 };
 
-const instantiate = (src: Data, id: number) => {
-  if (src.type !== "text") {
-    return { initialResult: textData("UNEXPECTED: not a text.", "エラー") };
-  }
-  const truncated = src.value.slice(0, 100);
-  const hist = histogram(truncated);
-  if (hist.length <= 1) {
-    return { initialResult: textData("UNEXPECTED: all chars are the same.", "エラー") };
-  }
-
-  const zeroChar = signal(hist[0][0] > hist[1][0] ? hist[0][0] : hist[1][0]);
-  const oneChar = signal(hist[0][0] > hist[1][0] ? hist[1][0] : hist[0][0]);
-  const withDebounce = debouncer(100);
-
-  const decode = async () => {
-    if (zeroChar.value.length === 0 || oneChar.value.length === 0) {
-      return textData("読み取りに使う文字が指定されていません", "エラー");
+const component = ({ id, input }: { input: Data | null, id: number }) => {
+  const hist = useMemo(() => {
+    if (!input || input.type !== "text") {
+      return null;
     }
-    setBusy(id, true);
+    const truncated = input.value.slice(0, 100);
+    return histogram(truncated);
+  }, []);
+
+  const [zeroChar, setZeroChar] = useState(!hist ? "・" : (
+    hist[0][0] > hist[1][0] ? hist[0][0] : hist[1][0]
+  ));
+  const [oneChar, setOneChar] = useState(!hist ? "－" : (
+    hist[0][0] > hist[1][0] ? hist[1][0] : hist[0][0]
+  ));
+
+  useAsyncAnalyzerEffect(id, async () => {
+    if (!input || input.type !== "text") {
+      throw new Error("UNEXPECTED: not a text.");
+    }
+    if (zeroChar.length === 0 || oneChar.length === 0) {
+      throw new Error("読み取りに使う文字が指定されていません");
+    }
     const { decodeMorse } = await packages.morse();
-    try {
-      const [enMorse, jpMorse] = decodeMorse(src.value, zeroChar.value, oneChar.value);
-      const data = multipleData([
-        textData(enMorse, "欧文モールスの読み取り結果"),
-        textData(jpMorse, "和文モールスの読み取り結果"),
-      ]);
-      setBusy(id, false);
-      updateResult(id, data);
-    } catch (e: any) {
-      setBusy(id, false);
-      updateResult(id, textData("message" in e ? e.message : "", "エラー"));
-    }
-  };
-  decode();
+    const [enMorse, jpMorse] = decodeMorse(input.value, zeroChar, oneChar);
+    const data = multipleData([
+      textData(enMorse, "欧文モールスの読み取り結果"),
+      textData(jpMorse, "和文モールスの読み取り結果"),
+    ]);
+    return data;
+  }, [zeroChar, oneChar, input]);
 
-  const onInputZeroChar = (value: string) => {
-    zeroChar.value = value;
-    withDebounce(decode);
-  };
-
-  const onInputOneChar = (value: string) => {
-    oneChar.value = value;
-    withDebounce(decode);
-  };
-
-  const component = () => (
+  return (
     <>
       <label for="zeroChar">短点（・）として扱う文字</label>
       <input
           type="text"
           name="zeroChar"
           maxLength={1}
-          value={zeroChar.value}
-          onInput={e => onInputZeroChar(e.currentTarget.value)} />
+          value={zeroChar}
+          onInput={e => setZeroChar(e.currentTarget.value)} />
       <label for="oneChar">長点（－）として扱う文字</label>
       <input
           type="text"
           name="oneChar"
           maxLength={1}
-          value={oneChar.value}
-          onInput={e => onInputOneChar(e.currentTarget.value)} />
+          value={oneChar}
+          onInput={e => setOneChar(e.currentTarget.value)} />
       <div>
         <small>※無線局運用規則（十二条）で規定されていない文字は�になります</small>
       </div>
     </>
   );
-
-  return { component, initialBusy: true };
 };
 
 export const morseDecoder: AnalyzerModule = {
   label: "モールス信号を復号化",
   detect,
-  instantiate,
+  component,
 };

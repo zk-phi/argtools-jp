@@ -1,7 +1,7 @@
-import { instantiate } from "../analyzers/importers/fileAdder";
-import type { ImporterModule } from "../state";
+import { fileAdder } from "../analyzers/importers/fileAdder";
+import type { AnalyzerModule } from "../state";
 
-export const fileImporter: ImporterModule = {
+export const fileImporter: AnalyzerModule = {
+  ...fileAdder,
   label: "ファイルを解析",
-  instantiate: (id: number) => instantiate(null, id),
 };
