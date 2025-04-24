@@ -28,7 +28,21 @@
       "correctness": {
         "noUndeclaredVariables": "off",
         "useImportExtensions": "off",
-        "noNodejsModules": "off"
+        "noNodejsModules": "off",
+        "useExhaustiveDependencies": {
+          "level": "error",
+          "options": {
+            "hooks": [{
+              "name": "useAnalyzerEffect",
+              "closureIndex": 1,
+              "dependenciesIndex": 2
+            }, {
+              "name": "useAsyncAnalyzerEffect",
+              "closureIndex": 1,
+              "dependenciesIndex": 2
+            }]
+          }
+        }
       },
       "complexity": {
         "noExcessiveCognitiveComplexity": "off",

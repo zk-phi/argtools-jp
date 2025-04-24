@@ -16,15 +16,15 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
 
   useAnalyzerEffect(id, () => {
     if (!input) {
-      return textData(text, "入力されたデータ");
+      return textData(debouncedText, "入力されたデータ");
     }
     if (input.type === "wordlist") {
       return textData("UNEXPECTED: wordlist given", "エラー");
     }
     if (input.type === "multiple") {
-      return multipleData([...input.datum, textData(text, "入力されたデータ")]);
+      return multipleData([...input.datum, textData(debouncedText, "入力されたデータ")]);
     }
-    return multipleData([input, textData(text, "入力されたデータ")]);
+    return multipleData([input, textData(debouncedText, "入力されたデータ")]);
   }, [input, debouncedText]);
 
   return (

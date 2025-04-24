@@ -25,7 +25,7 @@ export const asyncSimpleAnalyzerFactory = (
   label,
   detect,
   component: ({ id, input }: { id: number, input: Data | null }) => {
-    useAsyncAnalyzerEffect(id, () => analyze(input), [input]);
+    useAsyncAnalyzerEffect(id, () => analyze(input), [analyze, input]);
     return view;
   },
 });
@@ -36,7 +36,7 @@ export const simpleAnalyzerFactory = (
   label,
   detect,
   component: ({ id, input }: { id: number, input: Data | null }) => {
-    useAnalyzerEffect(id, () => analyze(input), [input]);
+    useAnalyzerEffect(id, () => analyze(input), [analyze, input]);
     return view;
   },
 });
