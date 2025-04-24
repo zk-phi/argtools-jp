@@ -1,7 +1,7 @@
-import { useState, } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { useDebounce } from "../../utils/useDebounce";
 import { textData, multipleData, type Data } from "../../datatypes";
-import { useAnalyzerEffect, type AnalyzerModule } from "../../state";
+import { useAnalyzerEffect, reportBusy, type AnalyzerModule } from "../../state";
 
 const detect = (src: Data) => {
   if (src.type !== "wordlist") {
@@ -13,6 +13,10 @@ const detect = (src: Data) => {
 const component = ({ id, input }: { input: Data | null, id: number }) => {
   const [text, setText] = useState("");
   const debouncedText = useDebounce(text, 100);
+
+  useEffect(() => {
+    reportBusy(id, true);
+  }, [text]);
 
   useAnalyzerEffect(id, () => {
     if (!input) {

@@ -83,7 +83,8 @@ const App = () => {
             }}>
               <Component id={frame.id} input={stack.value[ix - 1]?.output ?? null} />
             </div>
-            {frame.output && (
+            {/* render result either if the frame is inactive or not-busy */}
+            {frame.output && (ix < stack.value.length - 1 || !busy.value) && (
               <DataViewer
                   data={frame.output}
                   onInspect={ix === stack.value.length - 1 ? pushInspection : undefined}
