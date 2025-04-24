@@ -1,7 +1,6 @@
-import { useState, useEffect } from "preact/hooks";
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { useState, } from "preact/hooks";
 import { readFileAsBuffer } from "../../utils/file";
-import { textData, binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
+import { binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
 import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {

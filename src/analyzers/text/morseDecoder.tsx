@@ -1,7 +1,6 @@
-import { useState, useEffect, useMemo } from "preact/hooks";
+import { useState, useMemo } from "preact/hooks";
 import { histogram } from "../../utils/string";
 import { cacheAsync } from "../../utils/cache";
-import { debouncer } from "../../utils/debouncer";
 import { textData, multipleData, type Data } from "../../datatypes";
 import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
 
@@ -28,7 +27,7 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
     }
     const truncated = input.value.slice(0, 100);
     return histogram(truncated);
-  }, []);
+  }, [input]);
 
   const [zeroChar, setZeroChar] = useState(!hist ? "・" : (
     hist[0][0] > hist[1][0] ? hist[0][0] : hist[1][0]

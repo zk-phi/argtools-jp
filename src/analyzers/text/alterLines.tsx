@@ -1,4 +1,4 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, } from "preact/hooks";
 import { textData, type Data } from "../../datatypes";
 import { useAnalyzerEffect, type AnalyzerModule } from "../../state";
 
@@ -22,9 +22,8 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
   useAnalyzerEffect(id, () => {
     if (!input || input.type !== "text") {
       throw new Error("ERROR: unexpedted data type.");
-    } else {
-      return textData(_alterText(input.value, columns), input.label);
     }
+    return textData(_alterText(input.value, columns), input.label);
   }, [columns, input]);
 
   return (

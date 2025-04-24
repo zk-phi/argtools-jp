@@ -1,7 +1,7 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, } from "preact/hooks";
 import { useDebounce } from "../../utils/useDebounce";
 import { textData, multipleData, type Data } from "../../datatypes";
-import { reportOutput, useAnalyzerEffect, type AnalyzerModule } from "../../state";
+import { useAnalyzerEffect, type AnalyzerModule } from "../../state";
 
 const detect = (src: Data) => {
   if (src.type !== "wordlist") {
@@ -17,13 +17,14 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
   useAnalyzerEffect(id, () => {
     if (!input) {
       return textData(text, "入力されたデータ");
-    } else if (input.type === "wordlist") {
-      return textData("UNEXPECTED: wordlist given", "エラー");
-    } else if (input.type === "multiple") {
-      return multipleData([...input.datum, textData(text, "入力されたデータ")]);
-    } else {
-      return multipleData([input, textData(text, "入力されたデータ")]);
     }
+    if (input.type === "wordlist") {
+      return textData("UNEXPECTED: wordlist given", "エラー");
+    }
+    if (input.type === "multiple") {
+      return multipleData([...input.datum, textData(text, "入力されたデータ")]);
+    }
+    return multipleData([input, textData(text, "入力されたデータ")]);
   }, [input, debouncedText]);
 
   return (

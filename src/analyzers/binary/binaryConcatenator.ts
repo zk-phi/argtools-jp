@@ -1,6 +1,5 @@
 import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
-import { binaryData, textData, type Data, type BinaryBody } from "../../datatypes";
-import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
+import { binaryData, type Data, type BinaryBody } from "../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type === "multiple" && data.datum.every(({type}) => type ===  "binary")) {

@@ -1,6 +1,5 @@
 import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { textData, multipleData, type Data, type AtomicData } from "../../datatypes";
-import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary") {

@@ -1,7 +1,6 @@
 import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
 import { multipleData, textData, type Data, type AtomicData } from "../../datatypes";
-import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
 
 const packages = {
   exif: cacheAsync(() => import("../../utils/exif")),

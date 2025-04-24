@@ -1,5 +1,5 @@
 import { asyncSimpleTextDecoderFactory } from "../analyzerFactories";
-import { textData, binaryData } from "../../datatypes";
+import { binaryData } from "../../datatypes";
 
 const alphabet = "[0-9a-fA-F]";
 const byte = `(0x)?${alphabet}{2}`;

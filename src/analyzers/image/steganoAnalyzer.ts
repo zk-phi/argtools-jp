@@ -1,7 +1,6 @@
 import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
-import { multipleData, binaryData, textData, type Data } from "../../datatypes";
-import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
+import { multipleData, binaryData, type Data } from "../../datatypes";
 
 const packages = {
   image: cacheAsync(() => import("../../utils/image.ts")),

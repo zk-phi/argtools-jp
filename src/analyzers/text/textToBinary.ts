@@ -1,6 +1,5 @@
 import { simpleAnalyzerFactory } from "../analyzerFactories";
-import { textData, binaryData, type Data } from "../../datatypes";
-import type { AnalyzerModule } from "../../state";
+import { binaryData, type Data } from "../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type === "text") {

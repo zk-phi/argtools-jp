@@ -103,7 +103,7 @@ export const useAnalyzerEffect = (
     } catch (e: any) {
       reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
     }
-  }, [id, ...deps]);
+  }, [id, cb, ...deps]);
 };
 
 // thin wrapper for analyzer modules to handle errors and state management
@@ -119,5 +119,5 @@ export const useAsyncAnalyzerEffect = (
     }).catch(e => {
       reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
     });
-  }, [id, ...deps]);
+  }, [id, cb, ...deps]);
 };

@@ -1,6 +1,6 @@
-import { useEffect } from "preact/hooks";
+
 import { simpleAnalyzerFactory } from "../analyzerFactories";
-import { textData, numberData, multipleData, type Data } from "../../datatypes";
+import { numberData, multipleData, type Data } from "../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && (
@@ -23,12 +23,11 @@ const analyze = (input: Data | null) => {
     const uintView = new Uint8Array(input.value.array.buffer);
     if (intView[0] === uintView[0]) {
       return numberData(intView[0], "整数値として");
-    } else {
-      return multipleData([
-        numberData(intView[0], "整数値（２の補数）として"),
-        numberData(uintView[0], "整数値（符号なし）として"),
-      ]);
     }
+    return multipleData([
+      numberData(intView[0], "整数値（２の補数）として"),
+      numberData(uintView[0], "整数値（符号なし）として"),
+    ]);
   }
 
   if (input.value.array.length === 2) {
@@ -36,12 +35,11 @@ const analyze = (input: Data | null) => {
     const uintView = new Uint16Array(input.value.array.buffer);
     if (intView[0] === uintView[0]) {
       return numberData(intView[0], "整数値として");
-    } else {
-      return multipleData([
-        numberData(intView[0], "整数値（２の補数）として"),
-        numberData(uintView[0], "整数値（符号なし）として"),
-      ]);
     }
+    return multipleData([
+      numberData(intView[0], "整数値（２の補数）として"),
+      numberData(uintView[0], "整数値（符号なし）として"),
+    ]);
   }
 
   if (input.value.array.length === 4) {
@@ -53,13 +51,12 @@ const analyze = (input: Data | null) => {
         numberData(floatView[0], "小数値（IEEE754）として"),
         numberData(intView[0], "整数値として"),
       ]);
-    } else {
-      return multipleData([
-        numberData(floatView[0], "小数値（IEEE754）として"),
-        numberData(intView[0], "整数値（２の補数）として"),
-        numberData(uintView[0], "整数値（符号なし）として"),
-      ]);
     }
+    return multipleData([
+      numberData(floatView[0], "小数値（IEEE754）として"),
+      numberData(intView[0], "整数値（２の補数）として"),
+      numberData(uintView[0], "整数値（符号なし）として"),
+    ]);
   }
 
   if (input.value.array.length === 8) {

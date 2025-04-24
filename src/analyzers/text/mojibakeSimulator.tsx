@@ -1,7 +1,7 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState, } from "preact/hooks";
 import { cacheAsync } from "../../utils/cache";
 import { textData, multipleData, type Data } from "../../datatypes";
-import { reportBusy, reportOutput, useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
+import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
 import type { Encoding } from "../../utils/mojibake";
 
 // inspired by https://tmtms.net/mojibake/

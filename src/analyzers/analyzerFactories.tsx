@@ -1,5 +1,5 @@
 import type { ComponentChildren } from "preact";
-import { useEffect, useMemo } from "preact/hooks";
+import { useMemo } from "preact/hooks";
 import { ellipsis } from "../utils/string";
 import { useAnalyzerEffect, useAsyncAnalyzerEffect, reportBusy, reportOutput, type AnalyzerModule } from "../state";
 import { textData, multipleData, type Data, type AtomicData } from "../datatypes";
@@ -141,7 +141,7 @@ const _urlExtractorComponent = (
         reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
         return [];
       }
-    }, [id, input]);
+    }, [id, input, urlConstructor]);
     return (
       <>
         {view}

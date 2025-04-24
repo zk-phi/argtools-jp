@@ -23,7 +23,7 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
     const url = URL.createObjectURL(blob);
     reportOutput(id, null);
     return { src: url, type: input.value.mime };
-  }, [input]);
+  }, [id, input]);
 
   useEffect(() => {
     if (videoRef.current) {

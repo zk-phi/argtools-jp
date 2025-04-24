@@ -1,7 +1,6 @@
 import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
-import { textData, binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
-import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
+import { binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
 
 const packages = {
   dtmf: cacheAsync(() => import("../../utils/dtmf")),

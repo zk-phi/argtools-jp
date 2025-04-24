@@ -1,7 +1,6 @@
 import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
-import { textData, binaryData, type Data } from "../../datatypes";
-import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
+import { binaryData, type Data } from "../../datatypes";
 
 const packages = {
   fflate: cacheAsync(() => import("fflate")),

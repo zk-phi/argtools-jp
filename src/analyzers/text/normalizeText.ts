@@ -1,6 +1,5 @@
 import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { textData, type Data } from "../../datatypes";
-import type { AnalyzerModule } from "../../state";
 
 const suspicious = /[Ａ-Ｚａ-ｚ０-９]/;
 

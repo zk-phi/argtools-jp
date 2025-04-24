@@ -1,7 +1,7 @@
-import { useState, useCallback } from "preact/hooks";
+import { useState, } from "preact/hooks";
 import { wordlistData, type WordlistBody } from "../datatypes";
 import { cacheAsync } from "../utils/cache";
-import { reportOutput, reportBusy, type AnalyzerModule } from "../state";
+import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../state";
 
 type Dataset = {
   module: () => Promise<{ data: WordlistBody }>,
@@ -91,20 +91,20 @@ const datasets: { [key: string]: Dataset } = {
 const component = ({ id }: { id: number }) => {
   const [datasetKey, setDatasetKey] = useState("");
 
-  const loadDataset = useCallback(async (key: string) => {
-    if (datasets[key]) {
-      reportBusy(id, true);
-      setDatasetKey(key);
-      const { data } = await datasets[key].module();
-      reportOutput(id, wordlistData(data, datasets[key].label));
+  useAsyncAnalyzerEffect(id, async () => {
+    const dataset = datasets[datasetKey];
+    if (!dataset) {
+      return null;
     }
-  }, [setDatasetKey]);
+    const { data } = await dataset.module();
+    return wordlistData(data, dataset.label);
+  }, [datasetKey]);
 
   return (
     <>
       <select
           value={datasetKey}
-          onChange={e => loadDataset(e.currentTarget.value)}>
+          onChange={e => setDatasetKey(e.currentTarget.value)}>
         <option value="" disabled={true}>
           データセットを選択してください
         </option>

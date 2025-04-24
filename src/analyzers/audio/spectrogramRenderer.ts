@@ -1,8 +1,7 @@
 import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { mapRange } from "../../utils/range";
 import { cacheAsync } from "../../utils/cache";
-import { textData, binaryData, multipleData, type AtomicData, type Data } from "../../datatypes";
-import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
+import { binaryData, multipleData, type AtomicData, type Data } from "../../datatypes";
 
 const packages = {
   audio: cacheAsync(() => import("../../utils/audio")),

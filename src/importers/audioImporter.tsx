@@ -45,7 +45,7 @@ const component = ({ id }: { id: number }) => {
       });
       recorder.stop();
     }
-  }, [id, recorder]);
+  }, [id, recorder, ctx]);
 
   return (
     <>
