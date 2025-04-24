@@ -135,8 +135,9 @@ const _urlExtractorComponent = (
         if (!matches) {
           throw new Error("UNEXPECTED: no matches.");
         }
+        const urls = matches.map(urlConstructor);
         reportOutput(id, null);
-        return matches.map(urlConstructor);
+        return urls;
       } catch (e: any) {
         reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
         return [];
