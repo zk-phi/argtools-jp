@@ -1,5 +1,5 @@
 import type { FunctionComponent } from "preact";
-import { useEffect } from "preact/hooks";
+import { useEffect, useMemo } from "preact/hooks";
 import { signal } from "@preact/signals";
 import { gensym } from "./utils/gensym";
 import { textData, type Data } from "./datatypes";
@@ -96,14 +96,16 @@ export const useAnalyzerEffect = (
   cb: () => Data | null,
   deps: any[],
 ) => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  const fn = useMemo(() => cb, deps);
   useEffect(() => {
     reportBusy(id, true);
     try {
-      reportOutput(id, cb());
+      reportOutput(id, fn());
     } catch (e: any) {
       reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
     }
-  }, [id, cb, ...deps]);
+  }, [id, fn]);
 };
 
 // thin wrapper for analyzer modules to handle errors and state management
@@ -112,12 +114,14 @@ export const useAsyncAnalyzerEffect = (
   cb: () => Promise<Data | null>,
   deps: any[],
 ) => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  const fn = useMemo(() => cb, deps);
   useEffect(() => {
     reportBusy(id, true);
-    cb().then(output => {
+    fn().then(output => {
       reportOutput(id, output);
     }).catch(e => {
       reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
     });
-  }, [id, cb, ...deps]);
+  }, [id, fn]);
 };
