@@ -97,7 +97,7 @@ const _renderAnalyzedData = (analyzedData: Float32Array[], h: number): Promise<B
   })
 );
 
-export const renderSpectrum = (
+export const renderSpectrogram = (
   channelData: Float32Array,
   w: number,
   h: number,
