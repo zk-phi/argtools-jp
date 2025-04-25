@@ -62,10 +62,10 @@ const _renderAnalyzedData = (analyzedData: Float32Array[], h: number): Promise<B
     // (negative part is the same as positive part but mirrored)
     //
     // (freq)                             (canvas y)
-    //    f *-----------------------------* h
+    //    f *-----------------------------* 0
     //      |                             |
     //      |                             |
-    //    0 |.............................| 0
+    //    0 |.............................| h
     //      |                             |
     //      |                             |
     //   -f *-----------------------------*
