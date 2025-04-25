@@ -145,5 +145,5 @@ if (typeof window !== "undefined") {
 export const prerender = () => {
   const html = ssr(<App />);
   // add an empty script tag to detect prerendered contents
-  return { html: html + "<script id='isodata'></script>" };
+  return { html: `${html}<script id="isodata"></script>` };
 };
