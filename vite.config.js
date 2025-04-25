@@ -5,10 +5,14 @@ import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { resolve } from "path";
 
 export default defineConfig({
-  root: "src/entrypoints",
   base: "/argtools-jp/",
   plugins: [
-    preact(),
+    preact({
+      prerender: {
+        enabled: true,
+        renderTarget: "#app",
+      },
+    }),
     dsv(),
     nodePolyfills({
       // @file-type/xml requires some node modules to work
@@ -19,10 +23,5 @@ export default defineConfig({
   build: {
     outDir: resolve(__dirname, "dist"),
     emptyOutDir: true,
-    rollupOptions: {
-      input: {
-        drwatson: "src/entrypoints/index.html",
-      },
-    },
   },
 });
