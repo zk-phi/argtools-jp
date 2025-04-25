@@ -1,12 +1,10 @@
-import { render, hydrate } from "preact";
-import { render as ssr } from "preact-render-to-string";
 import { computed } from "@preact/signals";
 import { analyzers, analyzerCategories } from "./analyzers";
 import { importers } from "./importers";
 import { DataViewer } from "./DataViewer";
 import { busy, stack, pushAnalyzer, pushInspection, rollback, type AnalyzerModule } from "./state";
 
-const App = () => {
+export const App = () => {
   const suggestions = computed<{ reason: string, module: AnalyzerModule }[]>(() => {
     const suspicious = stack.value[stack.value.length - 1]?.output;
     if (suspicious) {
@@ -129,21 +127,4 @@ const App = () => {
       )}
     </>
   );
-};
-
-if (typeof window !== "undefined") {
-  const div = document.getElementById("app")!;
-  const prerendered = document.getElementById("isodata");
-  if (prerendered) {
-    hydrate(<App />, div);
-  } else {
-    // no prerendered contents (dev mode)
-    render(<App />, div);
-  }
-}
-
-export const prerender = () => {
-  const html = ssr(<App />);
-  // add an empty script tag to detect prerendered contents
-  return { html: `${html}<script id="isodata"></script>` };
 };
