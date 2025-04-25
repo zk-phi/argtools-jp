@@ -1,7 +1,7 @@
 import { useState } from "preact/hooks";
 import { useDebounce } from "../../utils/useDebounce";
 import { textData, multipleData, type Data } from "../../datatypes";
-import { useAnalyzerEffect, reportBusy, type AnalyzerModule } from "../../state";
+import { useAnalyzerEffect, type AnalyzerModule } from "../../state";
 
 const detect = (src: Data) => {
   if (src.type !== "wordlist") {

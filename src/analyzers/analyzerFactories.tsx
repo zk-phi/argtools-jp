@@ -145,7 +145,7 @@ const _urlExtractorComponent = (
           reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
         }
       });
-    }, [input]);
+    }, [input, urlConstructor, id]);
     return (
       <>
         {view}

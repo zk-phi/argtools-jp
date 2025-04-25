@@ -1,7 +1,6 @@
 import { useState } from "preact/hooks";
 import { useDebounce } from "../../utils/useDebounce";
-import { simpleAnalyzerFactory } from "../analyzerFactories";
-import { useAnalyzerEffect, reportBusy, type AnalyzerModule } from "../../state";
+import { useAnalyzerEffect, type AnalyzerModule } from "../../state";
 import { textData, multipleData, type Data, type AtomicData } from "../../datatypes";
 
 const detect = (data: Data) => {
@@ -12,12 +11,11 @@ const detect = (data: Data) => {
 };
 
 const asciiDecoder = (arr: Uint8Array): string[] => {
-  const strings = [];
+  const strings: string[] = [];
   let currentString = "";
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] === 0x09 || arr[i] === 0x0a || arr[i] === 0x0d ||
-        (arr[i] >= 0x20 && arr[i] <= 0x7e)) {
-      currentString += String.fromCharCode(arr[i]);
+  for (const byte of arr) {
+    if (byte === 0x09 || byte === 0x0a || byte === 0x0d || (byte >= 0x20 && byte <= 0x7e)) {
+      currentString += String.fromCharCode(byte);
     } else {
       if (currentString.length > 0) {
         strings.push(currentString);
@@ -52,7 +50,6 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
     if (Number.isNaN(debouncedMinLength) || debouncedMinLength <= 0) {
       throw new Error("最小文字数が不適切です")
     }
-    const decoder = new TextDecoder(encoding, { fatal: false });
     if (encoding !== "ascii" && encoding !== "utf-8") {
       throw new Error("UNEXPECTED: invalid encoding.");
     }
