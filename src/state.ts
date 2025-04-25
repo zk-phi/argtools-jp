@@ -2,6 +2,7 @@ import type { FunctionComponent } from "preact";
 import { useEffect, useMemo } from "preact/hooks";
 import { signal } from "@preact/signals";
 import { gensym } from "./utils/gensym";
+import { defer } from "./utils/defer";
 import { textData, type Data } from "./datatypes";
 
 // ---- types
@@ -100,11 +101,13 @@ export const useAnalyzerEffect = (
   const fn = useMemo(() => cb, deps);
   useEffect(() => {
     reportBusy(id, true);
-    try {
-      reportOutput(id, fn());
-    } catch (e: any) {
-      reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
-    }
+    defer(() => {
+      try {
+        reportOutput(id, fn());
+      } catch (e: any) {
+        reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
+      }
+    });
   }, [id, fn]);
 };
 
@@ -118,10 +121,12 @@ export const useAsyncAnalyzerEffect = (
   const fn = useMemo(() => cb, deps);
   useEffect(() => {
     reportBusy(id, true);
-    fn().then(output => {
-      reportOutput(id, output);
-    }).catch(e => {
-      reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
+    defer(async () => {
+      try {
+        reportOutput(id, await fn());
+      } catch (e: any) {
+        reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
+      }
     });
   }, [id, fn]);
 };

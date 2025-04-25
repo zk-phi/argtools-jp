@@ -1,4 +1,4 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { useDebounce } from "../../utils/useDebounce";
 import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { useAnalyzerEffect, reportBusy, type AnalyzerModule } from "../../state";
@@ -45,10 +45,6 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
   const [encoding, setEncoding] =  useState("ascii");
   const debouncedMinLength = useDebounce(minLength, 2000);
 
-  useEffect(() => {
-    reportBusy(id, true);
-  }, [minLength])
-
   useAnalyzerEffect(id, () => {
     if (!input || input.type !== "binary") {
       throw new Error("UNEXPECTED: not a binary.");
@@ -78,21 +74,25 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
 
   return (
     <>
-      <label for="encoding">エンコーディング：</label>
-      <select name="encoding" value={encoding} onChange={e => setEncoding(e.currentTarget.value)}>
-        <option value="ascii">ASCII</option>
-        <option value="utf-8">UTF-8</option>
-      </select>
-      <label for="minLength">最低文字数：</label>
-      <input
-          name="minLength"
-          type="number"
-          min="2"
-          max="30"
-          step="1"
-          value={minLength}
-          onInput={e => setMinLength(Number(e.currentTarget.value))}
-      />
+      <div>
+        <label for="encoding">エンコーディング：</label>
+        <select name="encoding" value={encoding} onChange={e => setEncoding(e.currentTarget.value)}>
+          <option value="ascii">ASCII</option>
+          <option value="utf-8">UTF-8</option>
+        </select>
+      </div>
+      <div>
+        <label for="minLength">最低文字数：</label>
+        <input
+            name="minLength"
+            type="number"
+            min="2"
+            max="30"
+            step="1"
+            value={minLength}
+            onInput={e => setMinLength(Number(e.currentTarget.value))}
+        />
+      </div>
     </>
   )
 }

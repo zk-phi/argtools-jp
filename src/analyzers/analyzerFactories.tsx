@@ -1,6 +1,7 @@
 import type { ComponentChildren } from "preact";
-import { useMemo } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { ellipsis } from "../utils/string";
+import { defer } from "../utils/defer";
 import { useAnalyzerEffect, useAsyncAnalyzerEffect, reportBusy, reportOutput, type AnalyzerModule } from "../state";
 import { textData, multipleData, type Data, type AtomicData } from "../datatypes";
 
@@ -125,24 +126,26 @@ const _urlExtractorComponent = (
 ) => {
   const matcherRegex = new RegExp(pattern, "mg");
   const component = ({ id, input }: { id: number, input: Data | null }) => {
-    const urls = useMemo(() => {
-      try {
-        reportBusy(id, true);
-        if (!input || input.type !== "text") {
-          throw new Error("UNEXPECTED: input is not a text.");
+    const [urls, setUrls] = useState<string[]>([]);
+    useEffect(() => {
+      reportBusy(id, true);
+      defer(() => {
+        try {
+          if (!input || input.type !== "text") {
+            throw new Error("UNEXPECTED: input is not a text.");
+          }
+          const matches = input.value.match(matcherRegex);
+          if (!matches) {
+            throw new Error("UNEXPECTED: no matches.");
+          }
+          setUrls(matches.map(urlConstructor))
+          reportOutput(id, null);
+        } catch (e: any) {
+          setUrls([]);
+          reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
         }
-        const matches = input.value.match(matcherRegex);
-        if (!matches) {
-          throw new Error("UNEXPECTED: no matches.");
-        }
-        const urls = matches.map(urlConstructor);
-        reportOutput(id, null);
-        return urls;
-      } catch (e: any) {
-        reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
-        return [];
-      }
-    }, [id, input, urlConstructor]);
+      });
+    }, [input]);
     return (
       <>
         {view}
