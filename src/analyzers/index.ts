@@ -19,6 +19,7 @@ import { plusCodeExtractor } from "./text/plusCodeExtractor";
 import { youtubeExtractor } from "./text/youtubeExtractor";
 import { rot13Decoder } from "./text/rot13Decoder";
 import { caesarDecoder } from "./text/caesarDecoder";
+import { rot47Decoder } from "./text/rot47Decoder";
 
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
@@ -100,6 +101,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     morseDecoder,
     base64Decoder,
     rot13Decoder,
+    rot47Decoder,
     caesarDecoder,
     textToDecimal,
     textToHexNumber,
