@@ -2,9 +2,9 @@ import { useState, } from "preact/hooks";
 import { textData, type Data } from "../../datatypes";
 import { useAnalyzerEffect, type AnalyzerModule } from "../../state";
 
-const asciiStrMatcher = /^[\x00-\x7F]*$/;
+const asciiStrMatcher = /^[\x00-\x7F]{30,}/;
 const detect = (data: Data) => {
-  if (data.type === "text" && data.value.match(asciiStrMatcher) && data.value.length > 30) {
+  if (data.type === "text" && data.value.match(asciiStrMatcher)) {
     return "長い ASCII 文字列 → アスキーアートかも？";
   }
   return null;
