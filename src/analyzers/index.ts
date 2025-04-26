@@ -15,6 +15,10 @@ import { mojibakeSimulator } from "./text/mojibakeSimulator";
 import { escapedUnicodeDecoder } from "./text/escapedUnicodeDecoder";
 import { isbnExtractor } from "./text/isbnExtractor";
 import { morseDecoder } from "./text/morseDecoder";
+import { plusCodeExtractor } from "./text/plusCodeExtractor";
+import { youtubeExtractor } from "./text/youtubeExtractor";
+import { rot13Decoder } from "./text/rot13Decoder";
+import { caesarDecoder } from "./text/caesarDecoder";
 
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
@@ -33,8 +37,6 @@ import { zipDecompressor } from "./binary/zipDecompressor";
 import { gzipDecompressor } from "./binary/gzipDecompressor";
 import { binaryToText } from "./binary/binaryToText";
 import { binaryToNumber } from "./binary/binaryToNumber";
-import { plusCodeExtractor } from "./text/plusCodeExtractor";
-import { youtubeExtractor } from "./text/youtubeExtractor";
 import { bitopBinary } from "./binary/bitopBinaries";
 
 import { chatGptSuggestor } from "./suggestions/chatGptSuggestor";
@@ -97,6 +99,8 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     plusCodeExtractor, // 確度高め
     morseDecoder,
     base64Decoder,
+    rot13Decoder,
+    caesarDecoder,
     textToDecimal,
     textToHexNumber,
     textToHexBinary,
