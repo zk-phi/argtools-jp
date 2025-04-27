@@ -46,7 +46,7 @@ export const App = () => {
       {stack.value.length === 0 ? (
         <section>
           <hr />
-          <h3>ツールを選ぶ：</h3>
+          <h3>モードを選ぶ：</h3>
           {importers.map(module => (
             <>
               <button
