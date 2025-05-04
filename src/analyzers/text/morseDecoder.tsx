@@ -54,23 +54,26 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
 
   return (
     <>
-      <label for="zeroChar">短点（・）として扱う文字</label>
-      <input
-          type="text"
-          name="zeroChar"
-          maxLength={1}
-          value={zeroChar}
-          onInput={e => setZeroChar(e.currentTarget.value)} />
-      <label for="oneChar">長点（－）として扱う文字</label>
-      <input
-          type="text"
-          name="oneChar"
-          maxLength={1}
-          value={oneChar}
-          onInput={e => setOneChar(e.currentTarget.value)} />
-      <div>
-        <small>※無線局運用規則（十二条）で規定されていない文字は�になります</small>
-      </div>
+      <fieldset>
+        <legend>オプション</legend>
+        <label for="zeroChar">短点（・）として扱う文字</label>
+        <input
+            type="text"
+            name="zeroChar"
+            maxLength={1}
+            value={zeroChar}
+            onInput={e => setZeroChar(e.currentTarget.value)} />
+        <label for="oneChar">長点（－）として扱う文字</label>
+        <input
+            type="text"
+            name="oneChar"
+            maxLength={1}
+            value={oneChar}
+            onInput={e => setOneChar(e.currentTarget.value)} />
+      </fieldset>
+      <p>
+        <small>※ 無線局運用規則（十二条）で規定されていない文字は�になります</small>
+      </p>
     </>
   );
 };

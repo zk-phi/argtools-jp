@@ -27,7 +27,8 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
   }, [columns, input]);
 
   return (
-    <>
+    <fieldset>
+      <legend>オプション</legend>
       <input
           type="range"
           value={columns}
@@ -36,7 +37,7 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
           min="1"
           max="100" />
       {columns}文字目で改行
-    </>
+    </fieldset>
   );
 };
 

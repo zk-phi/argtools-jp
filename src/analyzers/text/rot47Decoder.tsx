@@ -39,5 +39,12 @@ const analyze = (input: Data | null) => {
 export const rot47Decoder = simpleAnalyzerFactory ({
   label: "ROT47 暗号を復号化",
   detect,
+  view: (
+    <p>
+      <small>
+        ROT47 は ROT13 の拡張で、アルファベットだけでなく記号や数字にも対応したものです。
+      </small>
+    </p>
+  ),
   analyze,
 });

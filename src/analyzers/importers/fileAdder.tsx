@@ -41,7 +41,7 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
     <>
       <p>
         <small>
-          データはすべてローカルで処理され、開いたファイルがどこかに送信されることはありません。
+          ※ データはすべてローカルで処理され、開いたファイルがどこかに送信されることはありません。
         </small>
       </p>
       <input type="file" multiple={true} onChange={e => setFiles(e.currentTarget.files)} />

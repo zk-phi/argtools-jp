@@ -31,7 +31,7 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
     <>
       <p>
         <small>
-          データはすべてローカルで処理され、入力内容がどこかに送信されることはありません。
+          ※ データはすべてローカルで処理され、入力内容がどこかに送信されることはありません。
         </small>
       </p>
       <textarea

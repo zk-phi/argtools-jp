@@ -46,7 +46,8 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
 
   return (
     <>
-      <div>
+      <fieldset>
+        <legend>オプション</legend>
         <select
             value={fromEncoding}
             onChange={e => setFromEncoding(e.currentTarget.value as Encoding)}>
@@ -63,7 +64,7 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
           ))}
         </select>
         {" "}に戻す
-      </div>
+      </fieldset>
     </>
   );
 }

@@ -71,25 +71,31 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
 
   return (
     <>
-      <div>
-        <label for="encoding">エンコーディング：</label>
-        <select name="encoding" value={encoding} onChange={e => setEncoding(e.currentTarget.value)}>
-          <option value="ascii">ASCII</option>
-          <option value="utf-8">UTF-8</option>
-        </select>
-      </div>
-      <div>
-        <label for="minLength">最低文字数：</label>
-        <input
-            name="minLength"
-            type="number"
-            min="2"
-            max="30"
-            step="1"
-            value={minLength}
-            onInput={e => setMinLength(Number(e.currentTarget.value))}
-        />
-      </div>
+      <fieldset>
+        <legend>オプション</legend>
+        <div>
+          <label for="encoding">エンコーディング：</label>
+          <select
+              name="encoding"
+              value={encoding}
+              onChange={e => setEncoding(e.currentTarget.value)}>
+            <option value="ascii">ASCII（英数字・記号のみ）</option>
+            <option value="utf-8">UTF-8</option>
+          </select>
+        </div>
+        <div>
+          <label for="minLength">最低文字数：</label>
+          <input
+              name="minLength"
+              type="number"
+              min="2"
+              max="30"
+              step="1"
+              value={minLength}
+              onInput={e => setMinLength(Number(e.currentTarget.value))}
+          />
+        </div>
+      </fieldset>
     </>
   )
 }

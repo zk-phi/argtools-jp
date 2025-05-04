@@ -60,13 +60,26 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
 
   return (
     <>
-      <label>
-        <input
-            type="checkbox"
-            checked={rotNums}
-            onChange={e => setRotNums(e.currentTarget.checked)} />
-        数字にも適用する (ROT18)
-      </label>
+      <p>
+        <small>
+          ROT13 はアルファベットを 13 文字ずらす暗号、
+          Atbash はアルファベットの並び順を逆にする暗号です。
+        </small>
+      </p>
+      <ul>
+        <li><small>ROT13 の例「a → n」「b → o」「n → a」</small></li>
+        <li><small>Atbash の例「a → z」「b → y」「z → a」</small></li>
+      </ul>
+      <fieldset>
+        <legend>オプション</legend>
+        <label>
+          <input
+              type="checkbox"
+              checked={rotNums}
+              onChange={e => setRotNums(e.currentTarget.checked)} />
+          数字にも適用する (ROT18)
+        </label>
+      </fieldset>
     </>
   );
 };

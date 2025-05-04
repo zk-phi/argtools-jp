@@ -10,8 +10,8 @@ export const plusCodeExtractor = urlExtractorFactory({
   hint: "????+?? の形の文字列 → plus code かも？",
   view: (
     <>
-      <p>検出された OLC 候補の一覧です</p>
-      <p>※ OLC は、Google が開発した、短いコードで地球上の地点を特定する技術です。</p>
+      <p>検出された plus code 候補の一覧です</p>
+      <p>※ plus code は、Google が開発した、短いコードで地球上の地点を特定する技術です。</p>
     </>
   ),
   pattern: delimited,

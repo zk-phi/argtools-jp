@@ -21,7 +21,9 @@ export const textToDecimal = simpleTextDecoderFactory({
   hint: "0-9, ., +, - の数字列 → なんらかの数値（十進数）かも？",
   pattern: number,
   view: (
-    <p>※巨大な数値は正しく読み取れない場合があります（オーバーフロー）</p>
+    <p>
+      <small>※ 巨大な数値は正しく読み取れない場合があります（オーバーフロー）</small>
+    </p>
   ),
   decoder: (str: string, label: string) => (
     numberData(Number(str), label)

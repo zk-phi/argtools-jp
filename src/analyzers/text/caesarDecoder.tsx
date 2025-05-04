@@ -41,15 +41,24 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
 
   return (
     <>
-      <label for="n">キー（シフト数）</label>
-      <input
-          type="range"
-          value={n}
-          min={1}
-          max={25}
-          step={1}
-          onInput={e => setN(Number(e.currentTarget.value))} />
-      {n} 文字ずらし
+      <p>
+        <small>アルファベットを一定の文字数だけずらす暗号です。</small>
+      </p>
+      <ul>
+        <li><small>例：１文字ずらしなら「a → b」「b → c」「z → a」</small></li>
+      </ul>
+      <fieldset>
+        <legend>オプション</legend>
+        <label for="n">キー（シフト数）</label>
+        <input
+            type="range"
+            value={n}
+            min={1}
+            max={25}
+            step={1}
+            onInput={e => setN(Number(e.currentTarget.value))} />
+        {n} 文字ずらし
+      </fieldset>
     </>
   );
 };
