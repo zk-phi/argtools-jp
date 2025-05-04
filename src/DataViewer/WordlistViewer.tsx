@@ -27,7 +27,7 @@ const applyFilter = (value: WordlistBody, filter: Filter) => (
   })
 );
 
-export const WordlistViewer = ({ value }: { value: WordlistBody }) => {
+export const WordlistViewer = ({ value, busy }: { value: WordlistBody, busy?: boolean }) => {
   const [filters, setFilters] = useState<Filter[]>([]);
   const debouncedFilters = useDebounce(filters, 300);
 
@@ -67,6 +67,14 @@ export const WordlistViewer = ({ value }: { value: WordlistBody }) => {
       ...filters.slice(ix + 1),
     ]);
   }, [filters]);
+
+  if (busy) {
+    return (
+      <p>
+        解析中 ...
+      </p>
+    );
+  }
 
   return (
     <>

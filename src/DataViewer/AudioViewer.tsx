@@ -3,7 +3,7 @@ import type { BinaryData } from "../datatypes";
 import { save } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const AudioViewer = ({ data }: { data: BinaryData }) => {
+export const AudioViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
   const url = useMemo(() => {
     const blob = new Blob([data.value.array], { type: data.value.mime });
     return URL.createObjectURL(blob);
@@ -19,7 +19,7 @@ export const AudioViewer = ({ data }: { data: BinaryData }) => {
   );
 
   return (
-    <ViewerContainer label={data.label} caption={caption}>
+    <ViewerContainer label={data.label} caption={caption} busy={busy}>
       <audio controls={true} src={url} />
     </ViewerContainer>
   );

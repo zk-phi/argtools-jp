@@ -9,34 +9,35 @@ import { VideoViewer } from "./VideoViewer";
 import { WordlistViewer } from "./WordlistViewer";
 import type { Data, BinaryData } from "../datatypes";
 
-const BinaryViewer = ({ data }: { data: BinaryData }) => (
+const BinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => (
   data.value.mime.startsWith("image") ? (
-    <ImageViewer data={data} />
+    <ImageViewer data={data} busy={busy} />
   ) : data.value.mime.startsWith("video") ? (
-    <VideoViewer data={data} />
+    <VideoViewer data={data} busy={busy} />
   ) : data.value.mime.startsWith("audio") ? (
-    <AudioViewer data={data} />
+    <AudioViewer data={data} busy={busy} />
   ) : (
-    <RawBinaryViewer data={data} />
+    <RawBinaryViewer data={data} busy={busy} />
   )
 );
 
-export const DataViewer = ({ data, onInspect }: {
+export const DataViewer = ({ data, busy, onInspect }: {
   data: Data,
   onInspect?: (ix: number) => void,
+  busy?: boolean,
 }) => (
   data.type === "text" ? (
-    <TextViewer data={data} />
+    <TextViewer data={data} busy={busy} />
   ) : data.type === "integer" ? (
-    <IntegerViewer data={data} />
+    <IntegerViewer data={data} busy={busy} />
   ) : data.type === "float" ? (
-    <FloatViewer data={data} />
+    <FloatViewer data={data} busy={busy} />
   ) : data.type === "binary" ? (
-    <BinaryViewer data={data} />
+    <BinaryViewer data={data} busy={busy} />
   ) : data.type === "multiple" ? (
-    <MultipleViewer datum={data.datum} onInspect={onInspect} />
+    <MultipleViewer datum={data.datum} busy={busy} onInspect={onInspect} />
   ) : data.type === "wordlist" ? (
-    <WordlistViewer value={data.value} />
+    <WordlistViewer value={data.value} busy={busy} />
   ) : (
     null
   )

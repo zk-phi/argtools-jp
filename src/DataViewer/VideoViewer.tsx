@@ -3,7 +3,7 @@ import type { BinaryData } from "../datatypes";
 import { save } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const VideoViewer = ({ data }: { data: BinaryData }) => {
+export const VideoViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
   const url = useMemo(() => {
     const blob = new Blob([data.value.array], { type: data.value.mime });
     return URL.createObjectURL(blob);
@@ -19,7 +19,7 @@ export const VideoViewer = ({ data }: { data: BinaryData }) => {
   );
 
   return (
-    <ViewerContainer label={data.label} caption={caption}>
+    <ViewerContainer label={data.label} caption={caption} busy={busy}>
       <video controls={true} style={{ maxHeight: 300 }}>
         <source src={url} type={data.value.mime} />
       </video>

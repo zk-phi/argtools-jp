@@ -2,7 +2,7 @@ import type { TextData } from "../datatypes";
 import { savePlainText } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const TextViewer = ({ data }: { data: TextData }) => {
+export const TextViewer = ({ data, busy }: { data: TextData, busy?: boolean }) => {
   const caption = (
     <>
       文字列（{data.value.length}文字）
@@ -11,7 +11,7 @@ export const TextViewer = ({ data }: { data: TextData }) => {
   );
 
   return (
-    <ViewerContainer label={data.label} caption={caption}>
+    <ViewerContainer label={data.label} caption={caption} busy={busy}>
       <blockquote style={{ maxHeight: 300, maxWidth: 600, overflow: "auto" }}>
         <pre>{data.value}</pre>
       </blockquote>

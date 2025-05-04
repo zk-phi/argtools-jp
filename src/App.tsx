@@ -82,12 +82,18 @@ export const App = () => {
             }}>
               <Component id={frame.id} input={stack.value[ix - 1]?.output ?? null} />
             </div>
-            {/* render result either if the frame is inactive or not-busy */}
-            {frame.output && (ix < stack.value.length - 1 || !busy.value) && (
+            {frame.output ? (
               <DataViewer
                   data={frame.output}
                   onInspect={ix === stack.value.length - 1 ? pushInspection : undefined}
+                  busy={ix === stack.value.length - 1 && busy.value}
               />
+            ) : busy.value ? (
+              <p>
+                解析中 ...
+              </p>
+            ) : (
+              null
             )}
             {ix < stack.value.length - 1 && (
               <p>
@@ -100,9 +106,7 @@ export const App = () => {
         );
       })}
 
-      {busy.value ? (
-        "解析中 ..."
-      ) : suggestions.value.length > 0 ? (
+      {suggestions.value.length > 0 && (
         <section>
           <h3>使えそうなコマンド</h3>
           <table>
@@ -110,7 +114,10 @@ export const App = () => {
               {suggestions.value.map(({ reason, module }) => (
                 <tr key={module.label}>
                   <td style={{ textAlign: "right" }}>
-                    <button type="button" onClick={() => pushAnalyzer(module)}>
+                    <button
+                        type="button"
+                        onClick={busy.value ? undefined : () => pushAnalyzer(module)}
+                        disabled={busy.value}>
                       {module.label}
                     </button>
                   </td>
@@ -122,8 +129,6 @@ export const App = () => {
             </tbody>
           </table>
         </section>
-      ) : (
-        null
       )}
     </>
   );

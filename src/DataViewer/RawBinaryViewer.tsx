@@ -8,7 +8,7 @@ const byteToAscii = (n: number) => (
   n >= 32 && n <= 126 ? String.fromCharCode(n) : "."
 );
 
-export const RawBinaryViewer = ({ data }: { data: BinaryData }) => {
+export const RawBinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
   const hexString = useMemo(() => {
     const fullLines = Math.ceil(data.value.array.length / 16);
     const lines = Math.min(fullLines, 100);
@@ -34,7 +34,7 @@ export const RawBinaryViewer = ({ data }: { data: BinaryData }) => {
   );
 
   return (
-    <ViewerContainer label={data.label} caption={caption}>
+    <ViewerContainer label={data.label} caption={caption} busy={busy}>
       <pre style={{ maxHeight: 300, overflow: "auto" }}>{hexString}</pre>
     </ViewerContainer>
   );
