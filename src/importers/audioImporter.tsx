@@ -1,13 +1,13 @@
 import { useState, useCallback, useMemo } from "preact/hooks";
 import { cacheAsync } from "../utils/cache";
 import { binaryData } from "../datatypes";
-import { reportBusy, reportOutput, type AnalyzerModule } from "../state";
+import type { AnalyzerModule, StateReporter } from "../state";
 
 const packages = {
   audiobufferToWav: cacheAsync(() => import("audiobuffer-to-wav")),
 };
 
-const component = ({ id }: { id: number }) => {
+const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
   const [recorder, setRecorder] = useState<MediaRecorder>();
   const [recording, setRecording] = useState(false);
   const [decoding, setDecoding] = useState(false);
@@ -25,10 +25,10 @@ const component = ({ id }: { id: number }) => {
   const startRecording = useCallback(() => {
     if (recorder) {
       setRecording(true);
-      reportBusy(id, true);
+      onUpdate({ busy: true });
       recorder.start();
     }
-  }, [id, recorder]);
+  }, [onUpdate, recorder]);
 
   const stopRecording = useCallback(() => {
     if (recorder) {
@@ -41,11 +41,11 @@ const component = ({ id }: { id: number }) => {
         const wavBuffer = toWav(audioBuffer);
         const data = await binaryData(new Uint8Array(wavBuffer), "集音された音声");
         setDecoding(false);
-        reportOutput(id, data);
+        onUpdate({ output: data });
       });
       recorder.stop();
     }
-  }, [id, recorder, ctx]);
+  }, [onUpdate, recorder, ctx]);
 
   return (
     <>

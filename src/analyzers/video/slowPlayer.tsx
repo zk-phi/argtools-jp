@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useMemo } from "preact/hooks";
 import { textData, type Data } from "../../datatypes";
-import { reportBusy, reportOutput, type AnalyzerModule } from "../../state";
+import type { AnalyzerModule, StateReporter } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("video")) {
@@ -9,21 +9,21 @@ const detect = (data: Data) => {
   return null;
 };
 
-const component = ({ id, input }: { input: Data | null, id: number }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const [speed, setSpeed] = useState(0.25);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const sourceProps = useMemo(() => {
-    reportBusy(id, true);
+    onUpdate({ busy: true });
     if (!input || input.type !== "binary" || !input.value.mime.startsWith("video")) {
-      reportOutput(id, textData("UNEXPECTED: not a video.", "エラー"));
+      onUpdate({ output: textData("UNEXPECTED: not a video.", "エラー") });
       return null;
     }
     const blob = new Blob([input.value.array], { type: input.value.mime });
     const url = URL.createObjectURL(blob);
-    reportOutput(id, null);
+    onUpdate({ output: null });
     return { src: url, type: input.value.mime };
-  }, [id, input]);
+  }, [onUpdate, input]);
 
   useEffect(() => {
     if (videoRef.current) {

@@ -1,4 +1,3 @@
-
 import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { numberData, multipleData, type Data } from "../../datatypes";
 

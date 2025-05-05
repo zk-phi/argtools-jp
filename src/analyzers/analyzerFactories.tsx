@@ -2,7 +2,7 @@ import type { ComponentChildren } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { ellipsis } from "../utils/string";
 import { defer } from "../utils/ui/defer";
-import { useAnalyzerEffect, useAsyncAnalyzerEffect, reportBusy, reportOutput, type AnalyzerModule } from "../state";
+import { useAnalyzerEffect, useAsyncAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../state";
 import { textData, multipleData, type Data, type AtomicData } from "../datatypes";
 
 // --- simple analyzers (Data -> Data)
@@ -25,8 +25,8 @@ export const asyncSimpleAnalyzerFactory = (
 ): AnalyzerModule => ({
   label,
   detect,
-  component: ({ id, input }: { id: number, input: Data | null }) => {
-    useAsyncAnalyzerEffect(id, () => analyze(input), [analyze, input]);
+  component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+    useAsyncAnalyzerEffect(onUpdate, () => analyze(input), [analyze, input]);
     return view;
   },
 });
@@ -36,8 +36,8 @@ export const simpleAnalyzerFactory = (
 ): AnalyzerModule => ({
   label,
   detect,
-  component: ({ id, input }: { id: number, input: Data | null }) => {
-    useAnalyzerEffect(id, () => analyze(input), [analyze, input]);
+  component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+    useAnalyzerEffect(onUpdate, () => analyze(input), [analyze, input]);
     return view;
   },
 });
@@ -125,10 +125,10 @@ const _urlExtractorComponent = (
   view?: ComponentChildren,
 ) => {
   const matcherRegex = new RegExp(pattern, "mg");
-  const component = ({ id, input }: { id: number, input: Data | null }) => {
+  const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
     const [urls, setUrls] = useState<string[]>([]);
     useEffect(() => {
-      reportBusy(id, true);
+      onUpdate({ busy: true });
       defer(() => {
         try {
           if (!input || input.type !== "text") {
@@ -138,14 +138,16 @@ const _urlExtractorComponent = (
           if (!matches) {
             throw new Error("UNEXPECTED: no matches.");
           }
-          setUrls(matches.map(urlConstructor))
-          reportOutput(id, null);
+          setUrls(matches.map(urlConstructor));
+          onUpdate({ output: null });
         } catch (e: any) {
           setUrls([]);
-          reportOutput(id, textData("message" in e ? e.message : "Unexpected error.", "エラー"));
+          onUpdate({
+            output: textData("message" in e ? e.message : "Unexpected error.", "エラー"),
+          });
         }
       });
-    }, [input, urlConstructor, id]);
+    }, [input, onUpdate, urlConstructor]);
     return (
       <>
         {view}

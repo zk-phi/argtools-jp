@@ -1,7 +1,7 @@
 import { useState, } from "preact/hooks";
 import { readFileAsBuffer } from "../../utils/file";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
-import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
+import { useAsyncAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type !== "wordlist") {
@@ -10,10 +10,10 @@ const detect = (data: Data) => {
   return null;
 };
 
-const component = ({ id, input }: { input: Data | null, id: number }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const [files, setFiles] = useState<FileList | null>(null);
 
-  useAsyncAnalyzerEffect(id, async () => {
+  useAsyncAnalyzerEffect(onUpdate, async () => {
     if (input && input.type === "wordlist") {
       throw new Error("UNEXPECTED: wordlist given");
     }

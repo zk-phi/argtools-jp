@@ -36,7 +36,7 @@ const analyze = (input: Data | null) => {
   return data;
 }
 
-export const rot47Decoder = simpleAnalyzerFactory ({
+export const rot47Decoder = simpleAnalyzerFactory({
   label: "ROT47 暗号を復号化",
   detect,
   view: (

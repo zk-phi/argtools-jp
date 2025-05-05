@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import { useDebounce } from "../../utils/ui/useDebounce";
-import { useAnalyzerEffect, type AnalyzerModule } from "../../state";
+import { useAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../../state";
 import { textData, multipleData, type Data, type AtomicData } from "../../datatypes";
 
 const detect = (data: Data) => {
@@ -38,12 +38,12 @@ const utf8Decoder = (arr: Uint8Array): string[] => {
   ).split("\ufffd");
 };
 
-const component = ({ id, input }: { input: Data | null, id: number }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const [minLength, setMinLength] = useState(8);
   const [encoding, setEncoding] =  useState("ascii");
   const debouncedMinLength = useDebounce(minLength, 2000);
 
-  useAnalyzerEffect(id, () => {
+  useAnalyzerEffect(onUpdate, () => {
     if (!input || input.type !== "binary") {
       throw new Error("UNEXPECTED: not a binary.");
     }

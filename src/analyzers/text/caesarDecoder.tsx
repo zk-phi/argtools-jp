@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import { textData, type Data } from "../../datatypes";
-import { useAnalyzerEffect, type AnalyzerModule } from "../../state";
+import { useAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type !== "text") {
@@ -17,10 +17,10 @@ const detect = (data: Data) => {
   return null;
 };
 
-const component = ({ id, input }: { input: Data | null, id: number }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const [n, setN] = useState(13);
 
-  useAnalyzerEffect(id, () => {
+  useAnalyzerEffect(onUpdate, () => {
     if (!input || input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }

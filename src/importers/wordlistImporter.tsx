@@ -1,7 +1,7 @@
 import { useState, } from "preact/hooks";
 import { wordlistData, type WordlistBody } from "../datatypes";
 import { cacheAsync } from "../utils/cache";
-import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../state";
+import { useAsyncAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../state";
 
 type Dataset = {
   module: () => Promise<{ data: WordlistBody }>,
@@ -88,10 +88,10 @@ const datasets: { [key: string]: Dataset } = {
   },
 };
 
-const component = ({ id }: { id: number }) => {
+const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
   const [datasetKey, setDatasetKey] = useState("");
 
-  useAsyncAnalyzerEffect(id, async () => {
+  useAsyncAnalyzerEffect(onUpdate, async () => {
     const dataset = datasets[datasetKey];
     if (!dataset) {
       return null;

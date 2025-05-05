@@ -2,7 +2,7 @@ import { useState, useMemo } from "preact/hooks";
 import { histogram } from "../../utils/string";
 import { cacheAsync } from "../../utils/cache";
 import { textData, multipleData, type Data } from "../../datatypes";
-import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
+import { useAsyncAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../../state";
 
 const packages = {
   morse: cacheAsync(() => import("../../utils/text/morse")),
@@ -20,7 +20,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const component = ({ id, input }: { input: Data | null, id: number }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const hist = useMemo(() => {
     if (!input || input.type !== "text") {
       return null;
@@ -36,7 +36,7 @@ const component = ({ id, input }: { input: Data | null, id: number }) => {
     hist[0][0] > hist[1][0] ? hist[1][0] : hist[0][0]
   ));
 
-  useAsyncAnalyzerEffect(id, async () => {
+  useAsyncAnalyzerEffect(onUpdate, async () => {
     if (!input || input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }
