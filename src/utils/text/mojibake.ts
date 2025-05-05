@@ -1,4 +1,4 @@
-import { UTF_TO_JIS_TABLE } from "../../resources/utf8-to-jis-table";
+import { UTF_TO_JIS_TABLE } from "../../../resources/utf8-to-jis-table";
 import { encode, decode } from "iconv-lite";
 
 // inspired by https://tmtms.net/mojibake/

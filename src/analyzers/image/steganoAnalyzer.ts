@@ -3,7 +3,7 @@ import { cacheAsync } from "../../utils/cache";
 import { multipleData, binaryData, type Data } from "../../datatypes";
 
 const packages = {
-  image: cacheAsync(() => import("../../utils/image.ts")),
+  image: cacheAsync(() => import("../../utils/image")),
 }
 
 const detect = (data: Data) => {

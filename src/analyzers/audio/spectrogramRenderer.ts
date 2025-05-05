@@ -1,11 +1,11 @@
 import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
-import { mapRange } from "../../utils/range";
+import { mapRange } from "../../utils/array/range";
 import { cacheAsync } from "../../utils/cache";
 import { binaryData, multipleData, type AtomicData, type Data } from "../../datatypes";
 
 const packages = {
   audio: cacheAsync(() => import("../../utils/audio")),
-  spectrogram: cacheAsync(() => import("../../utils/spectrogram")),
+  spectrogram: cacheAsync(() => import("../../utils/audio/spectrogram")),
 };
 
 const detect = (data: Data) => {

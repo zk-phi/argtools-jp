@@ -1,4 +1,4 @@
-import type { WordlistBody } from "../datatypes";
+import type { WordlistBody } from "../../datatypes";
 
 export const formatUnidic = (data: string): WordlistBody => (
   data.split("\n").filter(line => line.length > 0).map((line, ix) => {

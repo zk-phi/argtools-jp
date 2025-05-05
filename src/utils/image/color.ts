@@ -1,4 +1,4 @@
-import { clamp } from "./math";
+import { clamp } from "../math";
 
 const _reduceColorVec = (x: number, arr: number[]) => (
   arr.reduce((l, r) => l * x + r)

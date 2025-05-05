@@ -3,7 +3,7 @@ import { cacheAsync } from "../../utils/cache";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
 
 const packages = {
-  dtmf: cacheAsync(() => import("../../utils/dtmf")),
+  dtmf: cacheAsync(() => import("../../utils/audio/dtmf")),
   audiobufferToWav: cacheAsync(() => import("audiobuffer-to-wav")),
 };
 

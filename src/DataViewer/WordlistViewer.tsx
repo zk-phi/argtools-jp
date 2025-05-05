@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "preact/hooks";
-import { useDebounce } from "../utils/useDebounce";
+import { useDebounce } from "../utils/ui/useDebounce";
 import { gensym } from "../utils/gensym";
 import type { WordlistBody } from "../datatypes";
 

@@ -5,7 +5,7 @@ import { textData, multipleData, type Data } from "../../datatypes";
 import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
 
 const packages = {
-  morse: cacheAsync(() => import("../../utils/morse")),
+  morse: cacheAsync(() => import("../../utils/text/morse")),
 }
 
 const detect = (data: Data) => {

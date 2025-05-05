@@ -1,4 +1,4 @@
-import { quoteRegex } from "./string";
+import { quoteRegex } from "../string";
 
 const MORSE_TABLE_JP: { [key: string]: string } = {
   "・": "ヘ",

@@ -1,6 +1,6 @@
 import { useMemo } from "preact/hooks";
 import type { BinaryData } from "../datatypes";
-import { mapRange } from "../utils/range";
+import { mapRange } from "../utils/array/range";
 import { save } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 

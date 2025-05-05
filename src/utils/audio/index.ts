@@ -1,5 +1,5 @@
-import { duplicate } from "./buffer";
-import { mapRange } from "./range";
+import { duplicate } from "../buffer";
+import { mapRange } from "../array/range";
 
 export const decodeAudio = async (
   buffer: ArrayBufferLike,

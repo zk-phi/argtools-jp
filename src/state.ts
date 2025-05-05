@@ -2,7 +2,7 @@ import type { FunctionComponent } from "preact";
 import { useEffect, useMemo } from "preact/hooks";
 import { signal } from "@preact/signals";
 import { gensym } from "./utils/gensym";
-import { defer } from "./utils/defer";
+import { defer } from "./utils/ui/defer";
 import { textData, type Data } from "./datatypes";
 
 // ---- types

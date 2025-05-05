@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { useDebounce } from "../../utils/useDebounce";
+import { useDebounce } from "../../utils/ui/useDebounce";
 import { useAnalyzerEffect, type AnalyzerModule } from "../../state";
 import { textData, multipleData, type Data, type AtomicData } from "../../datatypes";
 

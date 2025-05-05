@@ -1,6 +1,6 @@
 import Fft from "fft.js";
-import { clamp, roundUpToPowerOf2, norm, rescaleValueMap1D } from "./math";
-import { infernoColorMap } from "./color";
+import { clamp, roundUpToPowerOf2, norm, rescaleValueMap1D } from "../math";
+import { infernoColorMap } from "../image/color";
 
 // TODO: Try window functions for cleaner results ?
 // https://qiita.com/purple_jp/items/7c91a05c547615e9ab89

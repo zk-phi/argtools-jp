@@ -1,11 +1,11 @@
 import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../utils/cache";
-import { mapRange } from "../../utils/range";
+import { mapRange } from "../../utils/array/range";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
 
 const packages = {
   audio: cacheAsync(() => import("../../utils/audio")),
-  waveform: cacheAsync(() => import("../../utils/waveform")),
+  waveform: cacheAsync(() => import("../../utils/audio/waveform")),
 };
 
 const detect = (data: Data) => {

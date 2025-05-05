@@ -2,12 +2,12 @@ import { useState, } from "preact/hooks";
 import { cacheAsync } from "../../utils/cache";
 import { textData, multipleData, type Data } from "../../datatypes";
 import { useAsyncAnalyzerEffect, type AnalyzerModule } from "../../state";
-import type { Encoding } from "../../utils/mojibake";
+import type { Encoding } from "../../utils/text/mojibake";
 
 // inspired by https://tmtms.net/mojibake/
 
 const packages = {
-  mojibake: cacheAsync(() => import("../../utils/mojibake")),
+  mojibake: cacheAsync(() => import("../../utils/text/mojibake")),
 };
 
 const encodings: [string, Encoding][] = [

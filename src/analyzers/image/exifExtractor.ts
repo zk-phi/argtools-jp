@@ -3,7 +3,7 @@ import { cacheAsync } from "../../utils/cache";
 import { multipleData, textData, type Data, type AtomicData } from "../../datatypes";
 
 const packages = {
-  exif: cacheAsync(() => import("../../utils/exif")),
+  exif: cacheAsync(() => import("../../utils/image/exif")),
 }
 
 const detect = (data: Data) => {

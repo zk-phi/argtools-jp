@@ -1,7 +1,7 @@
 import type { ComponentChildren } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { ellipsis } from "../utils/string";
-import { defer } from "../utils/defer";
+import { defer } from "../utils/ui/defer";
 import { useAnalyzerEffect, useAsyncAnalyzerEffect, reportBusy, reportOutput, type AnalyzerModule } from "../state";
 import { textData, multipleData, type Data, type AtomicData } from "../datatypes";
 
