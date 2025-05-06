@@ -89,6 +89,7 @@ const Frame = ({ frame, ix }: { frame: StackFrame, ix: number }) => {
     <section key={frame.id}>
       <hr />
       <h3>{frame.module.label}</h3>
+      {frame.module.description ?? null}
       {/* render inactive (hidden) components too, to keep their state */}
       <div style={isActive ? { marginBottom: "1em" } : { display: "none" }}>
         <Component onUpdate={onUpdate} input={input} />

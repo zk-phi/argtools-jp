@@ -39,14 +39,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   }, [input, files]);
 
   return (
-    <>
-      <p>
-        <small>
-          ※ データはすべてローカルで処理され、開いたファイルがどこかに送信されることはありません。
-        </small>
-      </p>
-      <input type="file" multiple={true} onChange={e => setFiles(e.currentTarget.files)} />
-    </>
+    <input type="file" multiple={true} onChange={e => setFiles(e.currentTarget.files)} />
   );
 };
 

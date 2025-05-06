@@ -1,4 +1,4 @@
-import type { FunctionComponent } from "preact";
+import type { FunctionComponent, ComponentChildren } from "preact";
 import { useEffect } from "preact/hooks";
 import { signal, computed } from "@preact/signals";
 import { gensym } from "./utils/gensym";
@@ -14,6 +14,8 @@ export type AnalyzerModule = {
   label: string,
   // A path to micro-app.
   app?: string,
+  // A user-friendly description of the analyzer
+  description?: ComponentChildren,
   // Check if the module is applicable to a data, and returns an explanation if true.
   // Note that this procedure should return as fast as possible to avoid input lags.
   detect?: (suspicious: Data) => string | null,

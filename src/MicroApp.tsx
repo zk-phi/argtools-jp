@@ -3,9 +3,10 @@ import { DataViewer } from "./DataViewer";
 import type { Data } from "./datatypes"
 import type { AnalyzerModule, StateReporter } from "./state";
 
-export const MicroApp = ({ importer, analyzer }: {
+export const MicroApp = ({ importer, analyzer, importerLabel }: {
   importer: AnalyzerModule,
   analyzer: AnalyzerModule,
+  importerLabel: string,
 }) => {
   const [importerOutput, setImporterOutput] = useState<Data | null>(null);
   const [importerBusy, setImporterBusy] = useState(false);
@@ -32,6 +33,9 @@ export const MicroApp = ({ importer, analyzer }: {
 
   return (
     <>
+      {analyzer.description ?? null}
+      <hr />
+      <h3>{importerLabel}</h3>
       <div style={{ marginBottom: "1em" }}>
         <Importer onUpdate={onUpdateImporter} input={null} />
         <Analyzer onUpdate={onUpdateAnalyzer} input={importerOutput} />

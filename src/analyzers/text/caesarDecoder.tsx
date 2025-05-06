@@ -41,32 +41,37 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   }, [input, n]);
 
   return (
-    <>
-      <p>
-        <small>アルファベットを一定の文字数だけずらす暗号です。</small>
-      </p>
-      <ul>
-        <li><small>例：１文字ずらしなら「a → b」「b → c」「z → a」</small></li>
-      </ul>
-      <fieldset>
-        <legend>オプション</legend>
-        <label for="n">キー（シフト数）</label>
-        <input
-            type="range"
-            value={n}
-            min={1}
-            max={25}
-            step={1}
-            onInput={e => setN(Number(e.currentTarget.value))} />
-        {n} 文字ずらし
-      </fieldset>
-    </>
+    <fieldset>
+      <legend>オプション</legend>
+      <label for="n">キー（シフト数）</label>
+      <input
+          type="range"
+          value={n}
+          min={1}
+          max={25}
+          step={1}
+          onInput={e => setN(Number(e.currentTarget.value))} />
+      {n} 文字ずらし
+    </fieldset>
   );
 };
 
 export const caesarDecoder: AnalyzerModule = {
   label: "シーザー暗号を復号化",
   app: "/argtools-jp/apps/caesar",
+  description: (
+    <>
+      <p>
+        アルファベットを一定の文字数だけずらす暗号です。
+      </p>
+      <ul>
+        <li>例：１文字ずらしなら「a → b」「b → c」「z → a」</li>
+      </ul>
+      <p>
+        特に１３文字ずらしのシーザー暗号は「ROT13」と呼ばれ、謎解きによく使われます。
+      </p>
+    </>
+  ),
   detect,
   component,
 };

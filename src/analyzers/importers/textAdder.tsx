@@ -29,19 +29,12 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   }, [input, debouncedText]);
 
   return (
-    <>
-      <p>
-        <small>
-          ※ データはすべてローカルで処理され、入力内容がどこかに送信されることはありません。
-        </small>
-      </p>
-      <textarea
-          value={text}
-          rows={20}
-          cols={50}
-          onInput={e => setText(e.currentTarget.value)}
-      />
-    </>
+    <textarea
+        value={text}
+        rows={20}
+        cols={50}
+        onInput={e => setText(e.currentTarget.value)}
+    />
   );
 };
 

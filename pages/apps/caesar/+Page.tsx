@@ -9,8 +9,10 @@ export const Page = () => (
       <a href="../">＜ 全てのツール</a>
     </p>
     <h2>{config.title}</h2>
-    <hr />
-    <h3>復号化したいテキスト</h3>
-    <MicroApp importer={textImporter} analyzer={caesarDecoder} />
+    <MicroApp
+        importerLabel="復号化したいテキスト"
+        importer={textImporter}
+        analyzer={caesarDecoder}
+    />
   </>
 );
