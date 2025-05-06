@@ -25,13 +25,14 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
     if (!input || input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }
+    const inverseN = 26 - n;
     const charCodes = input.value.split("").map(s => s.charCodeAt(0));
     const decodedCharCodes = charCodes.map(ch => {
       if (ch >= 65 && ch <= 90) {
-        return (ch - 65 + n) % 26 + 65;
+        return (ch - 65 + inverseN) % 26 + 65;
       }
       if (ch >= 97 && ch <= 122) {
-        return (ch - 97 + n) % 26 + 97;
+        return (ch - 97 + inverseN) % 26 + 97;
       }
       return ch;
     });
