@@ -1,5 +1,4 @@
 import { useState, useCallback } from "preact/hooks";
-import { gensym } from "./utils/gensym";
 import { DataViewer } from "./DataViewer";
 import type { Data } from "./datatypes"
 import type { AnalyzerModule, StateReporter } from "./state";

@@ -3,7 +3,6 @@ import preact from "@preact/preset-vite";
 import vike from "vike/plugin";
 import dsv from "@rollup/plugin-dsv";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import { resolve } from "path";
 
 export default defineConfig({
   base: "/argtools-jp/",

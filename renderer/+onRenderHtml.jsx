@@ -2,7 +2,7 @@ import { render } from "preact-render-to-string";
 import { escapeInject, dangerouslySkipEscape } from "vike/server";
 import "./dark.css";
 
-export const onRenderHtml = async ({ Page, config }) => {
+export const onRenderHtml = ({ Page, config }) => {
   const prerendered = render(<Page />);
 
   return escapeInject`<!DOCTYPE html>

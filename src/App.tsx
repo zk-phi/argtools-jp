@@ -27,7 +27,7 @@ const AnalyzersList = () => (
                 <>
                   {ix > 0 ? "、" : ""}
                   {analyzer.app ? (
-                    <a href={analyzer.app}>{analyzer.label}</a>
+                    <a key={analyzer.label} href={analyzer.app}>{analyzer.label}</a>
                   ) : (
                     analyzer.label
                   )}
