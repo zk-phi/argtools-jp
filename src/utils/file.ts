@@ -1,4 +1,4 @@
-import { saveAs } from "file-saver";
+import fileSaver from "file-saver";
 
 export const readFileAsDataUrl = async (file: File): Promise<string> => (
   new Promise((resolve) => {
@@ -24,10 +24,10 @@ export const save = ({ array, mime, ext }: {
 }) => {
   const blob = new Blob([array], { type: mime });
   fileId++;
-  saveAs(blob, `ダウンロード${fileId}${ext}`);
+  fileSaver.saveAs(blob, `ダウンロード${fileId}${ext}`);
 };
 export const savePlainText = (text: string) => {
   const blob = new Blob([text], { type: "text/plain" });
   fileId++;
-  saveAs(blob, `ダウンロード${fileId}.txt`);
+  fileSaver.saveAs(blob, `ダウンロード${fileId}.txt`);
 };

@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import preact from "@preact/preset-vite";
+import vike from "vike/plugin";
 import dsv from "@rollup/plugin-dsv";
 import { nodePolyfills } from "vite-plugin-node-polyfills";
 import { resolve } from "path";
@@ -7,17 +8,13 @@ import { resolve } from "path";
 export default defineConfig({
   base: "/argtools-jp/",
   plugins: [
-    preact({
-      prerender: {
-        enabled: true,
-        renderTarget: "#app",
-      },
-    }),
+    preact(),
     dsv(),
     nodePolyfills({
       // @file-type/xml requires some node modules to work
       include: ["stream", "util"],
     }),
+    vike(),
   ],
   publicDir: resolve(__dirname, "public"),
   build: {
