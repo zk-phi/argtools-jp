@@ -23,7 +23,16 @@ const AnalyzersList = () => (
           <b>{category.category}</b>
           <div style={{ marginLeft: "16px" }}>
             <small>
-              {category.analyzers.map(analyzer => analyzer.label).join("、")}
+              {category.analyzers.map((analyzer, ix) => (
+                <>
+                  {ix > 0 ? "、" : ""}
+                  {analyzer.app ? (
+                    <a href={analyzer.app}>{analyzer.label}</a>
+                  ) : (
+                    analyzer.label
+                  )}
+                </>
+              ))}
             </small>
           </div>
         </div>

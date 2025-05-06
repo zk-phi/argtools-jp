@@ -66,6 +66,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
 
 export const caesarDecoder: AnalyzerModule = {
   label: "シーザー暗号を復号化",
+  app: "/argtools-jp/apps/caesar",
   detect,
   component,
 };

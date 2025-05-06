@@ -17,7 +17,6 @@ export const onRenderHtml = async ({ Page, config }) => {
       </head>
 
       <body>
-        <h2>${config.title}</h2>
         <div id="app">
           ${dangerouslySkipEscape(prerendered)}
         </div>

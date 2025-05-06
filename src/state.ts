@@ -12,6 +12,8 @@ export type StateReporter = (state: { busy?: boolean, output?: Data | null }) =>
 export type AnalyzerModule = {
   // An user-friendly description.
   label: string,
+  // A path to micro-app.
+  app?: string,
   // Check if the module is applicable to a data, and returns an explanation if true.
   // Note that this procedure should return as fast as possible to avoid input lags.
   detect?: (suspicious: Data) => string | null,

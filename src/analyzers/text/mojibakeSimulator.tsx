@@ -72,6 +72,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
 
 export const mojibakeSimulator: AnalyzerModule = {
   label: "文字化けを復元",
+  app: "/argtools-jp/apps/mojibake",
   detect,
   component,
 };
