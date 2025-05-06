@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
 import { useDebounce } from "../../utils/ui/useDebounce";
-import { useAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../../state";
+import { useAnalyzerEffect } from "../../utils/ui/useAnalyzerEffect";
+import type { AnalyzerModule, StateReporter } from "../../state";
 import { textData, multipleData, type Data, type AtomicData } from "../../datatypes";
 
 const detect = (data: Data) => {

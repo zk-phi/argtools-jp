@@ -1,7 +1,8 @@
-import { useState, } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { readFileAsBuffer } from "../../utils/file";
+import { useAsyncAnalyzerEffect } from "../../utils/ui/useAnalyzerEffect";
+import type { AnalyzerModule, StateReporter } from "../../state";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../datatypes";
-import { useAsyncAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type !== "wordlist") {

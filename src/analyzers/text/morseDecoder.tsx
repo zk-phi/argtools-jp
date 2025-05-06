@@ -1,8 +1,9 @@
 import { useState, useMemo } from "preact/hooks";
 import { histogram } from "../../utils/string";
 import { cacheAsync } from "../../utils/cache";
+import { useAsyncAnalyzerEffect } from "../../utils/ui/useAnalyzerEffect";
+import type { AnalyzerModule, StateReporter } from "../../state";
 import { textData, multipleData, type Data } from "../../datatypes";
-import { useAsyncAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../../state";
 
 const packages = {
   morse: cacheAsync(() => import("../../utils/text/morse")),

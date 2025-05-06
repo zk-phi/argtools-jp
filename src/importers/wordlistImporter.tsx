@@ -1,7 +1,8 @@
 import { useState, } from "preact/hooks";
 import { wordlistData, type WordlistBody } from "../datatypes";
+import { useAsyncAnalyzerEffect } from "../utils/ui/useAnalyzerEffect";
 import { cacheAsync } from "../utils/cache";
-import { useAsyncAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../state";
+import type { AnalyzerModule, StateReporter } from "../state";
 
 type Dataset = {
   module: () => Promise<{ data: WordlistBody }>,

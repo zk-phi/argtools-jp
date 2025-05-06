@@ -1,6 +1,7 @@
 import { useState } from "preact/hooks";
+import { useAnalyzerEffect } from "../../utils/ui/useAnalyzerEffect";
+import type { AnalyzerModule, StateReporter } from "../../state";
 import { textData, multipleData, type Data } from "../../datatypes";
-import { useAnalyzerEffect, type AnalyzerModule, type StateReporter } from "../../state";
 
 const detect = (data: Data) => {
   if (data.type !== "text") {
