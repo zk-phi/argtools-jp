@@ -21,19 +21,17 @@ const AnalyzersList = () => (
       {analyzerCategories.map(category => (
         <div key={category.category}>
           <b>{category.category}</b>
-          <div style={{ marginLeft: "16px" }}>
-            <small>
-              {category.analyzers.map((analyzer, ix) => (
-                <>
-                  {ix > 0 ? "、" : ""}
-                  {analyzer.app ? (
-                    <a key={analyzer.label} href={analyzer.app}>{analyzer.label}</a>
-                  ) : (
-                    analyzer.label
-                  )}
-                </>
-              ))}
-            </small>
+          <div style={{ marginLeft: "16px", fontSize: "smaller" }}>
+            {category.analyzers.map((analyzer, ix) => (
+              <>
+                {ix > 0 ? "、" : ""}
+                {analyzer.app ? (
+                  <a key={analyzer.label} href={analyzer.app}>{analyzer.label}</a>
+                ) : (
+                  analyzer.label
+                )}
+              </>
+            ))}
           </div>
         </div>
       ))}
