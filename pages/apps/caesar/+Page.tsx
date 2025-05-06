@@ -6,7 +6,7 @@ import config from "./+config";
 export const Page = () => (
   <>
     <p>
-      <a href="../">＜ 全てのツール</a>
+      <a href="/argtools-jp/">＜ 全てのツール</a>
     </p>
     <h2>{config.title}</h2>
     <MicroApp
