@@ -1,4 +1,4 @@
-import{f as n}from"./formatUnidic-Chw87VHj.js";const e=`名詞,数詞,*,0
+import{f as n}from"./chunk-Chw87VHj.js";const e=`名詞,数詞,*,0
 名詞,数詞,*,00
 名詞,数詞,*,1
 名詞,数詞,*,1,2

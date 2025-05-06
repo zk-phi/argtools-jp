@@ -1,4 +1,4 @@
-import{f as n}from"./formatUnidic-Chw87VHj.js";const o=`動詞,一般,*,+
+import{f as n}from"./chunk-Chw87VHj.js";const o=`動詞,一般,*,+
 動詞,一般,*,÷
 動詞,一般,*,-
 動詞,一般,*,/

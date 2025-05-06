@@ -1,4 +1,4 @@
-import{f as n}from"./formatUnidic-Chw87VHj.js";const i=`副詞,*,*,1番
+import{f as n}from"./chunk-Chw87VHj.js";const i=`副詞,*,*,1番
 副詞,*,*,Don
 副詞,*,*,DonDoko
 副詞,*,*,PENぺん

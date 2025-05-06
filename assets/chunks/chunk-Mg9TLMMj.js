@@ -1,4 +1,4 @@
-import{f as n}from"./formatUnidic-Chw87VHj.js";const a=`名詞,固有名詞,人名,21エモン
+import{f as n}from"./chunk-Chw87VHj.js";const a=`名詞,固有名詞,人名,21エモン
 名詞,固有名詞,人名,AKIBA
 名詞,固有名詞,人名,ALESSIAL
 名詞,固有名詞,人名,ARTEMIS
