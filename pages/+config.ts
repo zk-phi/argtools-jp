@@ -7,5 +7,8 @@ export default {
     description: {
       env: { server: true },
     },
+    backlink: {
+      env: { server: true },
+    },
   },
 };

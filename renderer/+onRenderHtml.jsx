@@ -5,6 +5,12 @@ import "../resources/dark.css";
 export const onRenderHtml = ({ Page, config }) => {
   const prerendered = render(<Page />);
 
+  const backlink = config.backlink ? (
+    '<header><a href="/argtools-jp/">＜ 全てのツール</a></header>'
+  ) : (
+    ""
+  );
+
   return escapeInject`<!DOCTYPE html>
     <html lang="ja">
 
@@ -17,6 +23,8 @@ export const onRenderHtml = ({ Page, config }) => {
       </head>
 
       <body>
+        ${dangerouslySkipEscape(backlink)}
+        <h2>${config.title}</h2>
         <div id="app">
           ${dangerouslySkipEscape(prerendered)}
         </div>
