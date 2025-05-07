@@ -1,3 +1,4 @@
+# Generate dictionaries from the UniDic lexicon (lex.csv)
 cat lex.csv | grep -e ",普通名詞" -e ",代名詞" -e ",数詞" -e ",固有名詞,一般" -e ",固有名詞,地名" | cut -f 15,5,6,7 -d "," | nkf -Z | sort | uniq > nouns
 cat lex.csv | grep -e ",普通名詞" -e ",代名詞" -e ",数詞" -e ",固有名詞,一般" -e ",固有名詞,地名" | cut -f 14,5,6,7 -d "," | nkf --hiragana | sort | uniq > yomigana
 cat lex.csv | grep -e ",動詞" | cut -f 15,5,6,7 -d "," | nkf -Z | sort | uniq > verbs
