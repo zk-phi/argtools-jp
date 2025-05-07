@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "preact/hooks";
 import { cacheAsync } from "../utils/cache";
 import { binaryData } from "../datatypes";
-import type { AnalyzerModule, StateReporter } from "../state";
+import type { AnalyzerModule, StateReporter } from "../module";
 
 const packages = {
   audiobufferToWav: cacheAsync(() => import("audiobuffer-to-wav")),

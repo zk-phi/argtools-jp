@@ -3,7 +3,7 @@ import { useState, useEffect } from "preact/hooks";
 import { ellipsis } from "../utils/string";
 import { defer } from "../utils/ui/defer";
 import { useAsyncAnalyzerEffect, useAnalyzerEffect } from "../utils/ui/useAnalyzerEffect";
-import type { AnalyzerModule, StateReporter } from "../state";
+import type { AnalyzerModule, StateReporter } from "../module";
 import { textData, multipleData, type Data, type AtomicData } from "../datatypes";
 
 // --- simple analyzers (Data -> Data)

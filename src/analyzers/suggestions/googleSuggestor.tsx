@@ -1,5 +1,5 @@
 import type { Data } from "../../datatypes";
-import type { AnalyzerModule } from "../../state";
+import type { AnalyzerModule } from "../../module";
 
 const detect = (data: Data) => {
   if (data.type === "text") {

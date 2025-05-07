@@ -1,5 +1,5 @@
 import type { Data } from "../../datatypes";
-import type { AnalyzerModule } from "../../state";
+import type { AnalyzerModule } from "../../module";
 
 const tripleSlashes = /(?<=[^\/]|^)\/\/\/(?=[^\/]|$)/;
 const detect = (data: Data) => {

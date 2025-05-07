@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "preact/hooks";
 import { defer } from "./defer";
 import { textData, type Data } from "../../datatypes";
-import type { StateReporter } from "../../state";
+import type { StateReporter } from "../../module";
 
 // thin wrapper for analyzer modules to handle errors and manage state
 export const useAnalyzerEffect = (

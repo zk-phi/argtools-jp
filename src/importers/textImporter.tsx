@@ -1,5 +1,5 @@
 import { textAdder } from "../analyzers/importers/textAdder";
-import type { AnalyzerModule } from "../state";
+import type { AnalyzerModule } from "../module";
 
 export const textImporter: AnalyzerModule = {
   ...textAdder,

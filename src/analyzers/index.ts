@@ -49,7 +49,7 @@ import { w3wSuggestor } from "./suggestions/w3wSuggestor";
 import { fileAdder } from "./importers/fileAdder";
 import { textAdder } from "./importers/textAdder";
 
-import type { AnalyzerModule } from "../state";
+import type { AnalyzerModule } from "../module";
 
 type AnalyzerCategory = { category: string, analyzers: AnalyzerModule[] };
 

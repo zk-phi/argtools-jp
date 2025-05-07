@@ -2,6 +2,7 @@ import { useMemo } from "preact/hooks";
 import { analyzerCategories } from "./analyzers";
 import { importers } from "./importers";
 import { DataViewer } from "./DataViewer";
+import type { AnalyzerModule } from "./module";
 import {
   busy,
   stack,
@@ -10,7 +11,6 @@ import {
   rollback,
   suggestions,
   stateReporterForId,
-  type AnalyzerModule,
   type StackFrame,
 } from "./state";
 

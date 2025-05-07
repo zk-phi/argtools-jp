@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import { useAnalyzerEffect } from "../../utils/ui/useAnalyzerEffect";
-import type { AnalyzerModule, StateReporter } from "../../state";
+import type { AnalyzerModule, StateReporter } from "../../module";
 import { textData, type Data } from "../../datatypes";
 
 const detect = (data: Data) => {

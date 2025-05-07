@@ -1,7 +1,7 @@
 import { useState, } from "preact/hooks";
 import { cacheAsync } from "../../utils/cache";
 import { useAsyncAnalyzerEffect } from "../../utils/ui/useAnalyzerEffect";
-import type { AnalyzerModule, StateReporter } from "../../state";
+import type { AnalyzerModule, StateReporter } from "../../module";
 import { textData, multipleData, type Data } from "../../datatypes";
 import type { Encoding } from "../../utils/text/mojibake";
 

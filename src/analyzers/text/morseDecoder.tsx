@@ -2,7 +2,7 @@ import { useState, useMemo } from "preact/hooks";
 import { histogram } from "../../utils/string";
 import { cacheAsync } from "../../utils/cache";
 import { useAsyncAnalyzerEffect } from "../../utils/ui/useAnalyzerEffect";
-import type { AnalyzerModule, StateReporter } from "../../state";
+import type { AnalyzerModule, StateReporter } from "../../module";
 import { textData, multipleData, type Data } from "../../datatypes";
 
 const packages = {

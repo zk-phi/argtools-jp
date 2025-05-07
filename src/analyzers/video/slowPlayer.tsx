@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useMemo } from "preact/hooks";
 import { textData, type Data } from "../../datatypes";
-import type { AnalyzerModule, StateReporter } from "../../state";
+import type { AnalyzerModule, StateReporter } from "../../module";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("video")) {
