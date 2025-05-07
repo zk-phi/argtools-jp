@@ -1,6 +1,6 @@
 import { render } from "preact-render-to-string";
 import { escapeInject, dangerouslySkipEscape } from "vike/server";
-import "./dark.css";
+import "../resources/dark.css";
 
 export const onRenderHtml = ({ Page, config }) => {
   const prerendered = render(<Page />);
