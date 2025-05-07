@@ -2,6 +2,9 @@ import { render } from "preact-render-to-string";
 import { escapeInject, dangerouslySkipEscape } from "vike/server";
 import "../resources/dark.css";
 
+// TODO: Define type of PageContext and migrate to TypeScript
+// https://vike.dev/pageContext#extend
+
 export const onRenderHtml = ({ Page, config }) => {
   const prerendered = render(<Page />);
 
