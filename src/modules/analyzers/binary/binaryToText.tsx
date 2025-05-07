@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { useDebounce } from "../../../utils/ui/useDebounce";
+import { useDebouncedValue } from "../../../utils/ui/debounce";
 import { useAnalyzerEffect } from "../../../utils/ui/useAnalyzerEffect";
 import type { AnalyzerModule, StateReporter } from "../../";
 import { textData, multipleData, type Data, type AtomicData } from "../../../datatypes";
@@ -42,7 +42,7 @@ const utf8Decoder = (arr: Uint8Array): string[] => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const [minLength, setMinLength] = useState(8);
   const [encoding, setEncoding] =  useState("ascii");
-  const debouncedMinLength = useDebounce(minLength, 2000);
+  const debouncedMinLength = useDebouncedValue(minLength, 2000);
 
   useAnalyzerEffect(onUpdate, () => {
     if (!input || input.type !== "binary") {

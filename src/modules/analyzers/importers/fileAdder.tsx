@@ -1,6 +1,7 @@
-import { useState } from "preact/hooks";
+import type { JSX } from "preact";
+import { useCallback } from "preact/hooks";
 import { readFileAsBuffer } from "../../../utils/file";
-import { useAsyncAnalyzerEffect } from "../../../utils/ui/useAnalyzerEffect";
+import { withReporterAsync } from "../../../utils/ui/useAnalyzerEffect";
 import type { AnalyzerModule, StateReporter } from "../../";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../../datatypes";
 
@@ -12,13 +13,12 @@ const detect = (data: Data) => {
 };
 
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
-  const [files, setFiles] = useState<FileList | null>(null);
-
-  useAsyncAnalyzerEffect(onUpdate, async () => {
-    if (input && input.type === "wordlist") {
-      throw new Error("UNEXPECTED: wordlist given");
-    }
-    if (files) {
+  const onChange = useCallback((e: JSX.TargetedMouseEvent<HTMLInputElement>) => {
+    const files = e.currentTarget.files;
+    withReporterAsync(onUpdate, async () => {
+      if (!files || files.length === 0) {
+        throw new Error("ファイルが選択されていません");
+      }
       const datum: AtomicData[] = await Promise.all(
         [...files].map(async file => {
           const buffer = await readFileAsBuffer(file);
@@ -26,20 +26,21 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
           return await binaryData(array, file.name);
         })
       );
-      if (input) {
-        if (input.type === "multiple") {
-          Array.prototype.unshift.apply(datum, input.datum);
-        } else {
-          datum.unshift(input);
-        }
+      if (!input) {
+        return multipleData(datum);
       }
-      return multipleData(datum);
-    }
-    return null;
-  }, [input, files]);
+      if (input.type === "wordlist") {
+        throw new Error("UNEXPECTED: wordlist given");
+      }
+      if (input.type === "multiple") {
+        return multipleData([...input.datum, ...datum]);
+      }
+      return multipleData([input, ...datum]);
+    });
+  }, [onUpdate, input]);
 
   return (
-    <input type="file" multiple={true} onChange={e => setFiles(e.currentTarget.files)} />
+    <input type="file" multiple={true} onChange={onChange} />
   );
 };
 

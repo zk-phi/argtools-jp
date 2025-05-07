@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "preact/hooks";
-import { useDebounce } from "../utils/ui/useDebounce";
+import { useDebouncedValue } from "../utils/ui/debounce";
 import { gensym } from "../utils/gensym";
 import type { WordlistBody } from "../datatypes";
 
@@ -29,7 +29,7 @@ const applyFilter = (value: WordlistBody, filter: Filter) => (
 
 export const WordlistViewer = ({ value, busy }: { value: WordlistBody, busy?: boolean }) => {
   const [filters, setFilters] = useState<Filter[]>([]);
-  const debouncedFilters = useDebounce(filters, 300);
+  const debouncedFilters = useDebouncedValue(filters, 300);
 
   const filteredWords = useMemo(() => (
     debouncedFilters.reduce((l, r) => applyFilter(l, r), value)

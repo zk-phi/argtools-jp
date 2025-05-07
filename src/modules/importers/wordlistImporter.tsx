@@ -1,6 +1,7 @@
-import { useState, } from "preact/hooks";
+import type { JSX } from "preact";
+import { useState, useCallback } from "preact/hooks";
 import { wordlistData, type WordlistBody } from "../../datatypes";
-import { useAsyncAnalyzerEffect } from "../../utils/ui/useAnalyzerEffect";
+import { withReporterAsync } from "../../utils/ui/useAnalyzerEffect";
 import { cacheAsync } from "../../utils/cache";
 import type { AnalyzerModule, StateReporter } from "../";
 
@@ -10,27 +11,6 @@ type Dataset = {
   label: string,
   license: string,
 };
-type DatasetKey = keyof typeof datasets;
-type DatasetCategory = { label: string, datasetKeys: DatasetKey[] };
-
-const datasetCategories: DatasetCategory[] = [{
-  label: "---- 日本語",
-  datasetKeys: [
-    "nouns",
-    "yomigana",
-    "propers",
-    "verbs",
-    "adjectives",
-  ],
-}, {
-  label: "--- 交通",
-  datasetKeys: [
-    "stations",
-    "roadsideStations",
-    "airports",
-    "highwayJoints",
-  ],
-}];
 
 const datasets: { [key: string]: Dataset } = {
   nouns: {
@@ -89,23 +69,49 @@ const datasets: { [key: string]: Dataset } = {
   },
 };
 
+type DatasetKey = keyof typeof datasets;
+type DatasetCategory = { label: string, datasetKeys: DatasetKey[] };
+
+const datasetCategories: DatasetCategory[] = [{
+  label: "---- 日本語",
+  datasetKeys: [
+    "nouns",
+    "yomigana",
+    "propers",
+    "verbs",
+    "adjectives",
+  ],
+}, {
+  label: "--- 交通",
+  datasetKeys: [
+    "stations",
+    "roadsideStations",
+    "airports",
+    "highwayJoints",
+  ],
+}];
+
 const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
   const [datasetKey, setDatasetKey] = useState("");
 
-  useAsyncAnalyzerEffect(onUpdate, async () => {
-    const dataset = datasets[datasetKey];
-    if (!dataset) {
-      return null;
-    }
-    const { data } = await dataset.module();
-    return wordlistData(data, dataset.label);
-  }, [datasetKey]);
+  const onChange = useCallback((e: JSX.TargetedEvent<HTMLSelectElement, Event>) => {
+    const key = e.currentTarget.value;
+    setDatasetKey(key);
+    withReporterAsync(onUpdate, async () => {
+      const dataset = datasets[key];
+      if (!dataset) {
+        return null;
+      }
+      const { data } = await dataset.module();
+      return wordlistData(data, dataset.label);
+    });
+  }, [onUpdate]);
 
   return (
     <>
       <select
           value={datasetKey}
-          onChange={e => setDatasetKey(e.currentTarget.value)}>
+          onChange={onChange}>
         <option value="" disabled={true}>
           データセットを選択してください
         </option>
