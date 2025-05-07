@@ -1,4 +1,3 @@
-import type { ComponentChildren } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { ellipsis } from "../../utils/string";
 import { useAnalyzer, withReporter } from "../../utils/analyzer";
@@ -9,23 +8,14 @@ import { multipleData, type MaybeData, type Data, type AtomicData } from "../../
 
 type AnalyzerFunction = (input: Data) => Promise<MaybeData> | MaybeData;
 
-type SimpleAnalyzerFactoryProps = {
-  label: string,
-  app?: string,
-  detect: (suspicious: Data) => string | null,
+type SimpleAnalyzerFactoryProps = Omit<AnalyzerModule, "component"> & {
   analyze: AnalyzerFunction,
-  description?: ComponentChildren,
 };
 
-export const simpleAnalyzerFactory = (
-  { label, app, detect, description, analyze }: SimpleAnalyzerFactoryProps,
-): AnalyzerModule => ({
-  label,
-  app,
-  detect,
-  description,
+export const simpleAnalyzerFactory = (props: SimpleAnalyzerFactoryProps): AnalyzerModule => ({
+  ...props,
   component: ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
-    useAnalyzer(onUpdate, input, analyze, []);
+    useAnalyzer(onUpdate, input, props.analyze, []);
     return null;
   },
 });
@@ -34,26 +24,19 @@ export const simpleAnalyzerFactory = (
 
 type TextDecoder = (str: string, label: string) => AtomicData | Promise<AtomicData>;
 
-type SimpleTextDecoratorFactoryProps = {
-  label: string,
-  app?: string,
-  hint: string,
+type SimpleTextDecoratorFactoryProps = Omit<SimpleAnalyzerFactoryProps, "detect" | "analyze"> & {
   pattern: RegExp | string,
-  description?: ComponentChildren,
+  hint: string,
   decoder: TextDecoder,
 };
 
-export const simpleTextDecoderFactory = (
-  { label, app, hint, pattern, description, decoder }: SimpleTextDecoratorFactoryProps,
-): AnalyzerModule => {
-  const detectorRegex = new RegExp(pattern, "m");
-  const matcherRegex = new RegExp(pattern, "mg");
+export const simpleTextDecoderFactory = (props: SimpleTextDecoratorFactoryProps): AnalyzerModule => {
+  const detectorRegex = new RegExp(props.pattern, "m");
+  const matcherRegex = new RegExp(props.pattern, "mg");
   return simpleAnalyzerFactory({
-    label,
-    app,
-    description,
+    ...props,
     detect: (suspicious: Data) => (
-      suspicious.type === "text" && suspicious.value.match(detectorRegex) ? hint : null
+      suspicious.type === "text" && suspicious.value.match(detectorRegex) ? props.hint : null
     ),
     analyze: async (input: Data) => {
       if (input.type !== "text") {
@@ -64,7 +47,7 @@ export const simpleTextDecoderFactory = (
         throw new Error("UNEXPECTED: no matches.");
       }
       const datum: AtomicData[] = await Promise.all(
-        matches.map(str => decoder(str, `${ellipsis(str, 8)} のデコード結果`))
+        matches.map(str => props.decoder(str, `${ellipsis(str, 8)} のデコード結果`))
       );
       return multipleData(datum);
     },
@@ -75,26 +58,19 @@ export const simpleTextDecoderFactory = (
 
 type UrlConstructor = (match: string) => string;
 
-type UrlExtractorFactoryProps = {
-  label: string,
-  app?: string,
-  hint: string,
+type UrlExtractorFactoryProps = Omit<AnalyzerModule, "detect" | "component"> & {
   pattern: RegExp | string,
-  description?: ComponentChildren,
+  hint: string,
   urlConstructor: UrlConstructor,
 };
 
-export const urlExtractorFactory = (
-  { label, app, hint, pattern, description, urlConstructor }: UrlExtractorFactoryProps,
-): AnalyzerModule => {
-  const detectorRegex = new RegExp(pattern, "m");
-  const matcherRegex = new RegExp(pattern, "mg");
+export const urlExtractorFactory = (props: UrlExtractorFactoryProps): AnalyzerModule => {
+  const detectorRegex = new RegExp(props.pattern, "m");
+  const matcherRegex = new RegExp(props.pattern, "mg");
   return {
-    label,
-    app,
-    description,
+    ...props,
     detect: (suspicious: Data) => (
-      suspicious.type === "text" && suspicious.value.match(detectorRegex) ? hint : null
+      suspicious.type === "text" && suspicious.value.match(detectorRegex) ? props.hint : null
     ),
     component: ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
       const [urls, setUrls] = useState<string[]>([]);
@@ -111,10 +87,10 @@ export const urlExtractorFactory = (
           if (!matches) {
             throw new Error("UNEXPECTED: no matches.");
           }
-          setUrls(matches.map(urlConstructor));
+          setUrls(matches.map(props.urlConstructor));
           return null;
         });
-      }, [input, onUpdate, urlConstructor]);
+      }, [input, onUpdate, props.urlConstructor]);
       return (
         <ul>
           {urls.map(url => (
