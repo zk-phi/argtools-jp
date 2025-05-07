@@ -1,15 +1,14 @@
 import type { ComponentChildren } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { ellipsis } from "../../utils/string";
-import { defer } from "../../utils/ui/defer";
-import { useAsyncAnalyzerEffect, useAnalyzerEffect } from "../../utils/ui/useAnalyzerEffect";
+import { useAsyncAnalyzerEffect, useAnalyzerEffect, withReporter } from "../../utils/ui/useAnalyzerEffect";
 import type { AnalyzerModule, StateReporter } from "../";
-import { textData, multipleData, type Data, type AtomicData } from "../../datatypes";
+import { multipleData, type Data, type AtomicData } from "../../datatypes";
 
 // --- simple analyzers (Data -> Data)
 
-type AnalyzerFunction = (input: Data | null) => Data;
-type AsyncAnalyzerFunction = (input: Data | null) => Promise<Data>;
+type AnalyzerFunction = (input: Data) => Data | null;
+type AsyncAnalyzerFunction = (input: Data) => Promise<Data | null>;
 
 type SimpleAnalyzerFactoryProps = {
   label: string,
@@ -27,7 +26,9 @@ export const asyncSimpleAnalyzerFactory = (
   label,
   detect,
   component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
-    useAsyncAnalyzerEffect(onUpdate, () => analyze(input), [analyze, input]);
+    useAsyncAnalyzerEffect(onUpdate, () => (
+      input ? analyze(input) : Promise.resolve(null)
+    ), [analyze, input]);
     return view;
   },
 });
@@ -38,7 +39,9 @@ export const simpleAnalyzerFactory = (
   label,
   detect,
   component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
-    useAnalyzerEffect(onUpdate, () => analyze(input), [analyze, input]);
+    useAnalyzerEffect(onUpdate, () => (
+      input ? analyze(input) : null
+    ), [analyze, input]);
     return view;
   },
 });
@@ -71,8 +74,8 @@ const _asyncSimpleTextDecoderAnalyzer = (
   decoder: AsyncTextDecoder,
 ) => {
   const matcherRegex = new RegExp(pattern, "mg");
-  const analyzer: AsyncAnalyzerFunction = async (input: Data | null) => {
-    if (!input || input.type !== "text") {
+  const analyzer: AsyncAnalyzerFunction = async (input: Data) => {
+    if (input.type !== "text") {
       throw new Error("UNEXPECTED: input is not a text.");
     }
     const matches = input.value.match(matcherRegex);
@@ -129,24 +132,20 @@ const _urlExtractorComponent = (
   const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
     const [urls, setUrls] = useState<string[]>([]);
     useEffect(() => {
-      onUpdate({ busy: true });
-      defer(() => {
-        try {
-          if (!input || input.type !== "text") {
-            throw new Error("UNEXPECTED: input is not a text.");
-          }
-          const matches = input.value.match(matcherRegex);
-          if (!matches) {
-            throw new Error("UNEXPECTED: no matches.");
-          }
-          setUrls(matches.map(urlConstructor));
-          onUpdate({ output: null });
-        } catch (e: any) {
-          setUrls([]);
-          onUpdate({
-            output: textData("message" in e ? e.message : "Unexpected error.", "エラー"),
-          });
+      withReporter(onUpdate, () => {
+        setUrls([]);
+        if (!input) {
+          return null;
         }
+        if (input.type !== "text") {
+          throw new Error("UNEXPECTED: input is not a text.");
+        }
+        const matches = input.value.match(matcherRegex);
+        if (!matches) {
+          throw new Error("UNEXPECTED: no matches.");
+        }
+        setUrls(matches.map(urlConstructor));
+        return null;
       });
     }, [input, onUpdate, urlConstructor]);
     return (

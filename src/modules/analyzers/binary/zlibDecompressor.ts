@@ -16,8 +16,8 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data | null) => {
-  if (!input || input.type !== "binary") {
+const analyze = async (input: Data) => {
+  if (input.type !== "binary") {
     throw new Error("UNEXPECTED: not a binary.");
   };
   const { unzlibSync } = await packages.fflate();

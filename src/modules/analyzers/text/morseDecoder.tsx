@@ -38,7 +38,10 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   ));
 
   useAsyncAnalyzerEffect(onUpdate, async () => {
-    if (!input || input.type !== "text") {
+    if (!input) {
+      return null;
+    }
+    if (input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }
     if (zeroChar.length === 0 || oneChar.length === 0) {

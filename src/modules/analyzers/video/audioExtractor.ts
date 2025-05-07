@@ -14,8 +14,8 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data | null) => {
-  if (!input || input.type !== "binary" || !input.value.mime.startsWith("video")) {
+const analyze = async (input: Data) => {
+  if (input.type !== "binary" || !input.value.mime.startsWith("video")) {
     throw new Error("UNEXPECTED: not a video.") ;
   }
   const { decodeAudio } = await packages.audio();

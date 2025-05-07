@@ -13,8 +13,8 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data | null) => {
-  if (!input || input.type !== "binary" || !input.value.mime.startsWith("image")) {
+const analyze = async (input: Data) => {
+  if (input.type !== "binary" || !input.value.mime.startsWith("image")) {
     throw new Error("UNEXPECTED: not an image.");
   };
 

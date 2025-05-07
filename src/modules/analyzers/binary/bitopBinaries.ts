@@ -9,8 +9,8 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data | null) => {
-  if (!input || input.type !== "multiple" || input.datum.length !== 2) {
+const analyze = async (input: Data) => {
+  if (input.type !== "multiple" || input.datum.length !== 2) {
     throw new Error("UNEXPECTED: not a pair of two datum.");
   }
 

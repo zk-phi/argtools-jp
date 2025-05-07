@@ -21,7 +21,10 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   const [columns, setColumns] = useState(5);
 
   useAnalyzerEffect(onUpdate, () => {
-    if (!input || input.type !== "text") {
+    if (!input) {
+      return null;
+    }
+    if (input.type !== "text") {
       throw new Error("ERROR: unexpedted data type.");
     }
     return textData(_alterText(input.value, columns), input.label);

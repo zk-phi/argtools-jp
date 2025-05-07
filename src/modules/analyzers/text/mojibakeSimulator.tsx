@@ -31,7 +31,10 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   const [toEncoding, setToEncoding] = useState<Encoding>("utf8");
 
   useAsyncAnalyzerEffect(onUpdate, async () => {
-    if (!input || input.type !== "text") {
+    if (!input) {
+      return null;
+    }
+    if (input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }
     const { fixMojibake } = await packages.mojibake();

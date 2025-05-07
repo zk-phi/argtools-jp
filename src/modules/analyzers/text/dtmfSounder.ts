@@ -21,8 +21,8 @@ const detect = (data: Data) => {
 const allDigits = /([0-9#*][^0-9A-z#*]{0,2}){3,}/g;
 const allDelimiters = /[^0-9*#]+/g;
 
-const analyze = async (input: Data | null) => {
-  if (!input || input.type !== "text") {
+const analyze = async (input: Data) => {
+  if (input.type !== "text") {
     throw new Error("UNEXPECTED: not a text.");
   }
 

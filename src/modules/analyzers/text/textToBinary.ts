@@ -8,8 +8,8 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = (input: Data | null) => {
-  if (!input || input.type !== "text") {
+const analyze = (input: Data) => {
+  if (input.type !== "text") {
     throw new Error("UNEXPECTED: not a text.") ;
   }
   const decoded = (new TextEncoder()).encode(input.value);

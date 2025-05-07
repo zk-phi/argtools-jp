@@ -22,7 +22,10 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   const [n, setN] = useState(13);
 
   useAnalyzerEffect(onUpdate, () => {
-    if (!input || input.type !== "text") {
+    if (!input) {
+      return null;
+    }
+    if (input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }
     const inverseN = 26 - n;

@@ -22,7 +22,10 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   const [rotNums, setRotNums] = useState(false);
 
   useAnalyzerEffect(onUpdate, () => {
-    if (!input || input.type !== "text") {
+    if (!input) {
+      return null;
+    }
+    if (input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }
     const charCodes = input.value.split("").map(s => s.charCodeAt(0));

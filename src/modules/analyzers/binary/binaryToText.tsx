@@ -45,7 +45,10 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   const debouncedMinLength = useDebouncedValue(minLength, 2000);
 
   useAnalyzerEffect(onUpdate, () => {
-    if (!input || input.type !== "binary") {
+    if (!input) {
+      return null;
+    }
+    if (input.type !== "binary") {
       throw new Error("UNEXPECTED: not a binary.");
     }
     if (Number.isNaN(debouncedMinLength) || debouncedMinLength <= 0) {

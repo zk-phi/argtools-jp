@@ -12,8 +12,8 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = (input: Data | null) => {
-  if (!input || input.type !== "binary") {
+const analyze = (input: Data) => {
+  if (input.type !== "binary") {
     throw new Error("UNEXPECTED: not a binary.");
   }
 

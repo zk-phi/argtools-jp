@@ -8,9 +8,8 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data | null) => {
-  if (!input || input.type !== "multiple"
-      || input.datum.some(({type}) => type !== "binary")) {
+const analyze = async (input: Data) => {
+  if (input.type !== "multiple" || input.datum.some(({type}) => type !== "binary")) {
     throw new Error("UNEXPECTED: not a binary set.");
   }
   const arrays = input.datum.map(({value}) => (value as BinaryBody).array!);

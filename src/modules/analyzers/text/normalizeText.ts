@@ -10,8 +10,8 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = (input: Data | null) => {
-  if (!input || input.type !== "text") {
+const analyze = (input: Data) => {
+  if (input.type !== "text") {
     throw new Error("UNEXPECTED: not a text.") ;
   }
   // Replace ALL full-width ascii characters (not only alphabets and numbers)

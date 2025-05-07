@@ -1,5 +1,7 @@
-import { useRef, useState, useEffect, useMemo } from "preact/hooks";
-import { textData, type Data } from "../../../datatypes";
+import { useRef, useState, useEffect } from "preact/hooks";
+import { withReporter } from "../../../utils/ui/useAnalyzerEffect";
+import { useDebouncedValue } from "../../../utils/ui/debounce";
+import type { Data } from "../../../datatypes";
 import type { AnalyzerModule, StateReporter } from "../../";
 
 const detect = (data: Data) => {
@@ -10,27 +12,33 @@ const detect = (data: Data) => {
 };
 
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
-  const [speed, setSpeed] = useState(0.25);
+  const [speed, setSpeed] = useState(1.00);
+  const debouncedSpeed = useDebouncedValue(speed, 100);
+  const [sourceProps, setSourceProps] = useState<{ src: string, type: string } | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const sourceProps = useMemo(() => {
-    onUpdate({ busy: true });
-    if (!input || input.type !== "binary" || !input.value.mime.startsWith("video")) {
-      onUpdate({ output: textData("UNEXPECTED: not a video.", "エラー") });
+  useEffect(() => {
+    withReporter(onUpdate, () => {
+      setSourceProps(null);
+      if (!input) {
+        return null;
+      }
+      if (input.type !== "binary" || !input.value.mime.startsWith("video")) {
+        throw new Error("UNEXPECTED: not a video.");
+      }
+      const blob = new Blob([input.value.array], { type: input.value.mime });
+      const url = URL.createObjectURL(blob);
+      setSourceProps({ src: url, type: input.value.mime });
       return null;
-    }
-    const blob = new Blob([input.value.array], { type: input.value.mime });
-    const url = URL.createObjectURL(blob);
-    onUpdate({ output: null });
-    return { src: url, type: input.value.mime };
-  }, [onUpdate, input]);
+    });
+  }, [onUpdate, input])
 
   useEffect(() => {
     if (videoRef.current) {
-      videoRef.current.playbackRate = speed;
+      videoRef.current.playbackRate = debouncedSpeed;
       videoRef.current.preservesPitch = false;
     }
-  }, [speed]);
+  }, [debouncedSpeed]);
 
   return sourceProps && (
     <>
@@ -40,7 +48,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
       <div>
         <input
             type="range"
-            min="0.01"
+            min="0.1"
             max="2"
             step="0.01"
             value={speed}
