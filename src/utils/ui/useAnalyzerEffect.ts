@@ -3,7 +3,41 @@ import { defer } from "./defer";
 import { textData, type Data } from "../../datatypes";
 import type { StateReporter } from "../../modules";
 
-// thin wrapper for analyzer modules to handle errors and manage state
+// thin wrappers for analyzer modules to handle errors and manage busy state
+
+export const withReporter = (
+  reporter: StateReporter,
+  cb: () => Data | null,
+) => {
+  reporter({ busy: true });
+  // wait for the UI to update
+  defer(() => {
+    try {
+      reporter({ output: cb() });
+    } catch (e: any) {
+      reporter({
+        output: textData("message" in e ? e.message : "Unexpected error.", "エラー"),
+      });
+    }
+  });
+};
+
+export const withReporterAsync = (
+  reporter: StateReporter,
+  cb: () => Promise<Data | null>,
+) => {
+  reporter({ busy: true });
+  defer(async () => {
+    try {
+      reporter({ output: await cb() });
+    } catch (e: any) {
+      reporter({
+        output: textData("message" in e ? e.message : "Unexpected error.", "エラー"),
+      });
+    }
+  });
+};
+
 export const useAnalyzerEffect = (
   reporter: StateReporter,
   cb: () => Data | null,
@@ -11,21 +45,9 @@ export const useAnalyzerEffect = (
 ) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies:
   const fn = useMemo(() => cb, deps);
-  useEffect(() => {
-    reporter({ busy: true });
-    defer(() => {
-      try {
-        reporter({ output: fn() });
-      } catch (e: any) {
-        reporter({
-          output: textData("message" in e ? e.message : "Unexpected error.", "エラー"),
-        });
-      }
-    });
-  }, [reporter, fn]);
+  useEffect(() => withReporter(reporter, fn), [reporter, fn]);
 };
 
-// thin wrapper for analyzer modules to handle errors and state management
 export const useAsyncAnalyzerEffect = (
   reporter: StateReporter,
   cb: () => Promise<Data | null>,
@@ -33,16 +55,5 @@ export const useAsyncAnalyzerEffect = (
 ) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies:
   const fn = useMemo(() => cb, deps);
-  useEffect(() => {
-    reporter({ busy: true });
-    defer(async () => {
-      try {
-        reporter({ output: await fn() });
-      } catch (e: any) {
-        reporter({
-          output: textData("message" in e ? e.message : "Unexpected error.", "エラー"),
-        });
-      }
-    });
-  }, [reporter, fn]);
+  useEffect(() => withReporterAsync(reporter, fn), [reporter, fn]);
 };
