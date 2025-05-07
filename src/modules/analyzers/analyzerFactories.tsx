@@ -11,15 +11,17 @@ type AnalyzerFunction = (input: Data) => Promise<MaybeData> | MaybeData;
 
 type SimpleAnalyzerFactoryProps = {
   label: string,
+  app?: string,
   detect: (suspicious: Data) => string | null,
   analyze: AnalyzerFunction,
   description?: ComponentChildren,
 };
 
 export const simpleAnalyzerFactory = (
-  { label, detect, description, analyze }: SimpleAnalyzerFactoryProps,
+  { label, app, detect, description, analyze }: SimpleAnalyzerFactoryProps,
 ): AnalyzerModule => ({
   label,
+  app,
   detect,
   description,
   component: ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
@@ -34,6 +36,7 @@ type TextDecoder = (str: string, label: string) => AtomicData | Promise<AtomicDa
 
 type SimpleTextDecoratorFactoryProps = {
   label: string,
+  app?: string,
   hint: string,
   pattern: RegExp | string,
   description?: ComponentChildren,
@@ -41,12 +44,13 @@ type SimpleTextDecoratorFactoryProps = {
 };
 
 export const simpleTextDecoderFactory = (
-  { label, hint, pattern, description, decoder }: SimpleTextDecoratorFactoryProps,
+  { label, app, hint, pattern, description, decoder }: SimpleTextDecoratorFactoryProps,
 ): AnalyzerModule => {
   const detectorRegex = new RegExp(pattern, "m");
   const matcherRegex = new RegExp(pattern, "mg");
   return simpleAnalyzerFactory({
     label,
+    app,
     description,
     detect: (suspicious: Data) => (
       suspicious.type === "text" && suspicious.value.match(detectorRegex) ? hint : null
@@ -73,6 +77,7 @@ type UrlConstructor = (match: string) => string;
 
 type UrlExtractorFactoryProps = {
   label: string,
+  app?: string,
   hint: string,
   pattern: RegExp | string,
   description?: ComponentChildren,
@@ -80,12 +85,13 @@ type UrlExtractorFactoryProps = {
 };
 
 export const urlExtractorFactory = (
-  { label, hint, pattern, description, urlConstructor }: UrlExtractorFactoryProps,
+  { label, app, hint, pattern, description, urlConstructor }: UrlExtractorFactoryProps,
 ): AnalyzerModule => {
   const detectorRegex = new RegExp(pattern, "m");
   const matcherRegex = new RegExp(pattern, "mg");
   return {
     label,
+    app,
     description,
     detect: (suspicious: Data) => (
       suspicious.type === "text" && suspicious.value.match(detectorRegex) ? hint : null
