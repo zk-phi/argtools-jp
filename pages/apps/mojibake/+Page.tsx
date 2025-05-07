@@ -1,6 +1,6 @@
 import { MicroApp } from "../../../src/MicroApp";
-import { textImporter } from "../../../src/importers/textImporter";
-import { mojibakeSimulator } from "../../../src/analyzers/text/mojibakeSimulator";
+import { textImporter } from "../../../src/modules/importers/textImporter";
+import { mojibakeSimulator } from "../../../src/modules/analyzers/text/mojibakeSimulator";
 import config from "./+config";
 
 export const Page = () => (

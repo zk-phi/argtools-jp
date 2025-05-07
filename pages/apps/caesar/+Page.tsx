@@ -1,6 +1,6 @@
 import { MicroApp } from "../../../src/MicroApp";
-import { textImporter } from "../../../src/importers/textImporter";
-import { caesarDecoder } from "../../../src/analyzers/text/caesarDecoder.tsx";
+import { textImporter } from "../../../src/modules/importers/textImporter";
+import { caesarDecoder } from "../../../src/modules/analyzers/text/caesarDecoder.tsx";
 import config from "./+config";
 
 export const Page = () => (

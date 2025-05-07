@@ -1,7 +1,7 @@
 import { useState, useCallback } from "preact/hooks";
 import { DataViewer } from "./DataViewer";
 import type { Data } from "./datatypes"
-import type { AnalyzerModule, StateReporter } from "./module";
+import type { AnalyzerModule, StateReporter } from "./modules";
 
 export const MicroApp = ({ importer, analyzer, importerLabel }: {
   importer: AnalyzerModule,

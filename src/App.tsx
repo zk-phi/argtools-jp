@@ -1,11 +1,11 @@
 import { signal, computed } from "@preact/signals";
 import { useMemo, useEffect } from "preact/hooks";
 import { gensym } from "./utils/gensym";
-import { analyzerCategories, analyzers } from "./analyzers";
-import { importers } from "./importers";
+import { analyzerCategories, analyzers } from "./modules/analyzers";
+import { importers } from "./modules/importers";
 import { DataViewer } from "./DataViewer";
 import { textData, type Data } from "./datatypes";
-import type { AnalyzerModule, StateReporter } from "./module";
+import type { AnalyzerModule, StateReporter } from "./modules";
 
 /* ---- STATE */
 

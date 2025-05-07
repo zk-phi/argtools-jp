@@ -1,0 +1,33 @@
+import type { Data } from "../../../datatypes";
+import type { AnalyzerModule } from "../../";
+
+const detect = (data: Data) => {
+  if (data.type === "text") {
+    return "もし、意味のわからない単語や、謎の言語のテキストがあるなら";
+  }
+  return null;
+};
+
+const component = () => (
+  <>
+    <p>シンプルに検索したり翻訳するだけで何か見つかるかもしれません。</p>
+    <ul>
+      <li>
+        <a href="https://google.com" target="_blank" rel="noreferrer">
+          Google 検索 (https://google.com)
+        </a>
+      </li>
+      <li>
+        <a href="https://translate.google.co.jp/" target="_blank" rel="noreferrer">
+          Google 翻訳 (https://translate.google.co.jp/)
+        </a>
+      </li>
+    </ul>
+  </>
+);
+
+export const googleSuggestor: AnalyzerModule = {
+  label: "💡 Google で検索・翻訳",
+  detect,
+  component,
+};
