@@ -28,15 +28,18 @@ export const onRenderHtml = ({ Page, config }) => {
         <div id="app">
           ${dangerouslySkipEscape(prerendered)}
         </div>
-        <p>
-          <small>
+        <footer style="font-size:smaller">
+          <div>
             Built with ♡ by
             <a href="https://zk-phi.github.io/" target="_blank" rel="noreferrer">zk-phi</a>
             (
             <a href="https://github.com/zk-phi/argtools-jp/" target="_blank" rel="noreferrer">ライセンス表示・ソースコード</a>
             )
-          </small>
-        </p>
+          </div>
+          <div>
+            ※ 入力されたデータはすべてローカルで処理され、どこかへ送信されることはありません
+          </div>
+        </footer>
       </body>
 
     </html>`
