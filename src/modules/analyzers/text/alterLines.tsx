@@ -22,7 +22,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
   useAnalyzer(onUpdate, input, (input: Data) => {
     if (input.type !== "text") {
-      throw new Error("ERROR: unexpedted data type.");
+      throw new Error("テキストデータではありません");
     }
     return textData(_alterText(input.value, columns), input.label);
   }, [columns]);

@@ -10,7 +10,7 @@ const detect = (data: Data) => {
 
 const analyze = (input: Data) => {
   if (input.type !== "text") {
-    throw new Error("UNEXPECTED: not a text.") ;
+    throw new Error("テキストデータではありません");
   }
   const decoded = (new TextEncoder()).encode(input.value);
   return binaryData(decoded, input.label, "text/plain", ".txt");

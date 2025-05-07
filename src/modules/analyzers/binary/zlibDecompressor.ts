@@ -18,7 +18,7 @@ const detect = (data: Data) => {
 
 const analyze = async (input: Data) => {
   if (input.type !== "binary") {
-    throw new Error("UNEXPECTED: not a binary.");
+    throw new Error("バイナリデータではありません");
   };
   const { unzlibSync } = await packages.fflate();
   const expanded = unzlibSync(input.value.array);

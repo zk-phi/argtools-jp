@@ -10,7 +10,7 @@ const detect = (data: Data) => {
 
 const analyze = (input: Data) => {
   if (input.type !== "text") {
-    throw new Error("UNEXPECTED: not a text.");
+    throw new Error("テキストデータではありません");
   }
   const reversed = Array.from(input.value).reverse().join("");
   return textData(reversed, "反転されたテキスト");

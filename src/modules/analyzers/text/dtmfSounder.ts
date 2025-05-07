@@ -23,12 +23,12 @@ const allDelimiters = /[^0-9*#]+/g;
 
 const analyze = async (input: Data) => {
   if (input.type !== "text") {
-    throw new Error("UNEXPECTED: not a text.");
+    throw new Error("テキストデータではありません");
   }
 
   const matches = input.value.match(allDigits);
   if (!matches) {
-    throw new Error("UNEXPECTED: not matches.");
+    throw new Error("読み取れる部分はありませんでした😭");
   }
   if (matches.length > 100) {
     throw new Error(`候補が多すぎたので中止しました（${matches.length}件）`);

@@ -32,7 +32,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
   useAnalyzer(onUpdate, input, async (input: Data) => {
     if (input.type !== "text") {
-      throw new Error("UNEXPECTED: not a text.");
+      throw new Error("テキストデータではありません");
     }
     const { fixMojibake } = await packages.mojibake();
     const [fixed, allCandidates] = fixMojibake(input.value, fromEncoding, toEncoding);

@@ -46,13 +46,13 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
   useAnalyzer(onUpdate, input, (input: Data) => {
     if (input.type !== "binary") {
-      throw new Error("UNEXPECTED: not a binary.");
+      throw new Error("バイナリデータではありません");
     }
     if (Number.isNaN(debouncedMinLength) || debouncedMinLength <= 0) {
       throw new Error("最小文字数が不適切です")
     }
     if (encoding !== "ascii" && encoding !== "utf-8") {
-      throw new Error("UNEXPECTED: invalid encoding.");
+      throw new Error("UNEXPECTED: 存在しないエンコーディングです");
     }
     const decoded = encoding === "ascii" ? (
       asciiDecoder(input.value.array)

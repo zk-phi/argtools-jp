@@ -21,7 +21,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     setSourceProps(null);
     runAnalyzer(onUpdate, input, (input: Data) => {
       if (input.type !== "binary" || !input.value.mime.startsWith("video")) {
-        throw new Error("UNEXPECTED: not a video.");
+        throw new Error("動画データでないか、非対応の形式です");
       }
       const blob = new Blob([input.value.array], { type: input.value.mime });
       const url = URL.createObjectURL(blob);

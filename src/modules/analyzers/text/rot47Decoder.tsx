@@ -22,7 +22,7 @@ const detect = (data: Data) => {
 
 const analyze = (input: Data) => {
   if (input.type !== "text") {
-    throw new Error("UNEXPECTED: not a text.");
+    throw new Error("テキストデータではありません");
   }
   const charCodes = input.value.split("").map(s => s.charCodeAt(0));
   const decodedCharCodes = charCodes.map(ch => {

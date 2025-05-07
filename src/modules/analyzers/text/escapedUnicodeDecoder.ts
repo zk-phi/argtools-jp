@@ -28,7 +28,7 @@ export const escapedUnicodeDecoder = simpleTextDecoderFactory({
   decoder: (str: string, label: string) => {
     const chars = str.match(value);
     if (!chars) {
-      throw new Error("UNEXPECTED: no matches.");
+      throw new Error("読み取れる部分はありませんでした😭");
     }
     const string = String.fromCodePoint.apply(null, chars.map(char => {
       if (char.startsWith("#x")) {

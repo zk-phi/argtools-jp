@@ -10,7 +10,7 @@ const detect = (data: Data) => {
 
 const analyze = (input: Data) => {
   if (input.type !== "text") {
-    throw new Error("UNEXPECTED: not a text.");
+    throw new Error("テキストデータではありません");
   }
   const concatenated = input.value.replace(/(\r\n|\n|\r)/gm, "");
   return textData(concatenated, "結合されたテキスト");

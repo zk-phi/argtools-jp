@@ -39,7 +39,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
   useAnalyzer(onUpdate, input, async (input: Data) => {
     if (input.type !== "text") {
-      throw new Error("UNEXPECTED: not a text.");
+      throw new Error("テキストデータではありません");
     }
     if (zeroChar.length === 0 || oneChar.length === 0) {
       throw new Error("読み取りに使う文字が指定されていません");

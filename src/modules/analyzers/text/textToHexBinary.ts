@@ -18,7 +18,7 @@ export const textToHexBinary = simpleTextDecoderFactory({
   decoder: async (str: string, label: string) => {
     const matches = str.replace(allDelimiters, "").match(splitter);
     if (!matches) {
-      throw new Error("UNEXPECTED: malformed hexstring.");
+      throw new Error("読み取れる部分はありませんでした😭");
     }
     const arr = matches.map(match => Number.parseInt(match, 16));
     return await binaryData(Uint8Array.from(arr), label);

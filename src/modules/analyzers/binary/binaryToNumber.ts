@@ -14,7 +14,7 @@ const detect = (data: Data) => {
 
 const analyze = (input: Data) => {
   if (input.type !== "binary") {
-    throw new Error("UNEXPECTED: not a binary.");
+    throw new Error("バイナリデータではありません");
   }
 
   if (input.value.array.length === 1) {
@@ -63,7 +63,7 @@ const analyze = (input: Data) => {
     return numberData(floatView[0], "小数値（IEEE754）として");
   }
 
-  throw new Error("UNEXPECTED: not a 4byte nor 8byte binary.");
+  throw new Error("バイナリのバイト数が４でも８でもありません");
 };
 
 export const binaryToNumber = simpleAnalyzerFactory({

@@ -23,7 +23,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
   useAnalyzer(onUpdate, input, (input: Data) => {
     if (input.type !== "text") {
-      throw new Error("UNEXPECTED: not a text.");
+      throw new Error("テキストデータではありません");
     }
     const inverseN = 26 - n;
     const charCodes = input.value.split("").map(s => s.charCodeAt(0));

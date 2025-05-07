@@ -12,7 +12,7 @@ const detect = (data: Data) => {
 
 const analyze = (input: Data) => {
   if (input.type !== "text") {
-    throw new Error("UNEXPECTED: not a text.") ;
+    throw new Error("テキストデータではありません") ;
   }
   // Replace ALL full-width ascii characters (not only alphabets and numbers)
   // so that we may analyze float value like "１２３．４".

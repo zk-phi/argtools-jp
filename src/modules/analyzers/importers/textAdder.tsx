@@ -29,7 +29,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
           return input;
         }
         if (input.type === "wordlist") {
-          throw new Error("UNEXPECTED: wordlist given.");
+          throw new Error("データではなく単語リストが与えられました");
         }
         if (input.type === "multiple") {
           return multipleData([...input.datum, data]);

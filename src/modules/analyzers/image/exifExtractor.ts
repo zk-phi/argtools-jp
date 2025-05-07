@@ -15,7 +15,7 @@ const detect = (data: Data) => {
 
 const analyze = async (input: Data) => {
   if (input.type !== "binary" || !input.value.mime.startsWith("image")) {
-    throw new Error("UNEXPECTED: not an image.");
+    throw new Error("画像データでないか、非対応の形式です");
   }
   const { getAllTags } = await packages.exif();
   const tags = getAllTags(input.value.array.buffer);

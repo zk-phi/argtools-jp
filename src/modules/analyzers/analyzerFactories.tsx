@@ -40,11 +40,11 @@ export const simpleTextDecoderFactory = (props: SimpleTextDecoratorFactoryProps)
     ),
     analyze: async (input: Data) => {
       if (input.type !== "text") {
-        throw new Error("UNEXPECTED: input is not a text.");
+        throw new Error("テキストデータではありません");
       }
       const matches = input.value.match(matcherRegex);
       if (!matches) {
-        throw new Error("UNEXPECTED: no matches.");
+        throw new Error("読み取れる部分はありませんでした😭");
       }
       const datum: AtomicData[] = await Promise.all(
         matches.map(str => props.decoder(str, `${ellipsis(str, 8)} のデコード結果`))
@@ -81,11 +81,11 @@ export const urlExtractorFactory = (props: UrlExtractorFactoryProps): AnalyzerMo
             return null;
           }
           if (input.type !== "text") {
-            throw new Error("UNEXPECTED: input is not a text.");
+            throw new Error("テキストデータではありません");
           }
           const matches = input.value.match(matcherRegex);
           if (!matches) {
-            throw new Error("UNEXPECTED: no matches.");
+            throw new Error("マッチする部分がありませんでした😭");
           }
           setUrls(matches.map(props.urlConstructor));
           return null;

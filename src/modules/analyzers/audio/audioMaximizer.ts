@@ -16,7 +16,7 @@ const detect = (data: Data) => {
 
 const analyze = async (input: Data) => {
   if (input.type !== "binary" || !input.value.mime.startsWith("audio")) {
-    throw new Error("UNEXPECTED: not an audio data.");
+    throw new Error("音声データでないか、非対応の形式です");
   }
   const { decodeAudio, maximizeAudioBuffer } = await packages.audio();
   const { default: toWav } = await packages.audiobufferToWav();

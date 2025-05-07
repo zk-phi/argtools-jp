@@ -10,7 +10,7 @@ const detect = (data: Data) => {
 
 const analyze = async (input: Data) => {
   if (input.type !== "multiple" || input.datum.some(({type}) => type !== "binary")) {
-    throw new Error("UNEXPECTED: not a binary set.");
+    throw new Error("バイナリ以外のデータが含まれています");
   }
   const arrays = input.datum.map(({value}) => (value as BinaryBody).array!);
   const merged = new Uint8Array(arrays.reduce((l, r) => l + r.length, 0));

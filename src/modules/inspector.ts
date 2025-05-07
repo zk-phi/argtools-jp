@@ -9,7 +9,7 @@ export const genInspector = (ix: number): AnalyzerModule => ({
   component: ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
     useAnalyzer(onUpdate, input, (input: Data) => {
       if (!input || input.type !== "multiple" || !input.datum[ix]) {
-        throw new Error("UNEXPECTED: no inspection target.");
+        throw new Error("精査の対象が見つかりません");
       }
       return input.datum[ix];
     }, [ix]);

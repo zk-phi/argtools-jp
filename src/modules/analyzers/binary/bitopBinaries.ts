@@ -11,12 +11,12 @@ const detect = (data: Data) => {
 
 const analyze = async (input: Data) => {
   if (input.type !== "multiple" || input.datum.length !== 2) {
-    throw new Error("UNEXPECTED: not a pair of two datum.");
+    throw new Error("データの数が２件ではありません");
   }
 
   const [dataA, dataB] = input.datum;
   if(dataA.type !== "binary" || dataB.type !== "binary") {
-    throw new Error("UNEXPECTED: not a binary.");
+    throw new Error("バイナリデータではありません");
   }
   const arrA = dataA.value.array
   const arrB = dataB.value.array
