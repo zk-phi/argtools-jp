@@ -3,6 +3,7 @@ import { useMemo, useEffect } from "preact/hooks";
 import { gensym } from "./utils/gensym";
 import { analyzerCategories, analyzers } from "./modules/analyzers";
 import { importers } from "./modules/importers";
+import { genInspector } from "./modules/inspector";
 import { DataViewer } from "./DataViewer";
 import { textData, type Data } from "./datatypes";
 import type { AnalyzerModule, StateReporter } from "./modules";
@@ -58,28 +59,12 @@ const pushAnalyzer = (module: AnalyzerModule) => {
   stack.value = [..._stack, { id: gensym(), module, output: null }];
 };
 
-// A special higher-order module to extract an element from a MultipleData.
-const _inspectItem = (ix: number): AnalyzerModule => ({
-  label: "この項目を精査",
-  detect: () => null,
-  component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
-    useEffect(() => {
-      if (!input || input.type !== "multiple" || !input.datum[ix]) {
-        onUpdate({ output: textData("UNEXPECTED: no inspection target.", "エラー") });
-      } else {
-        onUpdate({ output: input.datum[ix] });
-      }
-    }, [onUpdate, ix, input]);
-    return null;
-  },
-})
-
 // An exceptional frame which is not related to any modules.
 // This may used to inspect a single element in a set of data.
 const pushInspection = (ix: number) => {
   const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
   busy.value = false;
-  stack.value = [..._stack, { id: gensym(), module: _inspectItem(ix), output: null }];
+  stack.value = [..._stack, { id: gensym(), module: genInspector(ix), output: null }];
 };
 
 // Rollback to undo N-th frame (= activate "N-1"-th frame)
