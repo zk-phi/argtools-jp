@@ -59,9 +59,8 @@ const pushAnalyzer = (module: AnalyzerModule) => {
   stack.value = [..._stack, { id: gensym(), module, output: null }];
 };
 
-// An exceptional frame which is not related to any modules.
-// This may used to inspect a single element in a set of data.
-const pushInspection = (ix: number) => {
+// Inspect a single element in a MultipleData.
+const inspect = (ix: number) => {
   const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
   busy.value = false;
   stack.value = [..._stack, { id: gensym(), module: genInspector(ix), output: null }];
@@ -143,7 +142,7 @@ const Frame = ({ frame, ix }: { frame: StackFrame, ix: number }) => {
   const isBusy = isActive && busy.value;
 
   const onUpdate = useMemo(() => stateReporterForId(frame.id), [frame.id]);
-  const onInspect = isActive ? pushInspection : undefined;
+  const onInspect = isActive ? inspect : undefined;
 
   return (
     <section key={frame.id}>
