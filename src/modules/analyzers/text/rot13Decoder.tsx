@@ -1,7 +1,7 @@
 import { useState } from "preact/hooks";
-import { useAnalyzer } from "../../../utils/ui/analyzer";
+import { useAnalyzer } from "../../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
-import { textData, multipleData, type Data } from "../../../datatypes";
+import { textData, multipleData, type Data, type MaybeData } from "../../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type !== "text") {
@@ -18,7 +18,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [rotNums, setRotNums] = useState(false);
 
   useAnalyzer(onUpdate, input, (input: Data) => {

@@ -1,6 +1,6 @@
 import { useState, useCallback } from "preact/hooks";
 import { DataViewer } from "./DataViewer";
-import type { Data } from "./datatypes"
+import type { MaybeData } from "./datatypes"
 import type { AnalyzerModule, StateReporter } from "./modules";
 
 export const microAppFactory = ({ importer, analyzer, importerLabel }: {
@@ -9,7 +9,7 @@ export const microAppFactory = ({ importer, analyzer, importerLabel }: {
   importerLabel: string,
 }) => {
   const Component = () => {
-    const [importerOutput, setImporterOutput] = useState<Data | null>(null);
+    const [importerOutput, setImporterOutput] = useState<MaybeData>(null);
     const [importerBusy, setImporterBusy] = useState(false);
 
     const onUpdateImporter = useCallback<StateReporter>(state => {
@@ -19,7 +19,7 @@ export const microAppFactory = ({ importer, analyzer, importerLabel }: {
       setImporterBusy(!!state.busy);
     }, []);
 
-    const [analyzerOutput, setAnalyzerOutput] = useState<Data | null>(null);
+    const [analyzerOutput, setAnalyzerOutput] = useState<MaybeData>(null);
     const [analyzerBusy, setAnalyzerBusy] = useState(false);
 
     const onUpdateAnalyzer = useCallback<StateReporter>((state) => {

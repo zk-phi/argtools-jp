@@ -1,9 +1,9 @@
 import { useState, useMemo } from "preact/hooks";
 import { histogram } from "../../../utils/string";
 import { cacheAsync } from "../../../utils/cache";
-import { useAnalyzer } from "../../../utils/ui/analyzer";
+import { useAnalyzer } from "../../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
-import { textData, multipleData, type Data } from "../../../datatypes";
+import { textData, multipleData, type Data, type MaybeData } from "../../../datatypes";
 
 const packages = {
   morse: cacheAsync(() => import("../../../utils/text/morse")),
@@ -21,7 +21,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const hist = useMemo(() => {
     if (!input || input.type !== "text") {
       return null;

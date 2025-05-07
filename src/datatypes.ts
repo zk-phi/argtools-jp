@@ -26,6 +26,11 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
   });
 };
 
+export type ErrorData = { type: "error", id: number, value: string };
+export const errorData = (value: string): ErrorData => (
+  { type: "error", id: gensym(), value }
+);
+
 export type TextData = { type: "text", id: number, label: string, value: string };
 export const textData = (value: string, label: string): TextData => (
   { type: "text", id: gensym(), label, value }
@@ -70,3 +75,4 @@ export const multipleData = (datum: AtomicData[]): Data => {
 };
 
 export type Data = AtomicData | MultipleData | WordlistData;
+export type MaybeData = Data | ErrorData | null;

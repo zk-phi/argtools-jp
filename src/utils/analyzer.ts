@@ -1,17 +1,20 @@
 import { useEffect, useMemo } from "preact/hooks";
-import { defer } from "./defer";
-import { textData, type Data } from "../../datatypes";
-import type { StateReporter } from "../../modules";
+import { defer } from "./ui/defer";
+import { errorData, type Data, type MaybeData } from "../datatypes";
+import type { StateReporter } from "../modules";
 
 // thin wrappers for analyzer modules to handle errors and manage busy state
 
 export const runAnalyzer = async (
   reporter: StateReporter,
-  input: Data | null,
-  analyzer: (input: Data) => Promise<Data | null> | Data | null,
+  input: MaybeData,
+  analyzer: (input: Data) => Promise<MaybeData> | MaybeData,
 ) => {
   if (!input) {
     return reporter({ output: null });
+  }
+  if (input.type === "error") {
+    return reporter({ output: input });
   }
   reporter({ busy: true });
   await defer(); // wait for the UI to update
@@ -19,7 +22,7 @@ export const runAnalyzer = async (
     reporter({ output: await analyzer(input) });
   } catch (e: any) {
     reporter({
-      output: textData("message" in e ? e.message : "Unexpected error.", "エラー"),
+      output: errorData("message" in e ? e.message : "Unexpected error."),
     });
   }
 };
@@ -27,7 +30,7 @@ export const runAnalyzer = async (
 // Like runAnalyzer but accepts null as input
 export const withReporter = async (
   reporter: StateReporter,
-  cb: () => Promise<Data | null> | Data | null,
+  cb: () => Promise<MaybeData> | MaybeData,
 ) => {
   reporter({ busy: true });
   await defer(); // wait for the UI to update
@@ -35,15 +38,15 @@ export const withReporter = async (
     reporter({ output: await cb() });
   } catch (e: any) {
     reporter({
-      output: textData("message" in e ? e.message : "Unexpected error.", "エラー"),
+      output: errorData("message" in e ? e.message : "Unexpected error."),
     });
   }
 }
 
 export const useAnalyzer = (
   reporter: StateReporter,
-  input: Data | null,
-  analyzer: (input: Data) => Promise<Data | null> | Data | null,
+  input: MaybeData,
+  analyzer: (input: Data) => Promise<MaybeData> | MaybeData,
   deps: any[],
 ) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies:

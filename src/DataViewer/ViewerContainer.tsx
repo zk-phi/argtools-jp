@@ -32,8 +32,8 @@ export const ViewerContainer = ({ children, label, caption, busy }: {
       </div>
     )}
     <div>{children}</div>
-    <div>
-      <small>{caption}</small>
+    <div style={{ fontSize: "smaller" }}>
+      {caption}
     </div>
     {busy && (
       <div style={busyOverlayStyle}>

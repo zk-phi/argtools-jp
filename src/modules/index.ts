@@ -1,7 +1,7 @@
 import type { FunctionComponent, ComponentChildren } from "preact";
-import type { Data } from "../datatypes";
+import type { MaybeData, Data } from "../datatypes";
 
-export type StateReporter = (state: { busy?: boolean, output?: Data | null }) => void;
+export type StateReporter = (state: { busy?: boolean, output?: MaybeData }) => void;
 
 export type AnalyzerModule = {
   // An user-friendly description.
@@ -15,5 +15,5 @@ export type AnalyzerModule = {
   detect?: (suspicious: Data) => string | null,
   //    input ... The last output from the previous module.
   // onUpdate ... A function to report output.
-  component: FunctionComponent<{ onUpdate: StateReporter, input: Data | null }>,
+  component: FunctionComponent<{ onUpdate: StateReporter, input: MaybeData }>,
 };

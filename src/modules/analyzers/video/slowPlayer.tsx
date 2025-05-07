@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "preact/hooks";
-import { runAnalyzer } from "../../../utils/ui/analyzer";
+import { runAnalyzer } from "../../../utils/analyzer";
 import { useDebouncedValue } from "../../../utils/ui/debounce";
-import type { Data } from "../../../datatypes";
+import type { Data, MaybeData } from "../../../datatypes";
 import type { AnalyzerModule, StateReporter } from "../../";
 
 const detect = (data: Data) => {
@@ -11,7 +11,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [speed, setSpeed] = useState(1.00);
   const debouncedSpeed = useDebouncedValue(speed, 100);
   const [sourceProps, setSourceProps] = useState<{ src: string, type: string } | null>(null);

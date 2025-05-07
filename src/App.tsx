@@ -5,7 +5,7 @@ import { analyzerCategories, analyzers } from "./modules/analyzers";
 import { importers } from "./modules/importers";
 import { genInspector } from "./modules/inspector";
 import { DataViewer } from "./DataViewer";
-import type { Data } from "./datatypes";
+import type { MaybeData } from "./datatypes";
 import type { AnalyzerModule, StateReporter } from "./modules";
 
 /* ---- STATE */
@@ -15,7 +15,7 @@ type StackFrame = {
   id: number,
   // Latest output from the module. Updated by "stateReporter" fn defined later.
   // Note that only the frame on top of the stack can be updated.
-  output: Data | null,
+  output: MaybeData,
   module: AnalyzerModule,
 };
 
@@ -40,7 +40,7 @@ const stateReporterForId = (id: number): StateReporter => (state) => {
 // List of suggestions for the last output.
 const suggestions = computed<{ reason: string, module: AnalyzerModule }[]>(() => {
   const suspicious = stack.value[stack.value.length - 1]?.output;
-  if (suspicious) {
+  if (suspicious && suspicious.type !== "error") {
     return analyzers.map(analyzer => {
       const reason = analyzer.detect?.(suspicious) ?? null;
       if (reason) {

@@ -1,3 +1,4 @@
+import { ErrorViewer } from "./ErrorViewer";
 import { TextViewer } from "./TextViewer";
 import { IntegerViewer } from "./IntegerViewer";
 import { FloatViewer } from "./FloatViewer";
@@ -7,7 +8,7 @@ import { ImageViewer } from "./ImageViewer";
 import { RawBinaryViewer } from "./RawBinaryViewer";
 import { VideoViewer } from "./VideoViewer";
 import { WordlistViewer } from "./WordlistViewer";
-import type { Data, BinaryData } from "../datatypes";
+import type { MaybeData, BinaryData } from "../datatypes";
 
 const BinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => (
   data.value.mime.startsWith("image") ? (
@@ -22,11 +23,15 @@ const BinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => (
 );
 
 export const DataViewer = ({ data, busy, onInspect }: {
-  data: Data,
+  data: MaybeData,
   onInspect?: (ix: number) => void,
   busy?: boolean,
 }) => (
-  data.type === "text" ? (
+  !data ? (
+    null
+  ) : data.type === "error" ? (
+    <ErrorViewer data={data} busy={busy} />
+  ) : data.type === "text" ? (
     <TextViewer data={data} busy={busy} />
   ) : data.type === "integer" ? (
     <IntegerViewer data={data} busy={busy} />

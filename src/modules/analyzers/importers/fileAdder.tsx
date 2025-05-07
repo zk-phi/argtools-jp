@@ -1,9 +1,9 @@
 import type { JSX } from "preact";
 import { useCallback } from "preact/hooks";
 import { readFileAsBuffer } from "../../../utils/file";
-import { withReporter } from "../../../utils/ui/analyzer";
+import { withReporter } from "../../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
-import { binaryData, multipleData, type Data, type AtomicData } from "../../../datatypes";
+import { binaryData, multipleData, type MaybeData, type Data, type AtomicData } from "../../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type !== "wordlist") {
@@ -12,7 +12,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const onChange = useCallback((e: JSX.TargetedMouseEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
     withReporter(onUpdate, async () => {
@@ -28,6 +28,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
       );
       if (!input) {
         return multipleData(datum);
+      }
+      if (input.type === "error") {
+        return input;
       }
       if (input.type === "wordlist") {
         throw new Error("UNEXPECTED: wordlist given");

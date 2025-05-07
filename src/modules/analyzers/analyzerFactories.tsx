@@ -1,13 +1,13 @@
 import type { ComponentChildren } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { ellipsis } from "../../utils/string";
-import { useAnalyzer, withReporter } from "../../utils/ui/analyzer";
+import { useAnalyzer, withReporter } from "../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../";
-import { multipleData, type Data, type AtomicData } from "../../datatypes";
+import { multipleData, type MaybeData, type Data, type AtomicData } from "../../datatypes";
 
 // --- simple analyzers (Data -> Data)
 
-type AnalyzerFunction = (input: Data) => Promise<Data | null> | Data | null;
+type AnalyzerFunction = (input: Data) => Promise<MaybeData> | MaybeData;
 
 type SimpleAnalyzerFactoryProps = {
   label: string,
@@ -22,7 +22,7 @@ export const simpleAnalyzerFactory = (
   label,
   detect,
   description,
-  component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+  component: ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
     useAnalyzer(onUpdate, input, analyze, []);
     return null;
   },
@@ -42,7 +42,7 @@ type SimpleTextDecoratorFactoryProps = {
 
 export const simpleTextDecoderFactory = (
   { label, hint, pattern, description, decoder }: SimpleTextDecoratorFactoryProps,
-) => {
+): AnalyzerModule => {
   const detectorRegex = new RegExp(pattern, "m");
   const matcherRegex = new RegExp(pattern, "mg");
   return simpleAnalyzerFactory({
@@ -81,7 +81,7 @@ type UrlExtractorFactoryProps = {
 
 export const urlExtractorFactory = (
   { label, hint, pattern, description, urlConstructor }: UrlExtractorFactoryProps,
-) => {
+): AnalyzerModule => {
   const detectorRegex = new RegExp(pattern, "m");
   const matcherRegex = new RegExp(pattern, "mg");
   return {
@@ -90,7 +90,7 @@ export const urlExtractorFactory = (
     detect: (suspicious: Data) => (
       suspicious.type === "text" && suspicious.value.match(detectorRegex) ? hint : null
     ),
-    component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+    component: ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
       const [urls, setUrls] = useState<string[]>([]);
       useEffect(() => {
         withReporter(onUpdate, () => {

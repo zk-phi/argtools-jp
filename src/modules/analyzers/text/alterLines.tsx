@@ -1,7 +1,7 @@
 import { useState, } from "preact/hooks";
-import { useAnalyzer } from "../../../utils/ui/analyzer";
+import { useAnalyzer } from "../../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
-import { textData, type Data } from "../../../datatypes";
+import { textData, type Data, type MaybeData } from "../../../datatypes";
 
 const asciiStrMatcher = /^[\x00-\x7F]{30,}/;
 const detect = (data: Data) => {
@@ -17,7 +17,7 @@ const _alterText = (str: string, cols: number): string => {
   return altered ?? "";
 };
 
-const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [columns, setColumns] = useState(5);
 
   useAnalyzer(onUpdate, input, (input: Data) => {
