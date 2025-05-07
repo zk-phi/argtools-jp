@@ -202,6 +202,11 @@ const Suggestions = () => (
 
 export const App = () => (
   <>
+    <p>各種 ARG、高難易度謎解き、CTF などで使えそうな解析ツールの集合体です。</p>
+    <p>
+      解析したい暗号やデータを読ませると、
+      使えそうなツールを自動で選定して解読をサポートします。
+    </p>
     <AnalyzersList />
     <ImporterSelector />
     {stack.value.map((frame, ix) => (
