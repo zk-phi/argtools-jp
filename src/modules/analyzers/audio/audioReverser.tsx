@@ -28,6 +28,7 @@ const analyze = async (input: Data) => {
 
 export const audioReverser = simpleAnalyzerFactory({
   label: "逆再生する",
+  app: "/argtools-jp/apps/reverser",
   detect,
   analyze,
 });
