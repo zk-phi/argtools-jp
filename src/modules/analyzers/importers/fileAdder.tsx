@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { useCallback } from "preact/hooks";
 import { readFileAsBuffer } from "../../../utils/file";
-import { withReporterAsync } from "../../../utils/ui/useAnalyzerEffect";
+import { withReporter } from "../../../utils/ui/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../../datatypes";
 
@@ -15,7 +15,7 @@ const detect = (data: Data) => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const onChange = useCallback((e: JSX.TargetedMouseEvent<HTMLInputElement>) => {
     const files = e.currentTarget.files;
-    withReporterAsync(onUpdate, async () => {
+    withReporter(onUpdate, async () => {
       if (!files || files.length === 0) {
         throw new Error("ファイルが選択されていません");
       }

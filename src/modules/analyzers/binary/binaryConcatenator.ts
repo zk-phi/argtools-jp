@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { binaryData, type Data, type BinaryBody } from "../../../datatypes";
 
 const detect = (data: Data) => {
@@ -21,7 +21,7 @@ const analyze = async (input: Data) => {
   return await binaryData(merged, "結合されたバイナリ");
 }
 
-export const binaryConcatenator = asyncSimpleAnalyzerFactory({
+export const binaryConcatenator = simpleAnalyzerFactory({
   label: "結合する",
   detect,
   analyze,

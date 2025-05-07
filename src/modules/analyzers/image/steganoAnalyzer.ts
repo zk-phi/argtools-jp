@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { multipleData, binaryData, type Data } from "../../../datatypes";
 
@@ -69,7 +69,7 @@ const analyze = async (input: Data) => {
   ]);
 };
 
-export const steganoAnalyzer = asyncSimpleAnalyzerFactory({
+export const steganoAnalyzer = simpleAnalyzerFactory({
   label: "画像ステガノグラフィ検査",
   detect,
   analyze,

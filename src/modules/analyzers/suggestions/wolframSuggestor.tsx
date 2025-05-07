@@ -13,7 +13,7 @@ const integrateExample = "https://www.wolframalpha.com/input?i2d=true&i=Integrat
 
 const component = () => (
   <>
-    <p>高度な数学の計算をしたり、グラフを表示したりできるツールです。</p>
+    <p>Wolfram が運営する、高度な数学の計算や、グラフの描画などができるサイトです。</p>
     <ul>
       <li>
         <a href="https://www.wolframalpha.com/" target="_blank" rel="noreferrer">

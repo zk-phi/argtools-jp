@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { binaryData, type Data } from "../../../datatypes";
 
@@ -26,7 +26,7 @@ const analyze = async (input: Data) => {
   return await binaryData(new Uint8Array(wavBuffer), input.label);
 }
 
-export const audioMaximizer = asyncSimpleAnalyzerFactory({
+export const audioMaximizer = simpleAnalyzerFactory({
   label: "音量を最大化",
   detect,
   analyze,

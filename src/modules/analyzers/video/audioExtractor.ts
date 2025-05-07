@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { binaryData, type Data } from "../../../datatypes";
 
@@ -25,7 +25,7 @@ const analyze = async (input: Data) => {
   return await binaryData(new Uint8Array(wavBuffer), "抽出された音声");
 };
 
-export const audioExtractor = asyncSimpleAnalyzerFactory({
+export const audioExtractor = simpleAnalyzerFactory({
   label: "音声データを抽出",
   detect,
   analyze,

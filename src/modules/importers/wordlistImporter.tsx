@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { useState, useCallback } from "preact/hooks";
 import { wordlistData, type WordlistBody } from "../../datatypes";
-import { withReporterAsync } from "../../utils/ui/useAnalyzerEffect";
+import { withReporter } from "../../utils/ui/analyzer";
 import { cacheAsync } from "../../utils/cache";
 import type { AnalyzerModule, StateReporter } from "../";
 
@@ -97,7 +97,7 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
   const onChange = useCallback((e: JSX.TargetedEvent<HTMLSelectElement, Event>) => {
     const key = e.currentTarget.value;
     setDatasetKey(key);
-    withReporterAsync(onUpdate, async () => {
+    withReporter(onUpdate, async () => {
       const dataset = datasets[key];
       if (!dataset) {
         return null;
@@ -131,17 +131,13 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
       {datasetKey && (
         <>
           <p>
-            <small>
-              出典：
-              <a href={datasets[datasetKey].url} target="_blank" rel="noreferrer">
-                {datasets[datasetKey].license}
-              </a>
-            </small>
+            出典：
+            <a href={datasets[datasetKey].url} target="_blank" rel="noreferrer">
+              {datasets[datasetKey].license}
+            </a>
           </p>
           <p>
-            <small>
-              ※データを転載する際は、上記の利用条件にご注意ください。
-            </small>
+            ※ データを転載する際は、上記の利用条件にご注意ください。
           </p>
         </>
       )}

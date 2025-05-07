@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "preact/hooks";
-import { withReporter } from "../../../utils/ui/useAnalyzerEffect";
+import { runAnalyzer } from "../../../utils/ui/analyzer";
 import { useDebouncedValue } from "../../../utils/ui/debounce";
 import type { Data } from "../../../datatypes";
 import type { AnalyzerModule, StateReporter } from "../../";
@@ -18,11 +18,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    withReporter(onUpdate, () => {
-      setSourceProps(null);
-      if (!input) {
-        return null;
-      }
+    setSourceProps(null);
+    runAnalyzer(onUpdate, input, (input: Data) => {
       if (input.type !== "binary" || !input.value.mime.startsWith("video")) {
         throw new Error("UNEXPECTED: not a video.");
       }

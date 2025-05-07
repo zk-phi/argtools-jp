@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import { useDebouncedValue } from "../../../utils/ui/debounce";
-import { useAnalyzerEffect } from "../../../utils/ui/useAnalyzerEffect";
+import { useAnalyzer } from "../../../utils/ui/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
 import { textData, multipleData, type Data, type AtomicData } from "../../../datatypes";
 
@@ -44,10 +44,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   const [encoding, setEncoding] =  useState("ascii");
   const debouncedMinLength = useDebouncedValue(minLength, 2000);
 
-  useAnalyzerEffect(onUpdate, () => {
-    if (!input) {
-      return null;
-    }
+  useAnalyzer(onUpdate, input, (input: Data) => {
     if (input.type !== "binary") {
       throw new Error("UNEXPECTED: not a binary.");
     }
@@ -71,7 +68,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
       throw new Error("読み取れる部分はありませんでした😭");
     }
     return multipleData(datum);
-  }, [input, debouncedMinLength, encoding]);
+  }, [debouncedMinLength, encoding]);
 
   return (
     <>

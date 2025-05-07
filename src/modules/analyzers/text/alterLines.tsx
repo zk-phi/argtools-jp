@@ -1,5 +1,5 @@
 import { useState, } from "preact/hooks";
-import { useAnalyzerEffect } from "../../../utils/ui/useAnalyzerEffect";
+import { useAnalyzer } from "../../../utils/ui/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
 import { textData, type Data } from "../../../datatypes";
 
@@ -20,15 +20,12 @@ const _alterText = (str: string, cols: number): string => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const [columns, setColumns] = useState(5);
 
-  useAnalyzerEffect(onUpdate, () => {
-    if (!input) {
-      return null;
-    }
+  useAnalyzer(onUpdate, input, (input: Data) => {
     if (input.type !== "text") {
       throw new Error("ERROR: unexpedted data type.");
     }
     return textData(_alterText(input.value, columns), input.label);
-  }, [columns, input]);
+  }, [columns]);
 
   return (
     <fieldset>

@@ -1,5 +1,5 @@
-import { useEffect } from "preact/hooks";
-import { textData, type Data } from "../datatypes";
+import { useAnalyzer } from "../utils/ui/analyzer";
+import type { Data } from "../datatypes";
 import type { AnalyzerModule, StateReporter } from "../modules";
 
 // A higher-order module to extract an element from a MultipleData.
@@ -7,13 +7,12 @@ export const genInspector = (ix: number): AnalyzerModule => ({
   label: "この項目を精査",
   detect: () => null,
   component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
-    useEffect(() => {
+    useAnalyzer(onUpdate, input, (input: Data) => {
       if (!input || input.type !== "multiple" || !input.datum[ix]) {
-        onUpdate({ output: textData("UNEXPECTED: no inspection target.", "エラー") });
-      } else {
-        onUpdate({ output: input.datum[ix] });
+        throw new Error("UNEXPECTED: no inspection target.");
       }
-    }, [onUpdate, ix, input]);
+      return input.datum[ix];
+    }, [ix]);
     return null;
   },
 })

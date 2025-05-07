@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { mapRange } from "../../../utils/array/range";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../../datatypes";
@@ -35,7 +35,7 @@ const analyze = async (input: Data) => {
   return multipleData(datum);
 };
 
-export const waveformRenderer = asyncSimpleAnalyzerFactory({
+export const waveformRenderer = simpleAnalyzerFactory({
   label: "波形を描画",
   detect,
   analyze,

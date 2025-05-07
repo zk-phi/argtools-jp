@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { useAnalyzerEffect } from "../../../utils/ui/useAnalyzerEffect";
+import { useAnalyzer } from "../../../utils/ui/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
 import { textData, type Data } from "../../../datatypes";
 
@@ -21,10 +21,7 @@ const detect = (data: Data) => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const [n, setN] = useState(13);
 
-  useAnalyzerEffect(onUpdate, () => {
-    if (!input) {
-      return null;
-    }
+  useAnalyzer(onUpdate, input, (input: Data) => {
     if (input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }
@@ -42,7 +39,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
     const decoded = decodedCharCodes.map(ch => String.fromCharCode(ch)).join("");
     const data = textData(decoded, `シーザー暗号（${n}）のデコード結果`);
     return data;
-  }, [input, n]);
+  }, [n]);
 
   return (
     <fieldset>

@@ -1,115 +1,71 @@
 import type { ComponentChildren } from "preact";
 import { useState, useEffect } from "preact/hooks";
 import { ellipsis } from "../../utils/string";
-import { useAsyncAnalyzerEffect, useAnalyzerEffect, withReporter } from "../../utils/ui/useAnalyzerEffect";
+import { useAnalyzer, withReporter } from "../../utils/ui/analyzer";
 import type { AnalyzerModule, StateReporter } from "../";
 import { multipleData, type Data, type AtomicData } from "../../datatypes";
 
 // --- simple analyzers (Data -> Data)
 
-type AnalyzerFunction = (input: Data) => Data | null;
-type AsyncAnalyzerFunction = (input: Data) => Promise<Data | null>;
+type AnalyzerFunction = (input: Data) => Promise<Data | null> | Data | null;
 
 type SimpleAnalyzerFactoryProps = {
   label: string,
   detect: (suspicious: Data) => string | null,
   analyze: AnalyzerFunction,
-  view?: ComponentChildren,
+  description?: ComponentChildren,
 };
 
-type AsyncSimpleAnalyzerFactoryProps =
-  Omit<SimpleAnalyzerFactoryProps, "analyze"> & { analyze: AsyncAnalyzerFunction };
-
-export const asyncSimpleAnalyzerFactory = (
-  { label, detect, analyze, view }: AsyncSimpleAnalyzerFactoryProps,
-): AnalyzerModule => ({
-  label,
-  detect,
-  component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
-    useAsyncAnalyzerEffect(onUpdate, () => (
-      input ? analyze(input) : Promise.resolve(null)
-    ), [analyze, input]);
-    return view;
-  },
-});
-
 export const simpleAnalyzerFactory = (
-  { label, detect, analyze, view }: SimpleAnalyzerFactoryProps,
+  { label, detect, description, analyze }: SimpleAnalyzerFactoryProps,
 ): AnalyzerModule => ({
   label,
   detect,
+  description,
   component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
-    useAnalyzerEffect(onUpdate, () => (
-      input ? analyze(input) : null
-    ), [analyze, input]);
-    return view;
+    useAnalyzer(onUpdate, input, analyze, []);
+    return null;
   },
 });
 
 // ---- simple text extractors {regex, string -> Data}
 
-type TextDecoder = (str: string, label: string) => AtomicData;
-type AsyncTextDecoder = (str: string, label: string) => Promise<AtomicData>;
+type TextDecoder = (str: string, label: string) => AtomicData | Promise<AtomicData>;
 
 type SimpleTextDecoratorFactoryProps = {
   label: string,
   hint: string,
   pattern: RegExp | string,
-  view?: ComponentChildren,
+  description?: ComponentChildren,
   decoder: TextDecoder,
 };
 
-type AsyncSimpleTextDecoratorFactoryProps =
-  Omit<SimpleTextDecoratorFactoryProps, "decoder"> & { decoder: AsyncTextDecoder };
-
-const _simpleTextDecoderDetector = (pattern: RegExp | string, hint: string) => {
-  const detectorRegex = new RegExp(pattern, "m");
-  return (suspicious: Data) => (
-    suspicious.type === "text" && suspicious.value.match(detectorRegex) ? hint : null
-  );
-};
-
-const _asyncSimpleTextDecoderAnalyzer = (
-  pattern: RegExp | string,
-  decoder: AsyncTextDecoder,
-) => {
-  const matcherRegex = new RegExp(pattern, "mg");
-  const analyzer: AsyncAnalyzerFunction = async (input: Data) => {
-    if (input.type !== "text") {
-      throw new Error("UNEXPECTED: input is not a text.");
-    }
-    const matches = input.value.match(matcherRegex);
-    if (!matches) {
-      throw new Error("UNEXPECTED: no matches.");
-    }
-    const datum: AtomicData[] = await Promise.all(
-      matches.map(str => (
-        decoder(str, `${ellipsis(str, 8)} のデコード結果`)
-      ))
-    );
-    return multipleData(datum);
-  };
-  return analyzer;
-};
-
-export const asyncSimpleTextDecoderFactory = (
-  { label, hint, pattern, view, decoder }: AsyncSimpleTextDecoratorFactoryProps,
-) => asyncSimpleAnalyzerFactory({
-  label,
-  view,
-  detect: _simpleTextDecoderDetector(pattern, hint),
-  analyze: _asyncSimpleTextDecoderAnalyzer(pattern, decoder)
-});
-
 export const simpleTextDecoderFactory = (
-  { label, hint, pattern, view, decoder }: SimpleTextDecoratorFactoryProps,
-) => asyncSimpleTextDecoderFactory({
-  label,
-  hint,
-  pattern,
-  view,
-  decoder: async (str: string, label: string) => decoder(str, label),
-});
+  { label, hint, pattern, description, decoder }: SimpleTextDecoratorFactoryProps,
+) => {
+  const detectorRegex = new RegExp(pattern, "m");
+  const matcherRegex = new RegExp(pattern, "mg");
+  return simpleAnalyzerFactory({
+    label,
+    description,
+    detect: (suspicious: Data) => (
+      suspicious.type === "text" && suspicious.value.match(detectorRegex) ? hint : null
+    ),
+    analyze: async (input: Data) => {
+      if (input.type !== "text") {
+        throw new Error("UNEXPECTED: input is not a text.");
+      }
+      const matches = input.value.match(matcherRegex);
+      if (!matches) {
+        throw new Error("UNEXPECTED: no matches.");
+      }
+      const datum: AtomicData[] = await Promise.all(
+        matches.map(str => decoder(str, `${ellipsis(str, 8)} のデコード結果`))
+      );
+      return multipleData(datum);
+    },
+  });
+};
 
 // ---- url extractors {regex, string -> string}
 
@@ -119,38 +75,41 @@ type UrlExtractorFactoryProps = {
   label: string,
   hint: string,
   pattern: RegExp | string,
-  view?: ComponentChildren,
+  description?: ComponentChildren,
   urlConstructor: UrlConstructor,
 };
 
-const _urlExtractorComponent = (
-  pattern: RegExp | string,
-  urlConstructor: UrlConstructor,
-  view?: ComponentChildren,
+export const urlExtractorFactory = (
+  { label, hint, pattern, description, urlConstructor }: UrlExtractorFactoryProps,
 ) => {
+  const detectorRegex = new RegExp(pattern, "m");
   const matcherRegex = new RegExp(pattern, "mg");
-  const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
-    const [urls, setUrls] = useState<string[]>([]);
-    useEffect(() => {
-      withReporter(onUpdate, () => {
-        setUrls([]);
-        if (!input) {
+  return {
+    label,
+    description,
+    detect: (suspicious: Data) => (
+      suspicious.type === "text" && suspicious.value.match(detectorRegex) ? hint : null
+    ),
+    component: ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
+      const [urls, setUrls] = useState<string[]>([]);
+      useEffect(() => {
+        withReporter(onUpdate, () => {
+          setUrls([]);
+          if (!input) {
+            return null;
+          }
+          if (input.type !== "text") {
+            throw new Error("UNEXPECTED: input is not a text.");
+          }
+          const matches = input.value.match(matcherRegex);
+          if (!matches) {
+            throw new Error("UNEXPECTED: no matches.");
+          }
+          setUrls(matches.map(urlConstructor));
           return null;
-        }
-        if (input.type !== "text") {
-          throw new Error("UNEXPECTED: input is not a text.");
-        }
-        const matches = input.value.match(matcherRegex);
-        if (!matches) {
-          throw new Error("UNEXPECTED: no matches.");
-        }
-        setUrls(matches.map(urlConstructor));
-        return null;
-      });
-    }, [input, onUpdate, urlConstructor]);
-    return (
-      <>
-        {view}
+        });
+      }, [input, onUpdate, urlConstructor]);
+      return (
         <ul>
           {urls.map(url => (
             <li key={url}>
@@ -158,16 +117,7 @@ const _urlExtractorComponent = (
             </li>
           ))}
         </ul>
-      </>
-    );
+      );
+    },
   };
-  return component;
-}
-
-export const urlExtractorFactory = (
-  { label, hint, pattern, view, urlConstructor }: UrlExtractorFactoryProps,
-) => ({
-  label,
-  detect: _simpleTextDecoderDetector(pattern, hint),
-  component: _urlExtractorComponent(pattern, urlConstructor, view),
-});
+};

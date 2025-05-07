@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks";
-import { useAnalyzerEffect } from "../../../utils/ui/useAnalyzerEffect";
+import { useAnalyzer } from "../../../utils/ui/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
 import { textData, multipleData, type Data } from "../../../datatypes";
 
@@ -21,10 +21,7 @@ const detect = (data: Data) => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data | null }) => {
   const [rotNums, setRotNums] = useState(false);
 
-  useAnalyzerEffect(onUpdate, () => {
-    if (!input) {
-      return null;
-    }
+  useAnalyzer(onUpdate, input, (input: Data) => {
     if (input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }
@@ -60,9 +57,25 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
       textData(atbash, "Atbash のデコード結果"),
     ]);
     return data;
-  }, [input, rotNums]);
+  }, [rotNums]);
 
   return (
+    <fieldset>
+      <legend>オプション</legend>
+      <label>
+        <input
+            type="checkbox"
+            checked={rotNums}
+            onChange={e => setRotNums(e.currentTarget.checked)} />
+        数字にも適用する (ROT18)
+      </label>
+    </fieldset>
+  );
+};
+
+export const rot13Decoder: AnalyzerModule = {
+  label: "ROT13・Atbash 暗号を復号化",
+  description: (
     <>
       <p>
         <small>
@@ -71,25 +84,11 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
         </small>
       </p>
       <ul>
-        <li><small>ROT13 の例「a → n」「b → o」「n → a」</small></li>
-        <li><small>Atbash の例「a → z」「b → y」「z → a」</small></li>
+        <li><small>ROT13 の例：「a → n」「b → o」「n → a」</small></li>
+        <li><small>Atbash の例：「a → z」「b → y」「z → a」</small></li>
       </ul>
-      <fieldset>
-        <legend>オプション</legend>
-        <label>
-          <input
-              type="checkbox"
-              checked={rotNums}
-              onChange={e => setRotNums(e.currentTarget.checked)} />
-          数字にも適用する (ROT18)
-        </label>
-      </fieldset>
     </>
-  );
-};
-
-export const rot13Decoder: AnalyzerModule = {
-  label: "ROT13・Atbash 暗号を復号化",
+  ),
   detect,
   component,
 };

@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { mapRange } from "../../../utils/array/range";
 import { cacheAsync } from "../../../utils/cache";
 import { binaryData, multipleData, type AtomicData, type Data } from "../../../datatypes";
@@ -34,7 +34,7 @@ const analyze = async (input: Data) => {
   return multipleData(datum);
 };
 
-export const spectrogramRenderer = asyncSimpleAnalyzerFactory({
+export const spectrogramRenderer = simpleAnalyzerFactory({
   label: "スペクトログラム解析",
   detect,
   analyze,

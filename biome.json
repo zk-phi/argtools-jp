@@ -33,13 +33,9 @@
           "level": "error",
           "options": {
             "hooks": [{
-              "name": "useAnalyzerEffect",
-              "closureIndex": 1,
-              "dependenciesIndex": 2
-            }, {
-              "name": "useAsyncAnalyzerEffect",
-              "closureIndex": 1,
-              "dependenciesIndex": 2
+              "name": "useAnalyzer",
+              "closureIndex": 2,
+              "dependenciesIndex": 3
             }]
           }
         }

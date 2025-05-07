@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { binaryData, type Data } from "../../../datatypes";
 
@@ -26,7 +26,7 @@ const analyze = async (input: Data) => {
   return await binaryData(expanded, "解凍されたデータ");
 };
 
-export const gzipDecompressor = asyncSimpleAnalyzerFactory({
+export const gzipDecompressor = simpleAnalyzerFactory({
   label: "Gzip ファイルを解凍",
   detect,
   analyze,

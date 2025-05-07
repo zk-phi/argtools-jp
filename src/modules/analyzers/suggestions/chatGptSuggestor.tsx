@@ -10,7 +10,7 @@ const detect = (data: Data) => {
 
 const component = () => (
   <>
-    <p>けっきょくこいつがすごい。</p>
+    <p>OpenAI が運営する AI チャットサービスです。けっきょくこいつがすごい。</p>
     <ul>
       <li>
         <a href="https://chatgpt.com" target="_blank" rel="noreferrer">

@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../../datatypes";
 
 const detect = (data: Data) => {
@@ -52,7 +52,7 @@ const analyze = async (input: Data) => {
   return multipleData(datum);
 }
 
-export const bitopBinary = asyncSimpleAnalyzerFactory({
+export const bitopBinary = simpleAnalyzerFactory({
   label: "ビット演算で合成",
   detect,
   analyze,

@@ -1,6 +1,6 @@
 import { useState, } from "preact/hooks";
 import { cacheAsync } from "../../../utils/cache";
-import { useAsyncAnalyzerEffect } from "../../../utils/ui/useAnalyzerEffect";
+import { useAnalyzer } from "../../../utils/ui/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
 import { textData, multipleData, type Data } from "../../../datatypes";
 import type { Encoding } from "../../../utils/text/mojibake";
@@ -30,10 +30,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
   const [fromEncoding, setFromEncoding] = useState<Encoding>("cp932");
   const [toEncoding, setToEncoding] = useState<Encoding>("utf8");
 
-  useAsyncAnalyzerEffect(onUpdate, async () => {
-    if (!input) {
-      return null;
-    }
+  useAnalyzer(onUpdate, input, async (input: Data) => {
     if (input.type !== "text") {
       throw new Error("UNEXPECTED: not a text.");
     }
@@ -46,7 +43,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: Data |
       )),
     ]);
     return data;
-  }, [fromEncoding, toEncoding, input]);
+  }, [fromEncoding, toEncoding]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { multipleData, textData, type Data, type AtomicData } from "../../../datatypes";
 
@@ -27,7 +27,7 @@ const analyze = async (input: Data) => {
   return multipleData(datum);
 };
 
-export const exifExtractor = asyncSimpleAnalyzerFactory({
+export const exifExtractor = simpleAnalyzerFactory({
   label: "メタデータ (Exif 等) 抽出",
   detect,
   analyze,

@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { useState, useCallback } from "preact/hooks";
 import { useDebouncer } from "../../../utils/ui/debounce";
-import { withReporter } from "../../../utils/ui/useAnalyzerEffect";
+import { withReporter } from "../../../utils/ui/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
 import { textData, multipleData, type Data } from "../../../datatypes";
 

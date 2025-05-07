@@ -1,4 +1,4 @@
-import { asyncSimpleTextDecoderFactory } from "../analyzerFactories";
+import { simpleTextDecoderFactory } from "../analyzerFactories";
 import { binaryData } from "../../../datatypes";
 
 const alphabet = "[0-9a-fA-F]";
@@ -11,7 +11,7 @@ const delimited = `(?<=[^0-9A-z]|^)${body}(?=[^0-9A-z]|$)`;
 const allDelimiters = /[^0-9A-z]/g;
 const splitter = /[0-9a-fA-F]{2}/g;
 
-export const textToHexBinary = asyncSimpleTextDecoderFactory({
+export const textToHexBinary = simpleTextDecoderFactory({
   label: "バイナリ（十六進数）を抽出",
   hint: "0-9, A-F の長い英数字列 → 十六進数表記されたバイナリデータかも？",
   pattern: delimited,

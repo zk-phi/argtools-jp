@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../../datatypes";
 
@@ -47,7 +47,7 @@ const analyze = async (input: Data) => {
   return multipleData(datum);
 };
 
-export const dtmfSounder = asyncSimpleAnalyzerFactory({
+export const dtmfSounder = simpleAnalyzerFactory({
   label: "電話のダイヤル音を再現（DTMF）",
   detect,
   analyze,

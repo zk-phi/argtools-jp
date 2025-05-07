@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { binaryData, type Data } from "../../../datatypes";
 
@@ -26,7 +26,7 @@ const analyze = async (input: Data) => {
   return await binaryData(new Uint8Array(wavBuffer), "逆再生された音声");
 }
 
-export const audioReverser = asyncSimpleAnalyzerFactory({
+export const audioReverser = simpleAnalyzerFactory({
   label: "逆再生する",
   detect,
   analyze,

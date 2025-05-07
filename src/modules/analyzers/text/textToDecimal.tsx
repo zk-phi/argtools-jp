@@ -20,10 +20,11 @@ export const textToDecimal = simpleTextDecoderFactory({
   label: "数値（十進数）を抽出",
   hint: "0-9, ., +, - の数字列 → なんらかの数値（十進数）かも？",
   pattern: number,
-  view: (
-    <p>
-      <small>※ 巨大な数値は正しく読み取れない場合があります（オーバーフロー）</small>
-    </p>
+  description: (
+    <>
+      <p>文字列から数値を抽出します。</p>
+      <p>※ 巨大な数値は正しく読み取れない場合があります（オーバーフロー）</p>
+    </>
   ),
   decoder: (str: string, label: string) => (
     numberData(Number(str), label)

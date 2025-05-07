@@ -8,10 +8,10 @@ const delimited = `(?<=[^A-z0-9]|^)${body}(?=[^A-z0-9]|$)`;
 export const plusCodeExtractor = urlExtractorFactory({
   label: "plus code を抽出",
   hint: "????+?? の形の文字列 → plus code かも？",
-  view: (
+  description: (
     <>
-      <p>検出された plus code 候補の一覧です</p>
-      <p>※ plus code は、Google が開発した、短いコードで地球上の地点を特定する技術です。</p>
+      <p>文字列から plus code（地球上の地点を特定する ID）っぽい部分を抽出します。</p>
+      <p>※ plus code は Google が開発し、標準化された技術です</p>
     </>
   ),
   pattern: delimited,

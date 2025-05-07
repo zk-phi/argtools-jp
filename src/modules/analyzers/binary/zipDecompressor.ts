@@ -1,4 +1,4 @@
-import { asyncSimpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../../datatypes";
 
@@ -31,7 +31,7 @@ const analyze = async (input: Data) => {
   return multipleData(datum);
 };
 
-export const zipDecompressor = asyncSimpleAnalyzerFactory({
+export const zipDecompressor = simpleAnalyzerFactory({
   label: "Zip ファイルを解凍",
   detect,
   analyze,
