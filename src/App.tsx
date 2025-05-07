@@ -28,7 +28,7 @@ const stateReporterForId = (id: number): StateReporter => (state) => {
   // This may occur when stateReporter is called from an async analyzer.
   if (id === _stack[_stack.length - 1]?.id) {
     busy.value = !!state.busy;
-    if (state.output) {
+    if (state.output !== undefined) {
       stack.value = [
         ..._stack.slice(0, -1),
         { ..._stack[_stack.length - 1], output: state.output },
