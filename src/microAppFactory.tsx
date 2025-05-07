@@ -41,9 +41,11 @@ export const microAppFactory = ({ importer, analyzer, importerLabel }: {
           <Importer onUpdate={onUpdateImporter} input={null} />
           <Analyzer onUpdate={onUpdateAnalyzer} input={importerOutput} />
         </div>
-        <h3>解析結果</h3>
         {analyzerOutput ? (
-          <DataViewer data={analyzerOutput} busy={analyzerBusy || importerBusy} />
+          <>
+            <h3>解析結果</h3>
+            <DataViewer data={analyzerOutput} busy={analyzerBusy || importerBusy} />
+          </>
         ) : analyzerBusy || importerBusy ? (
           <p>解析中 ...</p>
         ) : (
