@@ -23,6 +23,13 @@ export const onRenderHtml = ({ Page, config }) => {
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script async src="https://www.googletagmanager.com/gtag/js"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7SXT99VRH4');
+        </script>
       </head>
 
       <body>
@@ -40,7 +47,7 @@ export const onRenderHtml = ({ Page, config }) => {
             )
           </div>
           <div>
-            ※ 入力されたデータはすべてローカルで処理され、どこかへ送信されることはありません
+            このツールでは、アクセス数等の集計に Google Analytics (Cookie) を使用しています。
           </div>
         </footer>
       </body>
