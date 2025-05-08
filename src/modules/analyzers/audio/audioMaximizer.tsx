@@ -28,6 +28,10 @@ const analyze = async (input: Data) => {
 
 export const audioMaximizer = simpleAnalyzerFactory({
   label: "音量を最大化",
+  app: "/argtools-jp/apps/maximizer",
+  description: (
+    <p>音が小さい音声データの音量を、割れない範囲で最大化します。</p>
+  ),
   detect,
   analyze,
 });
