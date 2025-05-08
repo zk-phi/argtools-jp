@@ -40,7 +40,6 @@ const _analyzeSpectrum = (channelData: Float32Array, frames: number): Float32Arr
     const bin = new Float32Array(channelData.buffer, byteOffset, fftSize);
     const freqData = fft.createComplexArray();
     fft.realTransform(freqData, bin);
-    fft.completeSpectrum(freqData);
     const realValues = new Float32Array(freqData.length / 2);
     for (let i = 0; i < freqData.length; i += 2) {
       realValues[i / 2] = norm(freqData[i], freqData[i + 1]);
@@ -62,19 +61,19 @@ const _renderAnalyzedData = (analyzedData: Float32Array[], h: number): Promise<B
     // (negative part is the same as positive part but mirrored)
     //
     // (freq)                             (canvas y)
-    //    f *-----------------------------* 0
+    //   2f *-----------------------------*
     //      |                             |
     //      |                             |
-    //    0 |.............................| h
+    //    f |.............................| 0
     //      |                             |
     //      |                             |
-    //   -f *-----------------------------*
+    //    0 *-----------------------------* h
     //
     // f = nyquist freq (samplerate / 2)
     //
     const rescaler = rescaleValueMap1D(
-      { min: 0, max: h - 1 },
-      { min: Math.floor(analyzedData[0]!.length / 2), max: analyzedData[0]!.length - 1 },
+      { min: 0, max: h },
+      { min: Math.floor(analyzedData[0]!.length / 2), max: 0 },
     );
 
     const ctx = canvas.getContext("2d")!;
