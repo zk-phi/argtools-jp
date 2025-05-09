@@ -37,7 +37,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       return ch;
     });
     const decoded = decodedCharCodes.map(ch => String.fromCharCode(ch)).join("");
-    const data = textData(decoded, `シーザー暗号（${n}）のデコード結果`);
+    const data = textData(decoded, `シーザー暗号の復号結果（${n} 文字戻し）`);
     return data;
   }, [n]);
 
@@ -52,7 +52,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
           max={25}
           step={1}
           onInput={e => setN(Number(e.currentTarget.value))} />
-      {n} 文字ずらし
+      {n} 文字戻し（{26 - n} 文字ずらし）
     </fieldset>
   );
 };
