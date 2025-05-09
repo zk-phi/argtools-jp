@@ -38,8 +38,8 @@ export const infernoColorMap = (x: number): [number, number, number] => {
   ];
 
   return [
-    clamp(0, 1, _reduceColorVec(x, r)),
-    clamp(0, 1, _reduceColorVec(x, g)),
-    clamp(0, 1, _reduceColorVec(x, b)),
+    clamp(_reduceColorVec(x, r), 0, 1),
+    clamp(_reduceColorVec(x, g), 0, 1),
+    clamp(_reduceColorVec(x, b), 0, 1),
   ];
 }

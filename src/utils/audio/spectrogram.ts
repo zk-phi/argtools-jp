@@ -1,5 +1,5 @@
 import Fft from "fft.js";
-import { clamp, roundUpToPowerOf2, norm, rescaleValueMap1D } from "../math";
+import { clamp, roundUpToPowerOf2, norm, remap1D } from "../math";
 import { infernoColorMap } from "../image/color";
 
 // TODO: Try window functions for cleaner results ?
@@ -57,32 +57,32 @@ const _renderAnalyzedData = (analyzedData: Float32Array[], h: number): Promise<B
     canvas.width = w;
     canvas.height = h;
 
-    // use positive freq part only
-    // (negative part is the same as positive part but mirrored)
-    //
-    // (freq)                             (canvas y)
-    //   2f *-----------------------------*
-    //      |                             |
-    //      |                             |
-    //    f |.............................| 0
-    //      |                             |
-    //      |                             |
-    //    0 *-----------------------------* h
-    //
-    // f = nyquist freq (samplerate / 2)
-    //
-    const rescaler = rescaleValueMap1D(
-      { min: 0, max: h },
-      { min: Math.floor(analyzedData[0]!.length / 2), max: 0 },
-    );
-
     const ctx = canvas.getContext("2d")!;
     const data = ctx.getImageData(0, 0, w, h);
     const arr = data.data;
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < w; x++) {
-        const value = rescaler(analyzedData[x], y);
-        const clamped = clamp(0, 1, value / 10); // "10" is a hand-picked magic number
+    for (let x = 0; x < w; x++) {
+      // use positive freq part only
+      // (negative part is the same as positive part but mirrored)
+      //
+      // (freq)                             (canvas y)
+      //   2f *-----------------------------*
+      //      |                             |
+      //      |                             |
+      //    f |.............................| 0
+      //      |                             |
+      //      |                             |
+      //    0 *-----------------------------* h
+      //
+      // f = nyquist freq (samplerate / 2)
+      //
+      const remapped = remap1D(
+        analyzedData[x],
+        { min: analyzedData[x]!.length / 2 - 1, max: 0 },
+        { min: 0, max: h - 1 },
+      );
+      for (let y = 0; y < h; y++) {
+        const value = remapped(y);
+        const clamped = clamp(value / 10, 0, 1); // "10" is a hand-picked magic number
         const [r, g, b] = infernoColorMap(clamped);
         const offset = (y * w + x) * 4;
         arr[offset + 0] = Math.ceil(r * 255);
