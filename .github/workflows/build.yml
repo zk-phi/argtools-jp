@@ -20,3 +20,19 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist/client
+  update-sitemap:
+    needs: build-and-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: cicirello/generate-sitemap@v1
+        with:
+          base-url-path: "https://zk-phi.github.io/argtools-jp/"
+      - run: |
+          git config user.name "Github Actions"
+          git config user.email "action@github.com"
+          git add sitemap.xml
+          git commit -m "[bot] Update sitemap.xml"
+          git push
