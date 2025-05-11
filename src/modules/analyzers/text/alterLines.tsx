@@ -12,7 +12,7 @@ const detect = (data: Data) => {
 };
 
 const _alterText = (str: string, cols: number): string => {
-  const removed = str.replace(/(\r\n|\n|\r)/gm, "");
+  const removed = str.replace(/[\r\n]+/g, "");
   const altered = removed.match(new RegExp(`.{1,${cols}}`, "g"))?.join("\n");
   return altered ?? "";
 };

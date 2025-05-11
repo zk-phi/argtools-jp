@@ -31,8 +31,8 @@ type SimpleTextDecoratorFactoryProps = Omit<SimpleAnalyzerFactoryProps, "detect"
 };
 
 export const simpleTextDecoderFactory = (props: SimpleTextDecoratorFactoryProps): AnalyzerModule => {
-  const detectorRegex = new RegExp(props.pattern, "m");
-  const matcherRegex = new RegExp(props.pattern, "mg");
+  const detectorRegex = new RegExp(props.pattern);
+  const matcherRegex = new RegExp(props.pattern, "g");
   return simpleAnalyzerFactory({
     ...props,
     detect: (suspicious: Data) => (
@@ -65,8 +65,8 @@ type UrlExtractorFactoryProps = Omit<AnalyzerModule, "detect" | "component"> & {
 };
 
 export const urlExtractorFactory = (props: UrlExtractorFactoryProps): AnalyzerModule => {
-  const detectorRegex = new RegExp(props.pattern, "m");
-  const matcherRegex = new RegExp(props.pattern, "mg");
+  const detectorRegex = new RegExp(props.pattern);
+  const matcherRegex = new RegExp(props.pattern, "g");
   return {
     ...props,
     detect: (suspicious: Data) => (
