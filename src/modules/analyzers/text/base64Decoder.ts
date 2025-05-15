@@ -1,6 +1,8 @@
 import { simpleTextDecoderFactory } from "../analyzerFactories";
 import { binaryData } from "../../../datatypes";
 
+// real-word example: https://www.dropbox.com/scl/fi/9jkmn1vr6ujtigzouf0vu/binarycity.txt
+
 const alphabet = "[0-9A-z+/]";
 const nonPaddedBody = `(${alphabet}{4})+`;
 // reject input like "0123a" (5 characters) but accept "-0123-" (delimited with "-")
