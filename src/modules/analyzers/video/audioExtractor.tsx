@@ -27,6 +27,10 @@ const analyze = async (input: Data) => {
 
 export const audioExtractor = simpleAnalyzerFactory({
   label: "音声データを抽出",
+  app: "/argtools-jp/apps/audioextract",
+  description: (
+    <p>※ 長い動画の場合、メモリ不足等で失敗することがあります</p>
+  ),
   detect,
   analyze,
 });
