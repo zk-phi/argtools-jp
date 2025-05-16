@@ -237,7 +237,7 @@ const Suggestions = ({ state: { suggestions, busy, pushAnalyzer } }: {
 
 export const App = () => {
   const state = useMemo(createAppState, []);
-  const { stack, rollback } = state;
+  const { stack } = state;
 
   return (
     <>
