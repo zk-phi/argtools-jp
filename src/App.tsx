@@ -1,4 +1,4 @@
-import { signal, computed } from "@preact/signals";
+import { signal, computed, type Signal } from "@preact/signals";
 import { useMemo } from "preact/hooks";
 import { gensym } from "./utils/gensym";
 import { analyzerCategories, analyzers } from "./modules/analyzers";
@@ -17,61 +17,88 @@ type StackFrame = {
   // Note that only the frame on top of the stack can be updated.
   output: MaybeData,
   module: AnalyzerModule,
+  reporter: StateReporter,
 };
 
-const busy = signal(false);
-const stack = signal<StackFrame[]>([]);
-
-const stateReporterForId = (id: number): StateReporter => (state) => {
-  const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
-  // If the frame is no longer active, do nothing.
-  // This may occur when stateReporter is called from an async analyzer.
-  if (id === _stack[_stack.length - 1]?.id) {
-    busy.value = !!state.busy;
-    if (state.output !== undefined) {
-      stack.value = [
-        ..._stack.slice(0, -1),
-        { ..._stack[_stack.length - 1], output: state.output },
-      ];
-    }
-  }
+type Suggestion = {
+  reason: string,
+  module: AnalyzerModule,
 };
 
-// List of suggestions for the last output.
-const suggestions = computed<{ reason: string, module: AnalyzerModule }[]>(() => {
-  const suspicious = stack.value[stack.value.length - 1]?.output;
-  if (suspicious && suspicious.type !== "error") {
-    return analyzers.map(analyzer => {
-      const reason = analyzer.detect?.(suspicious) ?? null;
-      if (reason) {
-        return { reason, module: analyzer };
+type AppState = {
+  busy: Signal<boolean>,
+  stack: Signal<StackFrame[]>,
+  suggestions: Signal<Suggestion[]>,
+  pushAnalyzer: (module: AnalyzerModule) => void,
+  inspect: (ix: number) => void,
+  rollback: (n: number) => void,
+};
+
+const createAppState = (): AppState => {
+  const busy = signal(false);
+  const stack = signal<StackFrame[]>([]);
+
+  const _stateReporterForId = (id: number): StateReporter => (state) => {
+    const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
+    // If the frame is no longer active, do nothing.
+    // This may occur when stateReporter is called from an async analyzer.
+    if (id === _stack[_stack.length - 1]?.id) {
+      busy.value = !!state.busy;
+      if (state.output !== undefined) {
+        stack.value = [
+          ..._stack.slice(0, -1),
+          { ..._stack[_stack.length - 1], output: state.output },
+        ];
       }
-      return null;
-    }).filter(suggestion => !!suggestion);
-  }
-  return [];
-});
+    }
+  };
 
-// Initialize an analyzer and push on to the stack.
-const pushAnalyzer = (module: AnalyzerModule) => {
-  const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
-  busy.value = false;
-  stack.value = [..._stack, { id: gensym(), module, output: null }];
-};
+  // List of suggestions for the last output.
+  const suggestions = computed<{ reason: string, module: AnalyzerModule }[]>(() => {
+    const suspicious = stack.value[stack.value.length - 1]?.output;
+    if (suspicious && suspicious.type !== "error") {
+      return analyzers.map(analyzer => {
+        const reason = analyzer.detect?.(suspicious) ?? null;
+        if (reason) {
+          return { reason, module: analyzer };
+        }
+        return null;
+      }).filter(suggestion => !!suggestion);
+    }
+    return [];
+  });
 
-// Inspect a single element in a MultipleData.
-const inspect = (ix: number) => {
-  const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
-  busy.value = false;
-  stack.value = [..._stack, { id: gensym(), module: genInspector(ix), output: null }];
-};
+  // Initialize an analyzer and push on to the stack.
+  const pushAnalyzer = (module: AnalyzerModule) => {
+    const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
+    const id = gensym();
+    busy.value = false;
+    stack.value = [
+      ..._stack,
+      { id, module, reporter: _stateReporterForId(id), output: null },
+    ];
+  };
 
-// Rollback to undo N-th frame (= activate "N-1"-th frame)
-const rollback = (n: number) => {
-  const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
-  busy.value = false;
-  stack.value = _stack.slice(0, n);
-};
+  // Inspect a single element in a MultipleData.
+  const inspect = (ix: number) => {
+    const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
+    const id = gensym();
+    busy.value = false;
+    stack.value = [
+      ..._stack,
+      { id, module: genInspector(ix), reporter: _stateReporterForId(id), output: null },
+    ];
+  };
+
+  // Rollback to undo N-th frame (= activate "N-1"-th frame)
+  const rollback = (n: number) => {
+    const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
+    busy.value = false;
+    stack.value = _stack.slice(0, n);
+  };
+
+  return { busy, stack, suggestions, pushAnalyzer, inspect, rollback };
+}
 
 /* ---- UI */
 
@@ -106,7 +133,9 @@ const AnalyzersList = () => (
   </section>
 );
 
-const ImporterSelector = () => (
+const ImporterSelector = ({ state: { stack, pushAnalyzer, rollback } }: {
+  state: AppState,
+}) => (
   stack.value.length === 0 ? (
     <section>
       <hr />
@@ -134,14 +163,18 @@ const ImporterSelector = () => (
   )
 );
 
-const Frame = ({ frame, ix }: { frame: StackFrame, ix: number }) => {
+const Frame = ({ frame, ix, state: { stack, inspect, busy, rollback } }: {
+  frame: StackFrame,
+  ix: number,
+  state: AppState,
+}) => {
   const Component = frame.module.component;
+
   const input = stack.value[ix - 1]?.output ?? null;
 
   const isActive = ix === stack.value.length - 1;
   const isBusy = isActive && busy.value;
 
-  const onUpdate = useMemo(() => stateReporterForId(frame.id), [frame.id]);
   const onInspect = isActive ? inspect : undefined;
 
   return (
@@ -151,7 +184,7 @@ const Frame = ({ frame, ix }: { frame: StackFrame, ix: number }) => {
       {frame.module.description ?? null}
       {/* render inactive (hidden) components too, to keep their state */}
       <div style={isActive ? { marginBottom: "1em" } : { display: "none" }}>
-        <Component onUpdate={onUpdate} input={input} />
+        <Component onUpdate={frame.reporter} input={input} />
       </div>
       {frame.output ? (
         <DataViewer data={frame.output} onInspect={onInspect} busy={isBusy} />
@@ -171,7 +204,9 @@ const Frame = ({ frame, ix }: { frame: StackFrame, ix: number }) => {
   );
 };
 
-const Suggestions = () => (
+const Suggestions = ({ state: { suggestions, busy, pushAnalyzer } }: {
+  state: AppState,
+}) => (
   suggestions.value.length > 0 ? (
     <section>
       <h3>使えそうなコマンド</h3>
@@ -200,18 +235,23 @@ const Suggestions = () => (
   )
 );
 
-export const App = () => (
-  <>
-    <p>各種 ARG、高難易度謎解き、CTF などで使えそうな解析ツールの集合体です。</p>
-    <p>
-      解析したい暗号やデータを読ませると、
-      使えそうなツールを自動で選定して解読をサポートします。
-    </p>
-    <AnalyzersList />
-    <ImporterSelector />
-    {stack.value.map((frame, ix) => (
-      <Frame key={frame.id} frame={frame} ix={ix} />
-    ))}
-    <Suggestions />
-  </>
-);
+export const App = () => {
+  const state = useMemo(createAppState, []);
+  const { stack, rollback } = state;
+
+  return (
+    <>
+      <p>各種 ARG、高難易度謎解き、CTF などで使えそうな解析ツールの集合体です。</p>
+      <p>
+        解析したい暗号やデータを読ませると、
+        使えそうなツールを自動で選定して解読をサポートします。
+      </p>
+      <AnalyzersList />
+      <ImporterSelector state={state} />
+      {stack.value.map((frame, ix) => (
+        <Frame key={frame.id} frame={frame} ix={ix} state={state} />
+      ))}
+      <Suggestions state={state} />
+    </>
+  );
+};
