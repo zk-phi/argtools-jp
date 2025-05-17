@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "preact/hooks";
 import { runAnalyzer } from "../../../utils/analyzer";
 import { useDebouncedValue } from "../../../utils/ui/debounce";
-import type { Data, MaybeData } from "../../../datatypes";
+import { toBlobUrl, type Data, type MaybeData } from "../../../datatypes";
 import type { AnalyzerModule, StateReporter } from "../../";
 
 const detect = (data: Data) => {
@@ -23,8 +23,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       if (input.type !== "binary" || !input.value.mime.startsWith("video")) {
         throw new Error("動画データでないか、非対応の形式です");
       }
-      const blob = new Blob([input.value.array], { type: input.value.mime });
-      const url = URL.createObjectURL(blob);
+      const url = toBlobUrl(input);
       setSourceProps({ src: url, type: input.value.mime });
       return null;
     });

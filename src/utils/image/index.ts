@@ -13,7 +13,9 @@ const urlToImg = (url: string): Promise<Img> => (
   })
 )
 
-const imgToCanvas = (img: Img): [Canvas, CanvasRenderingContext2D] => {
+type CanvasAndContext = [Canvas, CanvasRenderingContext2D];
+
+const imgToCanvas = (img: Img): CanvasAndContext => {
   const canvas = document.createElement("canvas");
   canvas.width = img.naturalWidth;
   canvas.height = img.naturalHeight;
@@ -24,11 +26,14 @@ const imgToCanvas = (img: Img): [Canvas, CanvasRenderingContext2D] => {
   return [canvas, ctx];
 }
 
+const urlToCanvas = async (url: string): Promise<CanvasAndContext> => (
+  imgToCanvas(await urlToImg(url))
+);
+
 export type Filter = (arr: Uint8ClampedArray) => void;
 export const applyFilter = (url: string, filter: Filter): Promise<Blob> => (
   new Promise((resolve) => {
-    urlToImg(url).then(img => {
-      const [canvas, ctx] = imgToCanvas(img);
+    urlToCanvas(url).then(([canvas, ctx]) => {
       const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
       filter(data.data);
       ctx.putImageData(data, 0, 0);

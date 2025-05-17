@@ -85,3 +85,10 @@ export const multipleData = (datum: AtomicData[]): Data => {
 
 export type Data = AtomicData | MultipleData | WordlistData;
 export type MaybeData = Data | ErrorData | null;
+
+// -------- UTILS
+
+export const toBlob = (data: BinaryData): Blob => (
+  new Blob([data.value.array], { type: data.value.mime })
+);
+export const toBlobUrl = (data: BinaryData): string => URL.createObjectURL(toBlob(data));

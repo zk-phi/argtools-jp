@@ -1,6 +1,6 @@
 import { simpleAnalyzerFactory } from "../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
-import { multipleData, binaryData, type Data } from "../../../datatypes";
+import { multipleData, binaryData, toBlobUrl, type Data } from "../../../datatypes";
 
 const packages = {
   image: cacheAsync(() => import("../../../utils/image")),
@@ -19,8 +19,7 @@ const analyze = async (input: Data) => {
   };
 
   const { applyFilter } = await packages.image();
-  const blob = new Blob([input.value.array], { type: input.value.mime });
-  const url = URL.createObjectURL(blob);
+  const url = toBlobUrl(input);
 
   const rImg = await applyFilter(url, (arr) => {
     for (let i = 0; i < arr.length; i += 4) {
