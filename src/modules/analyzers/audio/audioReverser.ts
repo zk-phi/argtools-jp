@@ -3,13 +3,13 @@ import { cacheAsync } from "../../../utils/cache";
 import { binaryData, type Data } from "../../../datatypes";
 
 const packages = {
+  audio: cacheAsync(() => import("../../../utils/audio")),
   audiobufferToWav: cacheAsync(() => import("audiobuffer-to-wav")),
-  audio: cacheAsync(() =>  import("../../../utils/audio")),
 };
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.value.mime.startsWith("audio")) {
-    return "もし、音が小さくてうまく解析できなかったら";
+    return "もし、何を言っているかわからない、変な声が入っていたら";
   }
   return null;
 };
@@ -18,20 +18,17 @@ const analyze = async (input: Data) => {
   if (input.type !== "binary" || !input.value.mime.startsWith("audio")) {
     throw new Error("音声データでないか、非対応の形式です");
   }
-  const { decodeAudio, maximizeAudioBuffer } = await packages.audio();
+  const { decodeAudio, reverseAudioBuffer } = await packages.audio();
   const { default: toWav } = await packages.audiobufferToWav();
-  const audioBuffer = await decodeAudio(input.value.array.buffer);
-  maximizeAudioBuffer(audioBuffer);
-  const wavBuffer = toWav(audioBuffer);
-  return await binaryData(new Uint8Array(wavBuffer), input.label);
+  const buffer = await decodeAudio(input.value.array.buffer);
+  reverseAudioBuffer(buffer);
+  const wavBuffer = toWav(buffer);
+  return await binaryData(new Uint8Array(wavBuffer), "逆再生された音声");
 }
 
-export const audioMaximizer = simpleAnalyzerFactory({
-  label: "音量を最大化",
-  app: "/argtools-jp/apps/maximizer",
-  description: (
-    <p>音が小さい音声データの音量を、割れない範囲で最大化します。</p>
-  ),
+export const audioReverser = simpleAnalyzerFactory({
+  label: "逆再生する",
+  app: "/argtools-jp/apps/reverser",
   detect,
   analyze,
 });

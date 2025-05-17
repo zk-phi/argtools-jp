@@ -63,7 +63,7 @@ export const caesarDecoder: AnalyzerModule = {
   description: (
     <>
       <p>
-        アルファベットを一定の文字数だけずらす暗号です。
+        シーザー暗号は、アルファベットを一定の文字数だけずらす暗号です。
       </p>
       <ul>
         <li>例：１文字ずらしなら「a → b」「b → c」「z → a」</li>

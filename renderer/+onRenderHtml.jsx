@@ -35,6 +35,7 @@ export const onRenderHtml = ({ Page, config }) => {
       <body>
         ${dangerouslySkipEscape(backlink)}
         <h2>${config.title}</h2>
+        <p>${config.description}</p>
         <div id="app">
           ${dangerouslySkipEscape(prerendered)}
         </div>

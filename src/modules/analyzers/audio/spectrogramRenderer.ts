@@ -37,9 +37,6 @@ const analyze = async (input: Data) => {
 export const spectrogramRenderer = simpleAnalyzerFactory({
   label: "スペクトログラム解析",
   app: "/argtools-jp/apps/spectrogram",
-  description: (
-    <p>音声ファイルの周波数領域に埋め込まれたデータを可視化します。</p>
-  ),
   detect,
   analyze,
 });

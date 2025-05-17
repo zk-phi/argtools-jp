@@ -71,9 +71,6 @@ const analyze = async (input: Data) => {
 export const steganoAnalyzer = simpleAnalyzerFactory({
   label: "画像ステガノグラフィ検査",
   app: "/argtools-jp/apps/stegano",
-  description: (
-    <p>画像に埋め込まれた透かしデータを可視化します</p>
-  ),
   detect,
   analyze,
 });

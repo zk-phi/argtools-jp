@@ -73,17 +73,6 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 export const mojibakeSimulator: AnalyzerModule = {
   label: "文字化けを復元",
   app: "/argtools-jp/apps/mojibake",
-  description: (
-    <>
-      <p>
-        データが失われているタイプの文字化け（一部が "?" になっている）も、
-        できるところまで復元を試みます。
-      </p>
-      <p>
-        Unicode 以外の変な文字化けにも一部対応します。
-      </p>
-    </>
-  ),
   detect,
   component,
 };
