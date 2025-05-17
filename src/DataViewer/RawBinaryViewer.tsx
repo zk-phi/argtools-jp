@@ -26,9 +26,13 @@ export const RawBinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boole
     return `${string}${ellip}`;
   }, [data]);
 
+  const maybeExt = useMemo(() => (
+    data.value.ext ? `${data.value.ext.slice(1).toUpperCase()} データ` : "不明なバイナリ"
+  ), [data]);
+
   const caption = (
     <>
-      その他のバイナリ（{data.value.mime || "形式不明"} {data.value.array.length}バイト）
+      {maybeExt}（{data.value.array.length}バイト）
       <a href="javascript: void(0)" onClick={() => save(data.value)}>保存</a>
     </>
   );
