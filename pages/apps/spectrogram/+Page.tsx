@@ -4,6 +4,7 @@ import { spectrogramRenderer } from "../../../src/modules/analyzers/audio/spectr
 
 export const Page = microAppFactory({
   importerLabel: "解析したい音声ファイル",
+  outputLabel: "解析結果",
   importer: fileImporter,
   analyzer: spectrogramRenderer,
 });

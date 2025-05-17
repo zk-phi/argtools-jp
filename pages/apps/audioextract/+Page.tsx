@@ -4,6 +4,7 @@ import { audioExtractor } from "../../../src/modules/analyzers/video/audioExtrac
 
 export const Page = microAppFactory({
   importerLabel: "音声を抽出したい動画ファイル",
+  outputLabel: "抽出された音声",
   importer: fileImporter,
   analyzer: audioExtractor,
 });

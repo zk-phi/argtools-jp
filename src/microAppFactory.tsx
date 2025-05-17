@@ -3,10 +3,11 @@ import { DataViewer } from "./DataViewer";
 import type { MaybeData } from "./datatypes"
 import type { AnalyzerModule, StateReporter } from "./modules";
 
-export const microAppFactory = ({ importer, analyzer, importerLabel }: {
+export const microAppFactory = ({ importer, analyzer, importerLabel, outputLabel }: {
   importer: AnalyzerModule,
   analyzer: AnalyzerModule,
   importerLabel: string,
+  outputLabel?: string,
 }) => {
   const Component = () => {
     const [importerOutput, setImporterOutput] = useState<MaybeData>(null);
@@ -43,7 +44,7 @@ export const microAppFactory = ({ importer, analyzer, importerLabel }: {
         </div>
         {analyzerOutput ? (
           <>
-            <h3>解析結果</h3>
+            {outputLabel && (<h3>{outputLabel}</h3>)}
             <DataViewer data={analyzerOutput} busy={analyzerBusy || importerBusy} />
           </>
         ) : analyzerBusy || importerBusy ? (
