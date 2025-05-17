@@ -9,20 +9,29 @@ export type BinaryData = { type: "binary", id: number, label: string, value: Bin
 export function binaryData (array: Uint8Array, label: string, mime: string, ext: string): BinaryData;
 export function binaryData (array: Uint8Array, label: string): Promise<BinaryData>;
 export function binaryData (array: Uint8Array, label: string, mime?: string, ext?: string) {
+  // mime and ext specified
   if (mime != null) {
     return { type: "binary", id: gensym(), label, value: { array, mime, ext } };
   }
+  // not specified (detect)
   return fileType.fromBuffer(array).then(fileType => {
     if (fileType) {
       return binaryData(array, label, fileType.mime, `.${fileType.ext}`);
     }
-    const decoder = new TextDecoder("utf-8", { fatal: true });
-    try {
-      const str = decoder.decode(array);
-      return textData(str, label);
-    } catch (_) {
-      return binaryData(array, label, "", "");
+    const decoders = [
+      new TextDecoder("utf-8", { fatal: true }),
+      new TextDecoder("shift-jis", { fatal: true }),
+      new TextDecoder("euc-jp", { fatal: true }),
+    ];
+    for (const decoder of decoders) {
+      try {
+        const str = decoder.decode(array);
+        return textData(str, label);
+      } catch (_) {
+        // fall through to the next decoder
+      }
     }
+    return binaryData(array, label, "", "");
   });
 };
 
