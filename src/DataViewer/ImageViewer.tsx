@@ -19,4 +19,4 @@ export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }
       <img src={url} style={{ maxHeight: 300 }} />
     </ViewerContainer>
   );
-}
+};
