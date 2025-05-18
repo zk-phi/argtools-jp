@@ -37,11 +37,13 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
     }
     try {
       const str = decode(array);
-      try {
-        const obj = JSON.parse(str);
-        return objectData(array, obj, label, "text/json", ".json");
-      } catch (_) {
-        return textData(str, label);
+      if (str.match(/^\s*[{[]/)) {
+        try {
+          const obj = JSON.parse(str);
+          return objectData(array, obj, label, "text/json", ".json");
+        } catch (_) {
+          return textData(str, label);
+        }
       }
     } catch (_) {
       return binaryData(array, label, "", "");
