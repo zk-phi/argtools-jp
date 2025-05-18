@@ -1,6 +1,12 @@
 import { FileTypeParser } from "file-type";
 import { detectXml } from "@file-type/xml";
 import { gensym } from "./utils/gensym";
+import { decode } from "./utils/array/decode";
+import { cacheAsync } from "./utils/cache";
+
+const packages = {
+  fastXmlParser: cacheAsync(() => import("fast-xml-parser")),
+};
 
 const fileType = new FileTypeParser({ customDetectors: [detectXml] });
 
@@ -14,25 +20,33 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
     return { type: "binary", id: gensym(), label, value: { array, mime, ext } };
   }
   // not specified (detect)
-  return fileType.fromBuffer(array).then(fileType => {
-    if (fileType) {
-      return binaryData(array, label, fileType.mime, `.${fileType.ext}`);
-    }
-    const decoders = [
-      new TextDecoder("utf-8", { fatal: true }),
-      new TextDecoder("shift-jis", { fatal: true }),
-      new TextDecoder("euc-jp", { fatal: true }),
-    ];
-    for (const decoder of decoders) {
-      try {
-        const str = decoder.decode(array);
-        return textData(str, label);
-      } catch (_) {
-        // fall through to the next decoder
+  return (async () => {
+    const detected = await fileType.fromBuffer(array);
+    if (detected) {
+      if (detected.mime.endsWith("/xml")) {
+        try {
+          const { XMLParser } = await packages.fastXmlParser();
+          const parser = new XMLParser();
+          const obj = parser.parse(Buffer.from(array.buffer)) as Obj;
+          return objectData(array, obj, label, detected.mime, `.${detected.ext}`);
+        } catch (_) {
+          return binaryData(array, label, detected.mime, `.${detected.ext}`);
+        }
       }
+      return binaryData(array, label, detected.mime, `.${detected.ext}`);
     }
-    return binaryData(array, label, "", "");
-  });
+    try {
+      const str = decode(array);
+      try {
+        const obj = JSON.parse(str);
+        return objectData(array, obj, label, "text/json", ".json");
+      } catch (_) {
+        return textData(str, label);
+      }
+    } catch (_) {
+      return binaryData(array, label, "", "");
+    }
+  })();
 };
 
 export type ErrorData = { type: "error", id: number, value: string };
@@ -70,8 +84,17 @@ export const melodyData = (value: string, label: string): MelodyData => (
   { type: "mml", id: gensym(), label, value }
 );
 
+export type Atom = string | number | boolean | null;
+export type Collection = (Atom | Collection)[] | { [key: string]: Atom | Collection };
+export type Obj = Atom | Collection;
+export type ObjectBody = { object: Obj, array: Uint8Array, mime: string, ext: string };
+export type ObjectData = { type: "object", id: number, label: string, value: ObjectBody };
+export const objectData = (array: Uint8Array, object: Obj, label: string, mime: string, ext: string): ObjectData => (
+  { type: "object", id: gensym(), label, value: { array, object, mime, ext } }
+);
+
 export type AtomicData =
-  TextData | BinaryData | IntegerData | FloatData | MelodyData
+  TextData | BinaryData | IntegerData | FloatData | MelodyData | ObjectData
 // | TextTableData | NumberTableData | IntegersData | FloatsData
 ;
 

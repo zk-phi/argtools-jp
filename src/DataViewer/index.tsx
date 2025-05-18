@@ -8,6 +8,7 @@ import { ImageViewer } from "./ImageViewer";
 import { RawBinaryViewer } from "./RawBinaryViewer";
 import { VideoViewer } from "./VideoViewer";
 import { WordlistViewer } from "./WordlistViewer";
+import { ObjectViewer } from "./ObjectViewer";
 import type { MaybeData, BinaryData } from "../datatypes";
 
 const BinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => (
@@ -43,6 +44,8 @@ export const DataViewer = ({ data, busy, onInspect }: {
     <MultipleViewer datum={data.datum} busy={busy} onInspect={onInspect} />
   ) : data.type === "wordlist" ? (
     <WordlistViewer value={data.value} busy={busy} />
+  ) : data.type === "object" ? (
+    <ObjectViewer data={data} busy={busy} />
   ) : (
     null
   )
