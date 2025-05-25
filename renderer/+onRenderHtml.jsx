@@ -46,11 +46,19 @@ export const onRenderHtml = ({ Page, config }) => {
             (
             <a href="https://github.com/zk-phi/argtools-jp/" target="_blank" rel="noreferrer">ライセンス表示・ソースコード</a>
             )
+            <a href="javascript: void" onclick="share()">🤝 X でシェア</a>
           </div>
           <div>
             このツールでは、アクセス数等の集計に Google Analytics (Cookie) を使用しています。
           </div>
         </footer>
+        <script>
+function share() {
+  const title = document.title;
+  const url = location.href;
+  window.open("https://twitter.com/share?url=" + url + "&text=" + title + "&hashtags=ARGTOOLS");
+}
+        </script>
       </body>
 
     </html>`
