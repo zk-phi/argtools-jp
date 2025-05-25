@@ -31,11 +31,19 @@
             (
             <a href="https://github.com/zk-phi/argtools-jp/" target="_blank" rel="noreferrer">ライセンス表示・ソースコード</a>
             )
+            <a href="javascript: void" onclick="share()">🤝 X でシェア</a>
           </div>
           <div>
             このツールでは、アクセス数等の集計に Google Analytics (Cookie) を使用しています。
           </div>
         </footer>
+        <script>
+function share() {
+  const title = document.title;
+  const url = location.href;
+  window.open("https://twitter.com/share?url=" + url + "&text=" + title + "&hashtags=ARGTOOLS");
+}
+        </script>
         <script id="vike_pageContext" type="application/json">{"_urlRewrite":null,"pageId":"/pages/apps/filetype","routeParams":{}}</script>
         <script id="vike_globalContext" type="application/json">{}</script>
         <script src="/argtools-jp/assets/entries/entry-server-routing.sNfezGiR.js" type="module" async></script>
