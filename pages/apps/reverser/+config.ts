@@ -1,5 +1,5 @@
 export default {
   backlink: true,
-  title: "逆再生音声作成ツール",
+  title: "音声を逆再生するツール",
   description: "音声ファイルから、その逆再生版を作成します。",
 }
