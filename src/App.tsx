@@ -258,11 +258,7 @@ export const App = () => {
 
   return (
     <>
-      <p>各種 ARG、高難易度謎解き、CTF などで使えそうな解析ツールの集合体です。</p>
-      <p>
-        解析したい暗号やデータを読ませると、
-        使えそうなツールを自動で選定して解読をサポートします。
-      </p>
+      <p>各種 ARG、高難易度謎解き、CTF、開けないファイルの解析などにどうぞ。</p>
       <AnalyzersList />
       <ImporterSelector state={state} />
       {stack.value.map((frame, ix) => (
