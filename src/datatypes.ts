@@ -37,7 +37,7 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
     }
     try {
       const str = decode(array);
-      if (str.match(/^\s*[{[]/)) {
+      if (["[", "{"].includes(str.charAt(0))) {
         try {
           const obj = JSON.parse(str);
           return objectData(array, obj, label, "text/json", ".json");
