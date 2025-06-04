@@ -2,6 +2,7 @@ import { signal, computed, type Signal } from "@preact/signals";
 import { useMemo } from "preact/hooks";
 import { gensym } from "./utils/gensym";
 import { analyzerCategories, analyzers } from "./modules/analyzers";
+import { encoders } from "./modules/encoders";
 import { importers } from "./modules/importers";
 import { genInspector } from "./modules/inspector";
 import { DataViewer } from "./DataViewer";
@@ -128,6 +129,21 @@ const AnalyzersList = () => (
         <div style={{ marginLeft: "16px", fontSize: "smaller" }}>
           <a href="/argtools-jp/apps/filetype">ファイル形式の自動判別</a>
           、<a href="/argtools-jp/anything">条件に一致する単語や地名の特定</a>
+        </div>
+      </div>
+      <div>
+        <b>謎解き作成支援</b>
+        <div style={{ marginLeft: "16px", fontSize: "smaller" }}>
+          {encoders.map((encoder, ix) => (
+            <>
+              {ix > 0 ? "、" : ""}
+              {encoder.app ? (
+                <a key={encoder.label} href={encoder.app}>{encoder.label}</a>
+              ) : (
+                encoder.label
+              )}
+            </>
+          ))}
         </div>
       </div>
     </details>

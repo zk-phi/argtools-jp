@@ -1,6 +1,6 @@
 import { microAppFactory } from "../../../src/microAppFactory";
 import { fileImporter } from "../../../src/modules/importers/fileImporter";
-import { reverseSpectrogram } from "../../../src/modules/analyzers/image/reverseSpectrogram";
+import { reverseSpectrogram } from "../../../src/modules/encoders/image/reverseSpectrogram";
 
 export const Page = microAppFactory({
   importerLabel: "埋め込みたい画像データ",
