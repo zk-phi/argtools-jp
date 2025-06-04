@@ -43,3 +43,8 @@ export const infernoColorMap = (x: number): [number, number, number] => {
     clamp(_reduceColorVec(x, b), 0, 1),
   ];
 }
+
+// https://en.wikipedia.org/wiki/Relative_luminance
+export const luminanceFromRGB = (r: number, g: number, b: number) => Math.round(
+  0.2126 * r + 0.7152 * g + 0.0722 * b
+);

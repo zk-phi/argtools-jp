@@ -1,7 +1,7 @@
 type Img = HTMLImageElement;
 type Canvas = HTMLCanvasElement;
 
-const urlToImg = (url: string): Promise<Img> => (
+export const urlToImg = (url: string): Promise<Img> => (
   new Promise((resolve) => {
     const img = new Image();
     img.src = url;
@@ -40,4 +40,18 @@ export const applyFilter = (url: string, filter: Filter): Promise<Blob> => (
       canvas.toBlob(blob => resolve(blob!));
     })
   })
+);
+
+const canvasToBlob = (canvas: HTMLCanvasElement): Promise<Blob> => (
+  new Promise((resolve, reject) => canvas.toBlob((res) => {
+    if (!res) {
+      reject(new Error("Could not convert Blob from a canvas."));
+    } else {
+      resolve(res);
+    }
+  }))
+);
+
+export const canvasToURL = async (canvas: HTMLCanvasElement): Promise<string> => (
+  URL.createObjectURL(await canvasToBlob(canvas))
 );
