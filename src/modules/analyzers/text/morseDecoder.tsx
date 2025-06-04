@@ -73,7 +73,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
             onInput={e => setOneChar(e.currentTarget.value)} />
       </fieldset>
       <p>
-        <small>※ 無線局運用規則（十二条）で規定されていない文字は�になります</small>
+        ※ 無線局運用規則（十二条）で規定されていない文字は�になります
       </p>
     </>
   );

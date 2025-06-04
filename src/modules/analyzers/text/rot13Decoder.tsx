@@ -78,14 +78,12 @@ export const rot13Decoder: AnalyzerModule = {
   description: (
     <>
       <p>
-        <small>
           ROT13 はアルファベットを 13 文字ずらす暗号、
           Atbash はアルファベットの並び順を逆にする暗号です。
-        </small>
       </p>
       <ul>
-        <li><small>ROT13 の例：「a → n」「b → o」「n → a」</small></li>
-        <li><small>Atbash の例：「a → z」「b → y」「z → a」</small></li>
+        <li>ROT13 の例：「a → n」「b → o」「n → a」</li>
+        <li>Atbash の例：「a → z」「b → y」「z → a」</li>
       </ul>
     </>
   ),
