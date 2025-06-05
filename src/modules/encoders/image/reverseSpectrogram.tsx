@@ -11,6 +11,7 @@ const packages = {
 }
 
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
+  const [depth, setDepth] = useState(3);
   const [len, setLen] = useState(5);
   const [h, setH] = useState(128);
   const [img, setImg] = useState<string>();
@@ -26,17 +27,28 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
       const blobUrl = toBlobUrl(input);
       const img = await urlToImg(blobUrl);
-      const [url, buf] = await imageToAudio(img, h, len);
+      const [url, buf] = await imageToAudio(img, h, len, depth);
       setImg(url);
       const wav = toWav(buf);
       return await binaryData(new Uint8Array(wav), "画像が埋め込まれた音声");
     });
-  }, [len, h, input, onUpdate]);
+  }, [depth, len, h, input, onUpdate]);
 
   return (
     <>
       <fieldset>
         <legend>オプション</legend>
+        <p>
+          <label for="depth">階調（色数）</label>
+          <input
+              name="depth"
+              type="number"
+              value={depth}
+              min={2}
+              max={256}
+              step={1}
+              onInput={e => setDepth(Number(e.currentTarget.value))} />
+        </p>
         <p>
           <label for="h">解像度（周波数方向の分解能）</label>
           <input
@@ -61,10 +73,10 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
         </p>
       </fieldset>
       {img && (
-        <p>
-          モノクロ化された画像：
-          <div><img src={img} /></div>
-        </p>
+        <>
+          <h4>モノクロ化された画像：</h4>
+          <img src={img} />
+        </>
       )}
       <p>
         <button type="button" onClick={analyze}>作成</button>

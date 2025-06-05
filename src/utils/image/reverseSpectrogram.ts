@@ -5,6 +5,7 @@ import { remap1D } from "../math";
 const _simplifyImage = async (
   img: HTMLImageElement,
   h: number,
+  depth: number,
 ): Promise<[Uint8Array, string, number]> => {
   const w = Math.round((h / img.naturalHeight) * img.naturalWidth);
 
@@ -20,10 +21,11 @@ const _simplifyImage = async (
   const arr = new Uint8Array(w * h);
   for (let i = 0; i < arr.length; i++) {
     const lum = luminanceFromRGB(rawValue[i * 4], rawValue[i * 4 + 1], rawValue[i * 4 + 2]);
-    arr[i] = lum;
-    rawValue[i * 4] = lum;
-    rawValue[i * 4 + 1] = lum;
-    rawValue[i * 4 + 2] = lum;
+    const val = Math.round(Math.round(lum / 255 * (depth - 1)) * 255 / (depth - 1));
+    arr[i] = val;
+    rawValue[i * 4] = val;
+    rawValue[i * 4 + 1] = val;
+    rawValue[i * 4 + 2] = val;
     rawValue[i * 4 + 3] = 255;
   }
   ctx.putImageData(data, 0, 0);
@@ -36,7 +38,7 @@ const _simplifiedImageToAudio = (
   arr: Uint8Array,
   w: number,
   h: number,
-  length: number
+  length: number,
 ): AudioBuffer => {
   const ctx = new AudioContext();
   const numSamples = length * 44100;
@@ -72,9 +74,10 @@ const _simplifiedImageToAudio = (
 export const imageToAudio = async (
   img: HTMLImageElement,
   hResolution: number,
-  length: number
+  length: number,
+  depth: number,
 ): Promise<[string, AudioBuffer]> => {
-  const [data, url, w] = await _simplifyImage(img, hResolution);
+  const [data, url, w] = await _simplifyImage(img, hResolution, depth);
   const buf = _simplifiedImageToAudio(data, w, hResolution, length);
   return [url, buf];
 };
