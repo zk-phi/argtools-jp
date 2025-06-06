@@ -14,8 +14,7 @@ const busyOverlayStyle = {
   width: "100%",
   height: "100%",
   padding: 24,
-  background: "#000",
-  opacity: 0.8,
+  background: "#0004",
   boxSizing: "border-box",
 };
 
