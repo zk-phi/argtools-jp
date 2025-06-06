@@ -23,6 +23,7 @@ import { rot47Decoder } from "./text/rot47Decoder";
 
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
+import { imageInvestigator } from "./image/imageInvestigator";
 
 import { audioReverser } from "./audio/audioReverser";
 import { audioMaximizer } from "./audio/audioMaximizer";
@@ -56,6 +57,8 @@ type AnalyzerCategory = { category: string, analyzers: AnalyzerModule[] };
 export const analyzerCategories: AnalyzerCategory[] = [{
   category: "画像解析",
   analyzers: [
+    // もし
+    imageInvestigator,
     // もしかしたら
     steganoAnalyzer,
     exifExtractor,

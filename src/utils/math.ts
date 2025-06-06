@@ -1,5 +1,13 @@
+// NOTE: Both MIN and MAX are INCLUSIVE here.
+type IndexRange = { min: number, max: number };
+
 export const clamp = (x: number, l: number, r: number) => Math.max(l, Math.min(r, x));
 export const norm = (x: number, y: number) => Math.sqrt(x * x + y * y);
+
+export const remap = (x: number, from: IndexRange, to: IndexRange) => {
+  const scaleFactor = (to.max - to.min) / (from.max - from.min);
+  return (x - from.min) * scaleFactor + to.min;
+};
 
 export const roundUpToPowerOf2 = (n: number) => (
   2 ** Math.ceil(Math.log(n) / Math.log(2))
@@ -35,9 +43,6 @@ export const learp2D =
     const bottom = lerp1D(lb, rb, x);
     return lerp1D(top, bottom, y);
   };
-
-// NOTE: Both MIN and MAX are INCLUSIVE here.
-type IndexRange = { min: number, max: number };
 
 // Remap a linear array of values, by applying linear interpolation.
 export const remap1D = (arr: ArrayLike<number>, from: IndexRange, to: IndexRange) => {

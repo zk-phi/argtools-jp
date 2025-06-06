@@ -52,6 +52,11 @@ const canvasToBlob = (canvas: HTMLCanvasElement): Promise<Blob> => (
   }))
 );
 
+export const canvasToUint8Array = async (canvas: HTMLCanvasElement): Promise<Uint8Array> => {
+  const blob = await canvasToBlob(canvas);
+  return new Uint8Array(await blob.arrayBuffer());
+}
+
 export const canvasToURL = async (canvas: HTMLCanvasElement): Promise<string> => (
   URL.createObjectURL(await canvasToBlob(canvas))
 );
