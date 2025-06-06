@@ -57,8 +57,8 @@ export const tweakColor = (
   pow?: boolean,
   screen?: boolean,
 ) => {
-  const screened = screen ? 2 * value - Math.pow(value, 2) / 255 : value;
-  const powed = pow ? Math.pow(screened, 2) / 255 : screened;
+  const screened = screen ? 2 * value - value ** 2 / 255 : value;
+  const powed = pow ? screened ** 2 / 255 : screened;
   return clamp(
     (powed + brightness * 255 - 128) * contrast + 128,
     0,
