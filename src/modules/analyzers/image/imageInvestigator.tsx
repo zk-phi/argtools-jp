@@ -288,7 +288,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 };
 
 export const imageInvestigator = {
-  label: "拡大＆カラー補正",
+  label: "高度なカラー補正",
   app: "/argtools-jp/apps/image-investigator",
   detect,
   component,
