@@ -200,9 +200,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
           <input
               type="range"
               style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-              min="0"
-              max="20"
-              step="0.2"
+              min="1"
+              max="50"
+              step="0.5"
               value={colorProfile.contrast.r}
               onInput={(e) => onBatchInputColorProfile(
                 "contrast",
@@ -231,9 +231,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               <input
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                  min="0"
-                  max="20"
-                  step="0.2"
+                  min="1"
+                  max="50"
+                  step="0.5"
                   value={colorProfile.contrast.r}
                   onInput={(e) => onInputColorProfile(
                     "contrast",
@@ -262,9 +262,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               <input
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                  min="0"
-                  max="20"
-                  step="0.2"
+                  min="1"
+                  max="50"
+                  step="0.5"
                   value={colorProfile.contrast.g}
                   onInput={(e) => onInputColorProfile(
                     "contrast",
@@ -294,8 +294,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
                   min="1"
-                  max="20"
-                  step="0.2"
+                  max="50"
+                  step="0.5"
                   value={colorProfile.contrast.b}
                   onInput={(e) => onInputColorProfile(
                     "contrast",
