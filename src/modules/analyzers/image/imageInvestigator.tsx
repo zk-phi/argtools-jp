@@ -294,7 +294,7 @@ export const imageInvestigator = {
   component,
   description: (
     <p>
-      まずは極端なコントラストをつけて、明るさを動かしてみるのががおすすめです。
+      まずは極端なコントラストをつけて、明るさを動かしてみるのがおすすめです。
     </p>
   )
 };
