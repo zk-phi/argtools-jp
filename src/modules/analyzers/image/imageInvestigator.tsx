@@ -17,7 +17,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const RESULT_IMAGE_SIZE = 480 * 480;
+const RESULT_IMAGE_SIZE = 640 * 640;
 
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [rect, setRect] = useState({ l: 0, t: 0, r: 100, b: 100 });
