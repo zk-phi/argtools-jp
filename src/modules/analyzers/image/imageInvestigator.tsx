@@ -8,7 +8,6 @@ import { binaryData, toBlobUrl, type Data, type MaybeData } from "../../../datat
 const packages = {
   image: cacheAsync(() => import("../../../utils/image")),
   color: cacheAsync(() => import("../../../utils/image/color")),
-  math: cacheAsync(() => import("../../../utils/math")),
 }
 
 const detect = (data: Data) => {
@@ -62,7 +61,6 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     };
 
     const { canvasToUint8Array, urlToImg } = await packages.image();
-    const { clamp } = await packages.math();
     const { tweakColor } = await packages.color();
     const { l, r, t, b } = debouncedRect;
     const { brightness, contrast } = debouncedColorProfile;
