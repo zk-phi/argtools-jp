@@ -48,3 +48,15 @@ export const infernoColorMap = (x: number): [number, number, number] => {
 export const luminanceFromRGB = (r: number, g: number, b: number) => Math.round(
   0.2126 * r + 0.7152 * g + 0.0722 * b
 );
+
+// Tweak 0-255 color value
+export const tweakColor = (
+  value: number, // [0-255]
+  brightness: number, // [-1, 1]
+  contrast: number,
+  invert?: boolean,
+) => clamp(
+  ((invert ? 255 - value : value) + brightness * 255 - 128) * contrast + 128,
+  0,
+  255,
+);

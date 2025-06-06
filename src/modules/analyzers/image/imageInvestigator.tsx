@@ -7,6 +7,7 @@ import { binaryData, toBlobUrl, type Data, type MaybeData } from "../../../datat
 
 const packages = {
   image: cacheAsync(() => import("../../../utils/image")),
+  color: cacheAsync(() => import("../../../utils/image/color")),
   math: cacheAsync(() => import("../../../utils/math")),
 }
 
@@ -25,6 +26,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     brightness: { r: 0, g: 0, b: 0 },
     contrast: { r: 1, g: 1, b: 1 },
   });
+  const [invert, setInvert] = useState(false);
   const debouncedRect = useDebouncedValue(rect, 50);
   const debouncedColorProfile = useDebouncedValue(colorProfile, 50);
 
@@ -61,6 +63,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
     const { canvasToUint8Array, urlToImg } = await packages.image();
     const { clamp } = await packages.math();
+    const { tweakColor } = await packages.color();
     const { l, r, t, b } = debouncedRect;
     const { brightness, contrast } = debouncedColorProfile;
 
@@ -87,27 +90,30 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     );
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < imageData.data.length; i += 4) {
-      imageData.data[i + 0] = clamp(
-        (imageData.data[i + 0] + brightness.r * 255) * contrast.r - (contrast.r - 0.5) * 128,
-        0,
-        255,
+      imageData.data[i + 0] = tweakColor(
+        imageData.data[i + 0],
+        brightness.r,
+        contrast.r,
+        invert,
       );
-      imageData.data[i + 1] = clamp(
-        (imageData.data[i + 1] + brightness.g * 255) * contrast.g - (contrast.g - 0.5) * 128,
-        0,
-        255,
+      imageData.data[i + 1] = tweakColor(
+        imageData.data[i + 1],
+        brightness.g,
+        contrast.g,
+        invert,
       );
-      imageData.data[i + 2] = clamp(
-        (imageData.data[i + 2] + brightness.b * 255) * contrast.b - (contrast.b - 0.5) * 128,
-        0,
-        255,
+      imageData.data[i + 2] = tweakColor(
+        imageData.data[i + 2],
+        brightness.b,
+        contrast.b,
+        invert,
       );
     }
     ctx.putImageData(imageData, 0, 0);
 
     const arr = await canvasToUint8Array(canvas);
     return binaryData(arr, "補正画像");
-  }, [debouncedRect, debouncedColorProfile]);
+  }, [debouncedRect, debouncedColorProfile, invert]);
 
   return (
     <>
@@ -160,128 +166,137 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       </fieldset>
       <fieldset>
         <legend>カラー補正</legend>
-        明るさ：
-        <input
-            type="range"
-            style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-            min="-1"
-            max="1"
-            step="0.01"
-            value={colorProfile.brightness.r}
-            onInput={(e) => onBatchInputColorProfile(
-              "brightness",
-              Number(e.currentTarget.value),
-            )} />
-        {colorProfile.brightness.r}
-        {"　"}コントラスト：
-        <input
-            type="range"
-            style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-            min="1"
-            max="20"
-            step="0.2"
-            value={colorProfile.contrast.r}
-            onInput={(e) => onBatchInputColorProfile(
-              "contrast",
-              Number(e.currentTarget.value),
-            )} />
-        {colorProfile.contrast.r}
-        <details>
-          <summary>成分別に調整する</summary>
-          <div>
-            <div>R 成分</div>
-            明るさ：
-            <input
-                type="range"
-                style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                min="-1"
-                max="1"
-                step="0.01"
-                value={colorProfile.brightness.r}
-                onInput={(e) => onInputColorProfile(
-                  "brightness",
-                  "r",
-                  Number(e.currentTarget.value),
-                )} />
-            {colorProfile.brightness.r}
-            {"　"}コントラスト：
-            <input
-                type="range"
-                style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                min="1"
-                max="20"
-                step="0.2"
-                value={colorProfile.contrast.r}
-                onInput={(e) => onInputColorProfile(
-                  "contrast",
-                  "r",
-                  Number(e.currentTarget.value),
-                )} />
-            {colorProfile.contrast.r}
-          </div>
-          <div>
-            <div>G 成分</div>
-            明るさ：
-            <input
-                type="range"
-                style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                min="-1"
-                max="1"
-                step="0.01"
-                value={colorProfile.brightness.g}
-                onInput={(e) => onInputColorProfile(
-                  "brightness",
-                  "g",
-                  Number(e.currentTarget.value),
-                )} />
-            {colorProfile.brightness.g}
-            {"　"}コントラスト：
-            <input
-                type="range"
-                style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                min="1"
-                max="20"
-                step="0.2"
-                value={colorProfile.contrast.g}
-                onInput={(e) => onInputColorProfile(
-                  "contrast",
-                  "g",
-                  Number(e.currentTarget.value),
-                )} />
-            {colorProfile.contrast.g}
-          </div>
-          <div>
-            <div>B 成分</div>
-            明るさ：
-            <input
-                type="range"
-                style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                min="-1"
-                max="1"
-                step="0.01"
-                value={colorProfile.brightness.b}
-                onInput={(e) => onInputColorProfile(
-                  "brightness",
-                  "b",
-                  Number(e.currentTarget.value),
-                )} />
-            {colorProfile.brightness.b}
-            {"　"}コントラスト：
-            <input
-                type="range"
-                style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                min="1"
-                max="20"
-                step="0.2"
-                value={colorProfile.contrast.b}
-                onInput={(e) => onInputColorProfile(
-                  "contrast",
-                  "b",
-                  Number(e.currentTarget.value),
-                )} />
-            {colorProfile.contrast.b}
-          </div>
-        </details>
+        <div>
+          反転：
+          <input
+              type="checkbox"
+              checked={invert}
+              onChange={(e) => setInvert(e.currentTarget.checked)} />
+        </div>
+        <div>
+          明るさ：
+          <input
+              type="range"
+              style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
+              min="-1"
+              max="1"
+              step="0.01"
+              value={colorProfile.brightness.r}
+              onInput={(e) => onBatchInputColorProfile(
+                "brightness",
+                Number(e.currentTarget.value),
+              )} />
+          {colorProfile.brightness.r}
+          {"　"}コントラスト：
+          <input
+              type="range"
+              style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
+              min="0"
+              max="20"
+              step="0.2"
+              value={colorProfile.contrast.r}
+              onInput={(e) => onBatchInputColorProfile(
+                "contrast",
+                Number(e.currentTarget.value),
+              )} />
+          {colorProfile.contrast.r}
+          <details>
+            <summary>成分別に調整する</summary>
+            <div>
+              <div>R 成分</div>
+              明るさ：
+              <input
+                  type="range"
+                  style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
+                  min="-1"
+                  max="1"
+                  step="0.01"
+                  value={colorProfile.brightness.r}
+                  onInput={(e) => onInputColorProfile(
+                    "brightness",
+                    "r",
+                    Number(e.currentTarget.value),
+                  )} />
+              {colorProfile.brightness.r}
+              {"　"}コントラスト：
+              <input
+                  type="range"
+                  style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
+                  min="0"
+                  max="20"
+                  step="0.2"
+                  value={colorProfile.contrast.r}
+                  onInput={(e) => onInputColorProfile(
+                    "contrast",
+                    "r",
+                    Number(e.currentTarget.value),
+                  )} />
+              {colorProfile.contrast.r}
+            </div>
+            <div>
+              <div>G 成分</div>
+              明るさ：
+              <input
+                  type="range"
+                  style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
+                  min="-1"
+                  max="1"
+                  step="0.01"
+                  value={colorProfile.brightness.g}
+                  onInput={(e) => onInputColorProfile(
+                    "brightness",
+                    "g",
+                    Number(e.currentTarget.value),
+                  )} />
+              {colorProfile.brightness.g}
+              {"　"}コントラスト：
+              <input
+                  type="range"
+                  style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
+                  min="0"
+                  max="20"
+                  step="0.2"
+                  value={colorProfile.contrast.g}
+                  onInput={(e) => onInputColorProfile(
+                    "contrast",
+                    "g",
+                    Number(e.currentTarget.value),
+                  )} />
+              {colorProfile.contrast.g}
+            </div>
+            <div>
+              <div>B 成分</div>
+              明るさ：
+              <input
+                  type="range"
+                  style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
+                  min="-1"
+                  max="1"
+                  step="0.01"
+                  value={colorProfile.brightness.b}
+                  onInput={(e) => onInputColorProfile(
+                    "brightness",
+                    "b",
+                    Number(e.currentTarget.value),
+                  )} />
+              {colorProfile.brightness.b}
+              {"　"}コントラスト：
+              <input
+                  type="range"
+                  style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
+                  min="1"
+                  max="20"
+                  step="0.2"
+                  value={colorProfile.contrast.b}
+                  onInput={(e) => onInputColorProfile(
+                    "contrast",
+                    "b",
+                    Number(e.currentTarget.value),
+                  )} />
+              {colorProfile.contrast.b}
+            </div>
+          </details>
+        </div>
       </fieldset>
     </>
   );
