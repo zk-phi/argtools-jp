@@ -25,7 +25,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     brightness: { r: 0, g: 0, b: 0 },
     contrast: { r: 1, g: 1, b: 1 },
   });
-  const [invert, setInvert] = useState(false);
+  const [pow, setPow] = useState(false);
+  const [screen, setScreen] = useState(false);
   const debouncedRect = useDebouncedValue(rect, 50);
   const debouncedColorProfile = useDebouncedValue(colorProfile, 50);
 
@@ -92,26 +93,29 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
         imageData.data[i + 0],
         brightness.r,
         contrast.r,
-        invert,
+        pow,
+        screen,
       );
       imageData.data[i + 1] = tweakColor(
         imageData.data[i + 1],
         brightness.g,
         contrast.g,
-        invert,
+        pow,
+        screen,
       );
       imageData.data[i + 2] = tweakColor(
         imageData.data[i + 2],
         brightness.b,
         contrast.b,
-        invert,
+        pow,
+        screen,
       );
     }
     ctx.putImageData(imageData, 0, 0);
 
     const arr = await canvasToUint8Array(canvas);
     return binaryData(arr, "補正画像");
-  }, [debouncedRect, debouncedColorProfile, invert]);
+  }, [debouncedRect, debouncedColorProfile, pow, screen]);
 
   return (
     <>
@@ -165,11 +169,18 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       <fieldset>
         <legend>カラー補正</legend>
         <div>
-          反転：
+          自身と乗算（明るい部分を見やすく）：
           <input
               type="checkbox"
-              checked={invert}
-              onChange={(e) => setInvert(e.currentTarget.checked)} />
+              checked={pow}
+              onChange={(e) => setPow(e.currentTarget.checked)} />
+        </div>
+        <div>
+          自身とスクリーン合成（暗い部分を見やすく）：
+          <input
+              type="checkbox"
+              checked={screen}
+              onChange={(e) => setScreen(e.currentTarget.checked)} />
         </div>
         <div>
           明るさ：
