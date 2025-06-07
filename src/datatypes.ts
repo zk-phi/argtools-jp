@@ -45,6 +45,7 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
           return textData(str, label);
         }
       }
+      return textData(str, label);
     } catch (_) {
       return binaryData(array, label, "", "");
     }
