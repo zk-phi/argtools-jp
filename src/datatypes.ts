@@ -81,9 +81,10 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
             } catch (_) {
               break;
             }
-          default:
+          default: {
             const { languageIDs } = await packages.languageIDs();
             return textData(str, label, languageIDs[progLang[0].languageId] ?? "");
+          }
         }
       }
       return textData(str, label);
@@ -109,7 +110,8 @@ export function textData (value: string, label: string, language?: string) {
   return (async () => {
     const { francAll } = await packages.franc();
     const lang = francAll(value);
-    if (lang.length && lang[0][1] > DETECTOR_RELIABLITY_THRESHOLD && lang[0][0] !== "und") {
+    if (lang.length > 0 && lang[0][0] !== "und" &&
+        lang[0][1] > DETECTOR_RELIABLITY_THRESHOLD) {
       const { languageNames } = await packages.languageNames();
       const name = languageNames[lang[0][0]] ?? "";
       return textData(value, label, name);
