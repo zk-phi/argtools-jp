@@ -37,9 +37,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     const { fixMojibake } = await packages.mojibake();
     const [fixed, allCandidates] = fixMojibake(input.value, fromEncoding, toEncoding);
     const data = multipleData([
-      textData(fixed, "復元されたテキスト"),
+      await textData(fixed, "復元されたテキスト"),
       ...allCandidates.map((candidates, ix) => (
-        textData(candidates.join(", "), `[${ix + 1}]の候補`)
+        textData(candidates.join(", "), `[${ix + 1}]の候補`, "")
       )),
     ]);
     return data;

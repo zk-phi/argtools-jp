@@ -47,8 +47,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     const { decodeMorse } = await packages.morse();
     const [enMorse, jpMorse] = decodeMorse(input.value, zeroChar, oneChar);
     const data = multipleData([
-      textData(enMorse, "欧文モールスの読み取り結果"),
-      textData(jpMorse, "和文モールスの読み取り結果"),
+      await textData(enMorse, "欧文モールスの読み取り結果"),
+      await textData(jpMorse, "和文モールスの読み取り結果"),
     ]);
     return data;
   }, [zeroChar, oneChar]);

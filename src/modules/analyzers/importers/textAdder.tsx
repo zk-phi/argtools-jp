@@ -20,8 +20,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     const text = e.currentTarget.value;
     setText(text);
     withDebouncer(() => {
-      withReporter(onUpdate, () => {
-        const data = textData(text, "入力されたデータ");
+      withReporter(onUpdate, async () => {
+        const data = await textData(text, "入力されたデータ");
         if (!input) {
           return data;
         }

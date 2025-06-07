@@ -2,6 +2,8 @@ import { gensym } from "./utils/gensym";
 import { decode } from "./utils/array/decode";
 import { cacheAsync } from "./utils/cache";
 
+const DETECTOR_RELIABLITY_THRESHOLD = 0.70;
+
 const detectors = {
   fileType: cacheAsync(async () => {
     const { FileTypeParser } = await import("file-type");
@@ -18,6 +20,9 @@ const packages = {
   fastXmlParser: cacheAsync(() => import("fast-xml-parser")),
   yaml: cacheAsync(() => import("yaml")),
   toml: cacheAsync(() => import("toml")),
+  franc: cacheAsync(() => import("franc")),
+  languageNames: cacheAsync(() => import("../resources/languageNames")),
+  languageIDs: cacheAsync(() => import("../resources/languageIDs")),
 };
 
 export type BinaryBody = { array: Uint8Array, mime: string, ext: string };
@@ -51,7 +56,7 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
       const str = decode(array);
       const guessLang = await detectors.guessLang();
       const progLang = await guessLang.runModel(str);
-      if (progLang[0] && progLang[0].confidence > 0.70) {
+      if (progLang[0] && progLang[0].confidence > DETECTOR_RELIABLITY_THRESHOLD) {
         switch (progLang[0].languageId) {
           case "json":
             try {
@@ -77,6 +82,8 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
               break;
             }
           default:
+            const { languageIDs } = await packages.languageIDs();
+            return textData(str, label, languageIDs[progLang[0].languageId] ?? "");
         }
       }
       return textData(str, label);
@@ -92,10 +99,24 @@ export const errorData = (value: string): ErrorData => (
   { type: "error", id: gensym(), value }
 );
 
-export type TextData = { type: "text", id: number, label: string, value: string };
-export const textData = (value: string, label: string): TextData => (
-  { type: "text", id: gensym(), label, value }
-);
+export type TextData = { type: "text", id: number, label: string, value: string, language: string };
+export function textData (value: string, label: string, language: string): TextData;
+export function textData (value: string, label: string): Promise<TextData>;
+export function textData (value: string, label: string, language?: string) {
+  if (language != null) {
+    return { type: "text", id: gensym(), label, value, language };
+  }
+  return (async () => {
+    const { francAll } = await packages.franc();
+    const lang = francAll(value);
+    if (lang.length && lang[0][1] > DETECTOR_RELIABLITY_THRESHOLD && lang[0][0] !== "und") {
+      const { languageNames } = await packages.languageNames();
+      const name = languageNames[lang[0][0]] ?? "";
+      return textData(value, label, name);
+    }
+    return textData(value, label, "");
+  })();
+};
 
 export type IntegerData = { type: "integer", id: number, label: string, value: number };
 export const integerData = (value: number, label: string): IntegerData => (

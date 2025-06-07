@@ -21,7 +21,7 @@ const detect = (data: Data) => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [rotNums, setRotNums] = useState(false);
 
-  useAnalyzer(onUpdate, input, (input: Data) => {
+  useAnalyzer(onUpdate, input, async (input: Data) => {
     if (input.type !== "text") {
       throw new Error("テキストデータではありません");
     }
@@ -53,8 +53,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     const rot13 = rot13CharCodes.map(ch => String.fromCharCode(ch)).join("");
     const atbash = atbashCharCodes.map(ch => String.fromCharCode(ch)).join("");
     const data = multipleData([
-      textData(rot13, rotNums ? "ROT18 のデコード結果" : "ROT13 のデコード結果"),
-      textData(atbash, "Atbash のデコード結果"),
+      await textData(rot13, rotNums ? "ROT18 のデコード結果" : "ROT13 のデコード結果"),
+      await textData(atbash, "Atbash のデコード結果"),
     ]);
     return data;
   }, [rotNums]);
