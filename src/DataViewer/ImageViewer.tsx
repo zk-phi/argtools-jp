@@ -5,12 +5,12 @@ import { ViewerContainer } from "./ViewerContainer";
 
 export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
   const url = useMemo(() => toBlobUrl(data), [data]);
-  const upcaseExt = useMemo(() => data.value.ext.slice(1).toUpperCase(), [data]);
+  const upcaseExt = useMemo(() => data.ext.slice(1).toUpperCase(), [data]);
 
   const caption = (
     <>
-      {upcaseExt} 画像（{data.value.array.length}バイト）
-      <a href="javascript: void(0)" onClick={() => save(data.value)}>保存</a>
+      {upcaseExt} 画像（{data.value.length}バイト）
+      <a href="javascript: void(0)" onClick={() => save(data)}>保存</a>
     </>
   );
 

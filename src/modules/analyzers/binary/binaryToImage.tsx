@@ -20,7 +20,7 @@ const analyze = async (input: Data) => {
 
   const { canvasToUint8Array } = await packages.image();
 
-  const arr = input.value.array;
+  const arr = input.value;
   const w = 320;
   const h = Math.ceil(arr.length / w);
 

@@ -8,13 +8,13 @@ const packages = {
 };
 
 const analyze = async (input: Data) => {
-  if (input.type !== "binary" || !input.value.mime.startsWith("audio")) {
+  if (input.type !== "binary" || !input.mime.startsWith("audio")) {
     throw new Error("音声データでないか、非対応の形式です");
   }
 
   const { decodeAudio } = await packages.audio();
   const { default: toWav } = await packages.audiobufferToWav();
-  const audioBuffer = await decodeAudio(input.value.array.buffer);
+  const audioBuffer = await decodeAudio(input.value.buffer);
 
   if (audioBuffer.numberOfChannels < 2) {
     throw new Error("モノラル音声には適用できません");

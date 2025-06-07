@@ -18,7 +18,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
   const analyze = useCallback(() => {
     runAnalyzer(onUpdate, input, async (input: Data) => {
-      if (input.type !== "binary" || !input.value.mime.startsWith("image")) {
+      if (input.type !== "binary" || !input.mime.startsWith("image")) {
         throw new Error("画像データでないか、非対応の形式です");
       }
       const { urlToImg } = await packages.image();

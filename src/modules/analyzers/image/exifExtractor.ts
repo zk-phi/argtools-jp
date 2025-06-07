@@ -7,18 +7,18 @@ const packages = {
 }
 
 const detect = (data: Data) => {
-  if (data.type === "binary" && data.value.mime.startsWith("image")) {
+  if (data.type === "binary" && data.mime.startsWith("image")) {
     return "もしかしたら、メタデータに撮影地・日時・機材などが記録されているかも？";
   }
   return null;
 };
 
 const analyze = async (input: Data) => {
-  if (input.type !== "binary" || !input.value.mime.startsWith("image")) {
+  if (input.type !== "binary" || !input.mime.startsWith("image")) {
     throw new Error("画像データでないか、非対応の形式です");
   }
   const { getAllTags } = await packages.exif();
-  const tags = getAllTags(input.value.array.buffer);
+  const tags = getAllTags(input.value.buffer);
   const datum: AtomicData[] = await Promise.all(
     Object.keys(tags).filter(key => (
       tags[key]?.length > 0

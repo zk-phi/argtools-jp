@@ -83,19 +83,19 @@ export const ObjectViewer = ({ data, busy }: {
   data: ObjectData,
   busy?: boolean,
 }) => {
-  const upcaseExt = useMemo(() => data.value.ext.slice(1).toUpperCase(), [data]);
+  const upcaseExt = useMemo(() => data.ext.slice(1).toUpperCase(), [data]);
 
   const caption = (
     <>
-      {upcaseExt} データ（{data.value.array.length}バイト）
-      <a href="javascript: void(0)" onClick={() => save(data.value)}>保存</a>
+      {upcaseExt} データ（{data.value.length}バイト）
+      <a href="javascript: void(0)" onClick={() => save(data)}>保存</a>
     </>
   );
 
   return (
     <ViewerContainer label={data.label} caption={caption} busy={busy}>
       <div style={{ fontFamily: "monospace" }}>
-        <Field obj={data.value.object} initialOpened={true} />
+        <Field obj={data.object} initialOpened={true} />
       </div>
     </ViewerContainer>
   );

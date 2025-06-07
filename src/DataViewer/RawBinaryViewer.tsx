@@ -10,13 +10,13 @@ const byteToAscii = (n: number) => (
 
 export const RawBinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
   const hexString = useMemo(() => {
-    const fullLines = Math.ceil(data.value.array.length / 16);
+    const fullLines = Math.ceil(data.value.length / 16);
     const lines = Math.min(fullLines, 100);
     const string = mapRange(lines, (ix: number) => {
       const digest = [...new Uint8Array(
-        data.value.array.buffer,
+        data.value.buffer,
         ix * 16,
-        Math.min(16, data.value.array.length - ix * 16),
+        Math.min(16, data.value.length - ix * 16),
       )];
       const hexStr = digest.map(byte => byte.toString(16).padStart(2, "0")).join(" ");
       const asciiStr = digest.map(byteToAscii).join("");
@@ -27,13 +27,13 @@ export const RawBinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boole
   }, [data]);
 
   const maybeExt = useMemo(() => (
-    data.value.ext ? `${data.value.ext.slice(1).toUpperCase()} データ` : "不明なバイナリ"
+    data.ext ? `${data.ext.slice(1).toUpperCase()} データ` : "不明なバイナリ"
   ), [data]);
 
   const caption = (
     <>
-      {maybeExt}（{data.value.array.length}バイト）
-      <a href="javascript: void(0)" onClick={() => save(data.value)}>保存</a>
+      {maybeExt}（{data.value.length}バイト）
+      <a href="javascript: void(0)" onClick={() => save(data)}>保存</a>
     </>
   );
 

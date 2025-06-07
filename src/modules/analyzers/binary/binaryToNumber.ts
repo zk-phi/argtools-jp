@@ -3,11 +3,9 @@ import { numberData, multipleData, type Data } from "../../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && (
-    data.value.array.length === 1 ||
-    data.value.array.length === 2 ||
-    data.value.array.length === 4 ||
-    data.value.array.length === 8)) {
-    return `ちょうど ${data.value.array.length} バイトのバイナリ → 数値データかも？`;
+    data.value.length === 1 || data.value.length === 2 ||
+    data.value.length === 4 || data.value.length === 8)) {
+    return `ちょうど ${data.value.length} バイトのバイナリ → 数値データかも？`;
   }
   return null;
 };
@@ -17,9 +15,9 @@ const analyze = (input: Data) => {
     throw new Error("バイナリデータではありません");
   }
 
-  if (input.value.array.length === 1) {
-    const intView = new Int8Array(input.value.array.buffer);
-    const uintView = new Uint8Array(input.value.array.buffer);
+  if (input.value.length === 1) {
+    const intView = new Int8Array(input.value.buffer);
+    const uintView = new Uint8Array(input.value.buffer);
     if (intView[0] === uintView[0]) {
       return numberData(intView[0], "整数値として");
     }
@@ -29,9 +27,9 @@ const analyze = (input: Data) => {
     ]);
   }
 
-  if (input.value.array.length === 2) {
-    const intView = new Int16Array(input.value.array.buffer);
-    const uintView = new Uint16Array(input.value.array.buffer);
+  if (input.value.length === 2) {
+    const intView = new Int16Array(input.value.buffer);
+    const uintView = new Uint16Array(input.value.buffer);
     if (intView[0] === uintView[0]) {
       return numberData(intView[0], "整数値として");
     }
@@ -41,10 +39,10 @@ const analyze = (input: Data) => {
     ]);
   }
 
-  if (input.value.array.length === 4) {
-    const floatView = new Float32Array(input.value.array.buffer);
-    const intView = new Int32Array(input.value.array.buffer);
-    const uintView = new Uint32Array(input.value.array.buffer);
+  if (input.value.length === 4) {
+    const floatView = new Float32Array(input.value.buffer);
+    const intView = new Int32Array(input.value.buffer);
+    const uintView = new Uint32Array(input.value.buffer);
     if (intView[0] === uintView[0]) {
       return multipleData([
         numberData(floatView[0], "小数値（IEEE754）として"),
@@ -58,8 +56,8 @@ const analyze = (input: Data) => {
     ]);
   }
 
-  if (input.value.array.length === 8) {
-    const floatView = new Float64Array(input.value.array.buffer);
+  if (input.value.length === 8) {
+    const floatView = new Float64Array(input.value.buffer);
     return numberData(floatView[0], "小数値（IEEE754）として");
   }
 

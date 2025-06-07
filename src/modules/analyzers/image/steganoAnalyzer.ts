@@ -7,14 +7,14 @@ const packages = {
 }
 
 const detect = (data: Data) => {
-  if (data.type === "binary" && data.value.mime.startsWith("image")) {
+  if (data.type === "binary" && data.mime.startsWith("image")) {
     return "もしかしたら、画像に見えない透かしデータが埋め込まれているかも？";
   }
   return null;
 };
 
 const analyze = async (input: Data) => {
-  if (input.type !== "binary" || !input.value.mime.startsWith("image")) {
+  if (input.type !== "binary" || !input.mime.startsWith("image")) {
     throw new Error("画像データでないか、非対応の形式です");
   };
 

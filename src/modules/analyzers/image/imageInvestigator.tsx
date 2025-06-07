@@ -11,7 +11,7 @@ const packages = {
 }
 
 const detect = (data: Data) => {
-  if (data.type === "binary" && data.value.mime.startsWith("image")) {
+  if (data.type === "binary" && data.mime.startsWith("image")) {
     return "もし、うっすら映り込んでいるものや、色が薄い QR コードなどがあれば";
   }
   return null;
@@ -57,7 +57,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   }, [colorProfile])
 
   useAnalyzer(onUpdate, input, async (input: Data) => {
-    if (input.type !== "binary" || !input.value.mime.startsWith("image")) {
+    if (input.type !== "binary" || !input.mime.startsWith("image")) {
       throw new Error("画像データでないか、非対応の形式です");
     };
 

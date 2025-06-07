@@ -2,7 +2,7 @@ import type { Data } from "../../../datatypes";
 import type { AnalyzerModule } from "../../";
 
 const detect = (data: Data) => {
-  if (data.type === "binary" && data.value.mime.startsWith("image")) {
+  if (data.type === "binary" && data.mime.startsWith("image")) {
     return "もし、マーク・名所・有名人などを特定する必要がありそうなら";
   }
   return null;

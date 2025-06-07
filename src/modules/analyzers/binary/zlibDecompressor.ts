@@ -7,10 +7,10 @@ const packages = {
 }
 
 const detect = (data: Data) => {
-  if (data.type === "binary" && data.value.array.length > 2 && data.value.array[0] === 0x78) {
+  if (data.type === "binary" && data.value.length > 2 && data.value[0] === 0x78) {
     return "先頭の１バイトが 0x78 → zlib で圧縮されたデータかも？";
   }
-  if (data.type === "binary" && data.value.mime.endsWith("/zlib")) {
+  if (data.type === "binary" && data.mime.endsWith("/zlib")) {
     return "zlib 形式の圧縮データ";
   }
   return null;
@@ -21,7 +21,7 @@ const analyze = async (input: Data) => {
     throw new Error("バイナリデータではありません");
   };
   const { unzlibSync } = await packages.fflate();
-  const expanded = unzlibSync(input.value.array);
+  const expanded = unzlibSync(input.value);
   return await binaryData(expanded, "解凍されたデータ");
 };
 

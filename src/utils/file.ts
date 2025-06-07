@@ -17,12 +17,12 @@ export const readFileAsBuffer = async (file: File): Promise<ArrayBuffer> => (
 );
 
 let fileId = 0;
-export const save = ({ array, mime, ext }: {
-  array: Uint8Array,
+export const save = ({ value, mime, ext }: {
+  value: Uint8Array | string,
   mime: string,
   ext: string,
 }) => {
-  const blob = new Blob([array], { type: mime });
+  const blob = new Blob([value], { type: mime });
   fileId++;
   fileSaver.saveAs(blob, `ダウンロード${fileId}${ext}`);
 };

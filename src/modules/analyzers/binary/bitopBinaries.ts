@@ -18,8 +18,8 @@ const analyze = async (input: Data) => {
   if(dataA.type !== "binary" || dataB.type !== "binary") {
     throw new Error("バイナリデータではありません");
   }
-  const arrA = dataA.value.array
-  const arrB = dataB.value.array
+  const arrA = dataA.value
+  const arrB = dataB.value
   const lValue = arrA.length >= arrB.length ? arrA : arrB;
   const rValue = arrA.length >= arrB.length ? arrB : arrA;
 

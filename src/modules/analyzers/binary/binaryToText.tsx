@@ -55,9 +55,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       throw new Error("UNEXPECTED: 存在しないエンコーディングです");
     }
     const decoded = encoding === "ascii" ? (
-      asciiDecoder(input.value.array)
+      asciiDecoder(input.value)
     ) : (
-      utf8Decoder(input.value.array)
+      utf8Decoder(input.value)
     );
     const datum: AtomicData[] = await Promise.all(
       decoded.filter(str => (

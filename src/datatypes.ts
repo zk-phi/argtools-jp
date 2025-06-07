@@ -25,35 +25,35 @@ const packages = {
   languageIDs: cacheAsync(() => import("../resources/languageIDs")),
 };
 
-export type BinaryBody = { array: Uint8Array, mime: string, ext: string };
-export type BinaryData = { type: "binary", id: number, label: string, value: BinaryBody };
-export function binaryData (array: Uint8Array, label: string, mime: string, ext: string): BinaryData;
-export function binaryData (array: Uint8Array, label: string): Promise<BinaryData>;
-export function binaryData (array: Uint8Array, label: string, mime?: string, ext?: string) {
+export type BinaryBody = { value: Uint8Array, mime: string, ext: string };
+export type BinaryData = { type: "binary", id: number, label: string } & BinaryBody;
+export function binaryData (value: Uint8Array, label: string, mime: string, ext: string): BinaryData;
+export function binaryData (value: Uint8Array, label: string): Promise<BinaryData>;
+export function binaryData (value: Uint8Array, label: string, mime?: string, ext?: string) {
   // mime and ext specified
   if (mime != null) {
-    return { type: "binary", id: gensym(), label, value: { array, mime, ext } };
+    return { type: "binary", id: gensym(), label, value, mime, ext };
   }
   // not specified (detect)
   return (async () => {
     const fileType = await detectors.fileType();
-    const detected = await fileType.fromBuffer(array);
+    const detected = await fileType.fromBuffer(value);
     if (detected) {
       if (detected.mime.endsWith("/xml")) {
         try {
           const { XMLParser } = await packages.fastXmlParser();
           const parser = new XMLParser();
-          const obj = parser.parse(Buffer.from(array.buffer)) as Obj;
-          return objectData(array, obj, label, detected.mime, `.${detected.ext}`);
+          const obj = parser.parse(Buffer.from(value.buffer)) as Obj;
+          return objectData(value, obj, label, detected.mime, `.${detected.ext}`);
         } catch (_) {
           // Fall through and try to decode as text
         }
       } else {
-        return binaryData(array, label, detected.mime, `.${detected.ext}`);
+        return binaryData(value, label, detected.mime, `.${detected.ext}`);
       }
     }
     try {
-      const str = decode(array);
+      const str = decode(value);
       const guessLang = await detectors.guessLang();
       const progLang = await guessLang.runModel(str);
       if (progLang[0] && progLang[0].confidence > DETECTOR_RELIABLITY_THRESHOLD) {
@@ -61,7 +61,7 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
           case "json":
             try {
               const obj = JSON.parse(str);
-              return objectData(array, obj, label, "text/json", ".json");
+              return objectData(value, obj, label, "text/json", ".json");
             } catch (_) {
               break;
             }
@@ -69,7 +69,7 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
             try {
               const { parse } = await packages.yaml();
               const obj = parse(str);
-              return objectData(array, obj, label, "text/yaml", ".yaml");
+              return objectData(value, obj, label, "text/yaml", ".yaml");
             } catch (_) {
               break;
             }
@@ -77,7 +77,7 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
             try {
               const { parse } = await packages.toml();
               const obj = parse(str);
-              return objectData(array, obj, label, "text/toml", ".toml");
+              return objectData(value, obj, label, "text/toml", ".toml");
             } catch (_) {
               break;
             }
@@ -90,7 +90,7 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
       return textData(str, label);
     } catch (_) {
       // cannot decode as string
-      return binaryData(array, label, "", "");
+      return binaryData(value, label, "", "");
     }
   })();
 };
@@ -148,10 +148,10 @@ export const melodyData = (value: string, label: string): MelodyData => (
 export type Atom = string | number | boolean | null;
 export type Collection = (Atom | Collection)[] | { [key: string]: Atom | Collection };
 export type Obj = Atom | Collection;
-export type ObjectBody = { object: Obj, array: Uint8Array, mime: string, ext: string };
-export type ObjectData = { type: "object", id: number, label: string, value: ObjectBody };
-export const objectData = (array: Uint8Array, object: Obj, label: string, mime: string, ext: string): ObjectData => (
-  { type: "object", id: gensym(), label, value: { array, object, mime, ext } }
+export type ObjectBody = { object: Obj, value: Uint8Array, mime: string, ext: string };
+export type ObjectData = { type: "object", id: number, label: string } & ObjectBody;
+export const objectData = (value: Uint8Array, object: Obj, label: string, mime: string, ext: string): ObjectData => (
+  { type: "object", id: gensym(), label, value, object, mime, ext }
 );
 
 export type AtomicData =
@@ -173,6 +173,6 @@ export type MaybeData = Data | ErrorData | null;
 // -------- UTILS
 
 export const toBlob = (data: BinaryData): Blob => (
-  new Blob([data.value.array], { type: data.value.mime })
+  new Blob([data.value], { type: data.mime })
 );
 export const toBlobUrl = (data: BinaryData): string => URL.createObjectURL(toBlob(data));

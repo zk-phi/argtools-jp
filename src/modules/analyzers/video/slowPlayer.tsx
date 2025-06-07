@@ -5,7 +5,7 @@ import { toBlobUrl, type Data, type MaybeData } from "../../../datatypes";
 import type { AnalyzerModule, StateReporter } from "../../";
 
 const detect = (data: Data) => {
-  if (data.type === "binary" && data.value.mime.startsWith("video")) {
+  if (data.type === "binary" && data.mime.startsWith("video")) {
     return "動画をゆっくり確認したければ";
   }
   return null;
@@ -20,11 +20,11 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   useEffect(() => {
     setSourceProps(null);
     runAnalyzer(onUpdate, input, (input: Data) => {
-      if (input.type !== "binary" || !input.value.mime.startsWith("video")) {
+      if (input.type !== "binary" || !input.mime.startsWith("video")) {
         throw new Error("動画データでないか、非対応の形式です");
       }
       const url = toBlobUrl(input);
-      setSourceProps({ src: url, type: input.value.mime });
+      setSourceProps({ src: url, type: input.mime });
       return null;
     });
   }, [onUpdate, input])

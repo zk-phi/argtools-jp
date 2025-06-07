@@ -12,11 +12,11 @@ import { ObjectViewer } from "./ObjectViewer";
 import type { MaybeData, BinaryData } from "../datatypes";
 
 const BinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => (
-  data.value.mime.startsWith("image") ? (
+  data.mime.startsWith("image") ? (
     <ImageViewer data={data} busy={busy} />
-  ) : data.value.mime.startsWith("video") ? (
+  ) : data.mime.startsWith("video") ? (
     <VideoViewer data={data} busy={busy} />
-  ) : data.value.mime.startsWith("audio") ? (
+  ) : data.mime.startsWith("audio") ? (
     <AudioViewer data={data} busy={busy} />
   ) : (
     <RawBinaryViewer data={data} busy={busy} />
