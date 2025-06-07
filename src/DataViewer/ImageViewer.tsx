@@ -16,7 +16,9 @@ export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }
 
   return (
     <ViewerContainer label={data.label} caption={caption} busy={busy}>
-      <img src={url} style={{ maxHeight: 300 }} />
+      <div style={{ maxHeight: 420, overflowY: "scroll" }}>
+        <img src={url} />
+      </div>
     </ViewerContainer>
   );
 };
