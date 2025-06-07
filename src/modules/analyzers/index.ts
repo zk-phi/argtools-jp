@@ -21,6 +21,8 @@ import { rot13Decoder } from "./text/rot13Decoder";
 import { caesarDecoder } from "./text/caesarDecoder";
 import { rot47Decoder } from "./text/rot47Decoder";
 
+import { factorNumber } from "./number/factorNumber";
+
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
 import { imageInvestigator } from "./image/imageInvestigator";
@@ -120,6 +122,12 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     reverseText,
     textToBinary,
     // もしかしたら
+  ],
+}, {
+  category: "数値解析",
+  analyzers: [
+    // →
+    factorNumber,
   ],
 }, {
   category: "他",
