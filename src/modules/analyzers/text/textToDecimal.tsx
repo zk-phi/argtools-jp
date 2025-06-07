@@ -23,7 +23,7 @@ export const textToDecimal = simpleTextDecoderFactory({
   description: (
     <>
       <p>文字列から数値を抽出します。</p>
-      <p>※ 巨大な数値は正しく読み取れない場合があります（オーバーフロー）</p>
+      <p>※巨大な整数や桁数の多い小数には、誤差が出ることに注意してください</p>
     </>
   ),
   decoder: (str: string, label: string) => (

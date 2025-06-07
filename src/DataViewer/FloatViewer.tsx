@@ -11,7 +11,6 @@ export const FloatViewer = ({ data, busy }: { data: FloatData, busy?: boolean })
           onClick={() => savePlainText(data.value.toString())}>
         保存
       </a>
-      {"　"}※計算には誤差が生じる場合があります
     </>
   );
 
