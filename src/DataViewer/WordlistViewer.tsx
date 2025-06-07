@@ -1,11 +1,11 @@
 import { useState, useMemo, useCallback } from "preact/hooks";
 import { useDebouncedValue } from "../utils/ui/debounce";
 import { gensym } from "../utils/gensym";
-import type { WordlistBody } from "../datatypes";
+import type { Wordlist } from "../datatypes";
 
 type Filter = { type: string, string: string, length: number, id: number };
 
-const applyFilter = (value: WordlistBody, filter: Filter) => (
+const applyFilter = (value: Wordlist, filter: Filter) => (
   value.filter(row => {
     switch (filter.type) {
       case "exact": return row.key === filter.string;
@@ -27,7 +27,7 @@ const applyFilter = (value: WordlistBody, filter: Filter) => (
   })
 );
 
-export const WordlistViewer = ({ value, busy }: { value: WordlistBody, busy?: boolean }) => {
+export const WordlistViewer = ({ value, busy }: { value: Wordlist, busy?: boolean }) => {
   const [filters, setFilters] = useState<Filter[]>([]);
   const debouncedFilters = useDebouncedValue(filters, 300);
 

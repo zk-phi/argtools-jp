@@ -1,12 +1,12 @@
 import type { JSX } from "preact";
 import { useState, useCallback } from "preact/hooks";
-import { wordlistData, type WordlistBody } from "../../datatypes";
+import { wordlistData, type Wordlist } from "../../datatypes";
 import { withReporter } from "../../utils/analyzer";
 import { cacheAsync } from "../../utils/cache";
 import type { AnalyzerModule, StateReporter } from "../";
 
 type Dataset = {
-  module: () => Promise<{ data: WordlistBody }>,
+  module: () => Promise<{ data: Wordlist }>,
   url: string,
   label: string,
   license: string,

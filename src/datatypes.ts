@@ -25,8 +25,37 @@ const packages = {
   languageIDs: cacheAsync(() => import("../resources/languageIDs")),
 };
 
+/////////////////////
+
 export type BinaryBody = { value: Uint8Array, mime: string, ext: string };
 export type BinaryData = { type: "binary", id: number, label: string } & BinaryBody;
+
+export type ErrorData = { type: "error", id: number, value: string };
+
+export type TextBody = { value: string, language: string };
+export type TextData = { type: "text", id: number, label: string } & TextBody;
+
+export type IntegerData = { type: "integer", id: number, label: string, value: number };
+export type FloatData = { type: "float", id: number, label: string, value: number };
+
+export type Wordlist = { key: string, value: string, id: number }[];
+export type WordlistData = { type: "wordlist", id: number, label: string, value: Wordlist };
+
+export type Atom = string | number | boolean | null;
+export type Collection = (Atom | Collection)[] | { [key: string]: Atom | Collection };
+export type Obj = Atom | Collection;
+export type ObjectBody = { object: Obj, value: Uint8Array, mime: string, ext: string };
+export type ObjectData = { type: "object", id: number, label: string } & ObjectBody;
+
+export type AtomicData =
+  TextData | BinaryData | IntegerData | FloatData | MelodyData | ObjectData;
+export type MultipleData = { type: "multiple", datum: AtomicData[] };
+
+export type Data = AtomicData | MultipleData | WordlistData;
+export type MaybeData = Data | ErrorData | null;
+
+/////////////////////
+
 export function binaryData (value: Uint8Array, label: string, mime: string, ext: string): BinaryData;
 export function binaryData (value: Uint8Array, label: string): Promise<BinaryData>;
 export function binaryData (value: Uint8Array, label: string, mime?: string, ext?: string) {
@@ -95,12 +124,10 @@ export function binaryData (value: Uint8Array, label: string, mime?: string, ext
   })();
 };
 
-export type ErrorData = { type: "error", id: number, value: string };
 export const errorData = (value: string): ErrorData => (
   { type: "error", id: gensym(), value }
 );
 
-export type TextData = { type: "text", id: number, label: string, value: string, language: string };
 export function textData (value: string, label: string, language: string): TextData;
 export function textData (value: string, label: string): Promise<TextData>;
 export function textData (value: string, label: string, language?: string) {
@@ -120,12 +147,10 @@ export function textData (value: string, label: string, language?: string) {
   })();
 };
 
-export type IntegerData = { type: "integer", id: number, label: string, value: number };
 export const integerData = (value: number, label: string): IntegerData => (
   { type: "integer", id: gensym(), label, value }
 );
 
-export type FloatData = { type: "float", id: number, label: string, value: number };
 export const floatData = (value: number, label: string): FloatData => (
   { type: "float", id: gensym(), label, value }
 );
@@ -134,9 +159,7 @@ export const numberData = (value: number, label: string): IntegerData | FloatDat
   Number.isSafeInteger(value) ? integerData(value, label) : floatData(value, label)
 );
 
-export type WordlistBody = { key: string, value: string, id: number }[];
-export type WordlistData = { type: "wordlist", id: number, label: string, value: WordlistBody };
-export const wordlistData = (value: WordlistBody, label: string): WordlistData => (
+export const wordlistData = (value: Wordlist, label: string): WordlistData => (
   { type: "wordlist", id: gensym(), label, value }
 );
 
@@ -145,30 +168,16 @@ export const melodyData = (value: string, label: string): MelodyData => (
   { type: "mml", id: gensym(), label, value }
 );
 
-export type Atom = string | number | boolean | null;
-export type Collection = (Atom | Collection)[] | { [key: string]: Atom | Collection };
-export type Obj = Atom | Collection;
-export type ObjectBody = { object: Obj, value: Uint8Array, mime: string, ext: string };
-export type ObjectData = { type: "object", id: number, label: string } & ObjectBody;
 export const objectData = (value: Uint8Array, object: Obj, label: string, mime: string, ext: string): ObjectData => (
   { type: "object", id: gensym(), label, value, object, mime, ext }
 );
 
-export type AtomicData =
-  TextData | BinaryData | IntegerData | FloatData | MelodyData | ObjectData
-// | TextTableData | NumberTableData | IntegersData | FloatsData
-;
-
-export type MultipleData = { type: "multiple", datum: AtomicData[] };
 export const multipleData = (datum: AtomicData[]): Data => {
   if (datum.length === 1) {
     return datum[0];
   }
   return { type: "multiple", datum };
 };
-
-export type Data = AtomicData | MultipleData | WordlistData;
-export type MaybeData = Data | ErrorData | null;
 
 // -------- UTILS
 

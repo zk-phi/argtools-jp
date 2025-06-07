@@ -1,6 +1,6 @@
-import type { WordlistBody } from "../../datatypes";
+import type { Wordlist } from "../../datatypes";
 
-export const formatUnidic = (data: string): WordlistBody => (
+export const formatUnidic = (data: string): Wordlist => (
   data.split("\n").filter(line => line.length > 0).map((line, ix) => {
     const [category, subcategory, subsubcategory, word] = line.split(",");
 
