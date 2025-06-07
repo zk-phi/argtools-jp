@@ -44,7 +44,7 @@ export type WordlistData = { type: "wordlist", id: number, label: string, value:
 export type Atom = string | number | boolean | null;
 export type Collection = (Atom | Collection)[] | { [key: string]: Atom | Collection };
 export type Obj = Atom | Collection;
-export type ObjectBody = { object: Obj, value: Uint8Array, mime: string, ext: string };
+export type ObjectBody = { object: Obj, value: string, mime: string, ext: string };
 export type ObjectData = { type: "object", id: number, label: string } & ObjectBody;
 
 export type AtomicData =
@@ -72,8 +72,9 @@ export function binaryData (value: Uint8Array, label: string, mime?: string, ext
         try {
           const { XMLParser } = await packages.fastXmlParser();
           const parser = new XMLParser();
-          const obj = parser.parse(Buffer.from(value.buffer)) as Obj;
-          return objectData(value, obj, label, detected.mime, `.${detected.ext}`);
+          const str = decode(value);
+          const obj = parser.parse(str);
+          return objectData(str, obj, label, detected.mime, `.${detected.ext}`);
         } catch (_) {
           // Fall through and try to decode as text
         }
@@ -90,7 +91,7 @@ export function binaryData (value: Uint8Array, label: string, mime?: string, ext
           case "json":
             try {
               const obj = JSON.parse(str);
-              return objectData(value, obj, label, "text/json", ".json");
+              return objectData(str, obj, label, "text/json", ".json");
             } catch (_) {
               break;
             }
@@ -98,7 +99,7 @@ export function binaryData (value: Uint8Array, label: string, mime?: string, ext
             try {
               const { parse } = await packages.yaml();
               const obj = parse(str);
-              return objectData(value, obj, label, "text/yaml", ".yaml");
+              return objectData(str, obj, label, "text/yaml", ".yaml");
             } catch (_) {
               break;
             }
@@ -106,7 +107,7 @@ export function binaryData (value: Uint8Array, label: string, mime?: string, ext
             try {
               const { parse } = await packages.toml();
               const obj = parse(str);
-              return objectData(value, obj, label, "text/toml", ".toml");
+              return objectData(str, obj, label, "text/toml", ".toml");
             } catch (_) {
               break;
             }
@@ -168,7 +169,7 @@ export const melodyData = (value: string, label: string): MelodyData => (
   { type: "mml", id: gensym(), label, value }
 );
 
-export const objectData = (value: Uint8Array, object: Obj, label: string, mime: string, ext: string): ObjectData => (
+export const objectData = (value: string, object: Obj, label: string, mime: string, ext: string): ObjectData => (
   { type: "object", id: gensym(), label, value, object, mime, ext }
 );
 
