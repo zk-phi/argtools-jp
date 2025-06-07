@@ -52,15 +52,15 @@ export const luminanceFromRGB = (r: number, g: number, b: number) => Math.round(
 // Tweak 0-255 color value
 export const tweakColor = (
   value: number, // [0-255]
-  brightness: number, // [-1, 1]
-  contrast: number,
+  brightness: number, // [-255, 255]
+  contrast: number, // [0, ∞(128)]
   pow?: boolean,
   screen?: boolean,
 ) => {
   const screened = screen ? 2 * value - value ** 2 / 255 : value;
   const powed = pow ? screened ** 2 / 255 : screened;
   return clamp(
-    (powed + brightness * 255 - 128) * contrast + 128,
+    (powed + brightness - 128) * contrast + 128,
     0,
     255,
   );

@@ -187,9 +187,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
           <input
               type="range"
               style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-              min="-1"
-              max="1"
-              step="0.01"
+              min="-192"
+              max="192"
+              step="1"
               value={colorProfile.brightness.r}
               onInput={(e) => onBatchInputColorProfile(
                 "brightness",
@@ -201,7 +201,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               type="range"
               style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
               min="1"
-              max="50"
+              max="64"
               step="0.5"
               value={colorProfile.contrast.r}
               onInput={(e) => onBatchInputColorProfile(
@@ -217,9 +217,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               <input
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                  min="-1"
-                  max="1"
-                  step="0.01"
+                  min="-192"
+                  max="192"
+                  step="1"
                   value={colorProfile.brightness.r}
                   onInput={(e) => onInputColorProfile(
                     "brightness",
@@ -232,7 +232,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
                   min="1"
-                  max="50"
+                  max="64"
                   step="0.5"
                   value={colorProfile.contrast.r}
                   onInput={(e) => onInputColorProfile(
@@ -248,9 +248,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               <input
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                  min="-1"
-                  max="1"
-                  step="0.01"
+                  min="-192"
+                  max="192"
+                  step="1"
                   value={colorProfile.brightness.g}
                   onInput={(e) => onInputColorProfile(
                     "brightness",
@@ -263,7 +263,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
                   min="1"
-                  max="50"
+                  max="64"
                   step="0.5"
                   value={colorProfile.contrast.g}
                   onInput={(e) => onInputColorProfile(
@@ -279,9 +279,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               <input
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
-                  min="-1"
-                  max="1"
-                  step="0.01"
+                  min="-192"
+                  max="192"
+                  step="1"
                   value={colorProfile.brightness.b}
                   onInput={(e) => onInputColorProfile(
                     "brightness",
@@ -294,7 +294,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
                   min="1"
-                  max="50"
+                  max="64"
                   step="0.5"
                   value={colorProfile.contrast.b}
                   onInput={(e) => onInputColorProfile(
