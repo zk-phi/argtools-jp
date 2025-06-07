@@ -10,7 +10,7 @@ const MAX_SUPPORTED_INTEGER = 104729 ** 2;
 
 const detect = (data: Data) => {
   if (data.type === "integer" &&
-      /// data.value > 1000 &&
+      data.value > 1000 &&
       data.value <= MAX_SUPPORTED_INTEGER) {
     return "大きな整数 → 素因数分解してみるとなにか見えてくるかも？";
   }
@@ -27,11 +27,11 @@ const analyze = async (input: Data) => {
 
   const { PRIMES } = await packages.primes();
 
-  let int = BigInt(input.value);
-  const acc = [];
+  let int = input.value;
+  const acc: number[] = [];
   for (let i = 0; i < PRIMES.length && PRIMES[i] <= int; i++) {
-    while (int % PRIMES[i] === 0n) {
-      int = int / PRIMES[i];
+    while (int % PRIMES[i] === 0) {
+      int /= PRIMES[i];
       acc.push(Number(PRIMES[i]));
     }
   }

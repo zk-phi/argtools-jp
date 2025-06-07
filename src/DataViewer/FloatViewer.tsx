@@ -5,12 +5,13 @@ import { ViewerContainer } from "./ViewerContainer";
 export const FloatViewer = ({ data, busy }: { data: FloatData, busy?: boolean }) => {
   const caption = (
     <>
-      小数値{" "}
+      数値{" "}
       <a
           href="javascript: void(0)"
           onClick={() => savePlainText(data.value.toString())}>
         保存
       </a>
+      {"　"}※計算には誤差が生じる場合があります
     </>
   );
 

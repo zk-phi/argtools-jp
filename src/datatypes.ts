@@ -72,7 +72,7 @@ export const floatData = (value: number, label: string): FloatData => (
 );
 
 export const numberData = (value: number, label: string): IntegerData | FloatData => (
-  Number.isInteger(value) ? integerData(value, label) : floatData(value, label)
+  Number.isSafeInteger(value) ? integerData(value, label) : floatData(value, label)
 );
 
 export type WordlistBody = { key: string, value: string, id: number }[];
