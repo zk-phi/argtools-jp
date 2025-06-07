@@ -43,6 +43,7 @@ import { gzipDecompressor } from "./binary/gzipDecompressor";
 import { binaryToText } from "./binary/binaryToText";
 import { binaryToNumber } from "./binary/binaryToNumber";
 import { bitopBinary } from "./binary/bitopBinaries";
+import { binaryToImage } from "./binary/binaryToImage";
 
 import { chatGptSuggestor } from "./suggestions/chatGptSuggestor";
 import { googleLensSuggestor } from "./suggestions/googleLensSuggestor";
@@ -96,6 +97,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     // もしかしたら
     binaryToText,
     binaryConcatenator,
+    binaryToImage,
   ],
 }, {
   category: "テキスト解析",
