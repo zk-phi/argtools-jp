@@ -7,8 +7,10 @@ https://zk-phi.github.io/argtools-jp
 # 権利表示
 ## バンドルに含まれる OSS
 
+- guesslang.js (C) Ray-D-Song / MIT License
 - audiobuffer-to-wav (C) Jam3 / MIT License
 - ExifReader (C) Mattias Wallander / MPL License
+- fast-xml-parser (C) Amit Kumar Gupta / MIT License
 - fflate (C) Arjun Barrett / MIT License
 - FFT.js (C) Fedor Indutny / MIT License
 - FileSaver.js (C) Eli Grey / MIT License
@@ -17,7 +19,9 @@ https://zk-phi.github.io/argtools-jp
 - iconv-lite (C) Alexander Shtuchkin / MIT License
 - Preact (C) Jason Miller / MIT License
 - punycode (C) Mathias Bynens / MIT License
+- toml-node (C) Michelle Tilley / MIT License
 - vite-plugin-node-polyfills (C) David R. Myers / MIT License
+- yaml (C) Eemeli Aro / ISC License
 - Tiny.css (C) Muhammed Ihsan / MIT License
 
 文字化け解読ツールで使用している Shift_JIS と UTF-8 の対応表は encoding.js (C) polygonplanet / MIT License から生成しています。

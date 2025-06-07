@@ -1,14 +1,25 @@
-import { FileTypeParser } from "file-type";
-import { detectXml } from "@file-type/xml";
+import { GuessLang } from "@ray-d-song/guesslang-js";
 import { gensym } from "./utils/gensym";
 import { decode } from "./utils/array/decode";
 import { cacheAsync } from "./utils/cache";
 
-const packages = {
-  fastXmlParser: cacheAsync(() => import("fast-xml-parser")),
+const detectors = {
+  fileType: cacheAsync(async () => {
+    const { FileTypeParser } = await import("file-type");
+    const { detectXml } = await import("@file-type/xml");
+    return new FileTypeParser({ customDetectors: [detectXml] });
+  }),
+  guessLang: cacheAsync(async () => {
+    const { GuessLang } = await import("@ray-d-song/guesslang-js");
+    return new GuessLang();
+  }),
 };
 
-const fileType = new FileTypeParser({ customDetectors: [detectXml] });
+const packages = {
+  fastXmlParser: cacheAsync(() => import("fast-xml-parser")),
+  yaml: cacheAsync(() => import("yaml")),
+  toml: cacheAsync(() => import("toml")),
+};
 
 export type BinaryBody = { array: Uint8Array, mime: string, ext: string };
 export type BinaryData = { type: "binary", id: number, label: string, value: BinaryBody };
@@ -21,6 +32,7 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
   }
   // not specified (detect)
   return (async () => {
+    const fileType = await detectors.fileType();
     const detected = await fileType.fromBuffer(array);
     if (detected) {
       if (detected.mime.endsWith("/xml")) {
@@ -30,23 +42,46 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
           const obj = parser.parse(Buffer.from(array.buffer)) as Obj;
           return objectData(array, obj, label, detected.mime, `.${detected.ext}`);
         } catch (_) {
-          return binaryData(array, label, detected.mime, `.${detected.ext}`);
+          // Fall through and try to decode as text
         }
+      } else {
+        return binaryData(array, label, detected.mime, `.${detected.ext}`);
       }
-      return binaryData(array, label, detected.mime, `.${detected.ext}`);
     }
     try {
       const str = decode(array);
-      if (["[", "{"].includes(str.charAt(0))) {
-        try {
-          const obj = JSON.parse(str);
-          return objectData(array, obj, label, "text/json", ".json");
-        } catch (_) {
-          return textData(str, label);
+      const guessLang = await detectors.guessLang();
+      const progLang = await guessLang.runModel(str);
+      if (progLang[0] && progLang[0].confidence > 0.70) {
+        switch (progLang[0].languageId) {
+          case "json":
+            try {
+              const obj = JSON.parse(str);
+              return objectData(array, obj, label, "text/json", ".json");
+            } catch (_) {
+              break;
+            }
+          case "yaml":
+            try {
+              const { parse } = await packages.yaml();
+              const obj = parse(str);
+              return objectData(array, obj, label, "text/yaml", ".yaml");
+            } catch (_) {
+              break;
+            }
+          case "toml":
+            try {
+              const { parse } = await packages.toml();
+              const obj = parse(str);
+              return objectData(array, obj, label, "text/toml", ".toml");
+            } catch (_) {
+              break;
+            }
         }
       }
       return textData(str, label);
     } catch (_) {
+      // cannot decode as string
       return binaryData(array, label, "", "");
     }
   })();
