@@ -3,8 +3,8 @@
 
       <head>
         <link rel="stylesheet" type="text/css" href="/argtools-jp/assets/static/resources_dark-aebd039b.DIrtAqkC.css">
-        <title>ちょっと高性能な文字化け復元ツール</title>
-        <meta name="description" content="データが失われている（&#039;?&#039; になっている）文字化けも修復を試みます。">
+        <title>バイナリ可視化ツール</title>
+        <meta name="description" content="バイナリを値の範囲ごとに色分けして、画像として出力するツールです。">
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,10 +19,10 @@
 
       <body>
         <header><a href="/argtools-jp/">＜ 全てのツール</a></header>
-        <h2>ちょっと高性能な文字化け復元ツール</h2>
-        <p>データが失われている（&#039;?&#039; になっている）文字化けも修復を試みます。</p>
+        <h2>バイナリ可視化ツール</h2>
+        <p>バイナリを値の範囲ごとに色分けして、画像として出力するツールです。</p>
         <div id="app">
-          <hr/><h3>復元したいテキスト</h3><div style="margin-bottom:1em;"><textarea rows="20" cols="50"></textarea><fieldset><legend>オプション</legend><select><option value="eucjp">EUC-JP</option><option selected value="cp932">Shift_JIS</option><option value="utf8">UTF-8</option><option value="utf16">UTF-16</option></select> に化けたテキストを <select><option value="eucjp">EUC-JP</option><option value="cp932">Shift_JIS</option><option selected value="utf8">UTF-8</option><option value="utf16">UTF-16</option></select> に戻す</fieldset></div>
+          <hr/><h3>可視化したいファイル</h3><div style="margin-bottom:1em;"><input type="file" multiple/></div>
         </div>
         <footer style="font-size:smaller">
           <div>
@@ -44,15 +44,16 @@ function share() {
   window.open("https://twitter.com/share?url=" + url + "&text=" + title + "&hashtags=ARGTOOLS");
 }
         </script>
-        <script id="vike_pageContext" type="application/json">{"_urlRewrite":null,"pageId":"/pages/apps/mojibake","routeParams":{}}</script>
+        <script id="vike_pageContext" type="application/json">{"_urlRewrite":null,"pageId":"/pages/apps/binary-visualizer","routeParams":{}}</script>
         <script id="vike_globalContext" type="application/json">{}</script>
         <script src="/argtools-jp/assets/entries/entry-server-routing.BGiTop0x.js" type="module" async></script>
-        <link rel="modulepreload" href="/argtools-jp/assets/entries/pages_apps_mojibake.si0YlEYk.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/entries/pages_apps_binary-visualizer.BLZ2rTTp.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-Dkhd1Edw.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-D8MOA9rb.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-7XxqCBUU.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-QuGuscFx.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-D3fUTipx.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-D5JzPa4z.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-DRgjz1eH.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-j3UwUMgB.js" as="script" type="text/javascript">
       </body>
 
     </html>
