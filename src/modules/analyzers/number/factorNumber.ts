@@ -6,7 +6,7 @@ const packages = {
   primes: cacheAsync(() => import("../../../../resources/primes")),
 }
 
-const MAX_SUPPORTED_INTEGER = 104729 ** 2;
+export const MAX_SUPPORTED_INTEGER = 104729 ** 2;
 
 const detect = (data: Data) => {
   if (data.type === "integer" &&
@@ -19,10 +19,13 @@ const detect = (data: Data) => {
 
 const analyze = async (input: Data) => {
   if (input.type !== "integer") {
-    throw new Error("整数データではありません。");
+    throw new Error("整数以外のデータか、大きすぎる整数が与えられました。");
   }
   if (input.value > MAX_SUPPORTED_INTEGER) {
-    throw new Error("大きすぎる整数です。");
+    throw new Error(`${MAX_SUPPORTED_INTEGER} より大きい整数には対応していません。`);
+  }
+  if (input.value < 2) {
+    throw new Error("２未満の整数には対応していません。");
   }
 
   const { PRIMES } = await packages.primes();
@@ -46,6 +49,7 @@ const analyze = async (input: Data) => {
 
 export const factorNumber = simpleAnalyzerFactory({
   label: "素因数分解する",
+  app: "/argtools-jp/apps/factor",
   detect,
   analyze,
 });
