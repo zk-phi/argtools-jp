@@ -129,6 +129,7 @@ const AnalyzersList = () => (
         <div style={{ marginLeft: "16px", fontSize: "smaller" }}>
           <a href="/argtools-jp/apps/filetype">ファイル形式の自動判別</a>
           、<a href="/argtools-jp/anything">条件に一致する単語や地名の特定</a>
+          、プログラミング言語・自然言語の推定
         </div>
       </div>
       <div>
