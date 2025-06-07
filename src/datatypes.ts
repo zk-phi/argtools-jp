@@ -4,7 +4,7 @@ import { cacheAsync } from "./utils/cache";
 
 const DETECTOR_RELIABLITY_THRESHOLD = 0.70;
 
-const detectors = {
+const instances = {
   fileType: cacheAsync(async () => {
     const { FileTypeParser } = await import("file-type");
     const { detectXml } = await import("@file-type/xml");
@@ -14,10 +14,13 @@ const detectors = {
     const { GuessLang } = await import("@ray-d-song/guesslang-js");
     return new GuessLang();
   }),
+  xmlParser: cacheAsync(async () => {
+    const { XMLParser } = await import("fast-xml-parser");
+    return new XMLParser();
+  }),
 };
 
 const packages = {
-  fastXmlParser: cacheAsync(() => import("fast-xml-parser")),
   yaml: cacheAsync(() => import("yaml")),
   toml: cacheAsync(() => import("toml")),
   franc: cacheAsync(() => import("franc")),
@@ -65,61 +68,27 @@ export function binaryData (value: Uint8Array, label: string, mime?: string, ext
   }
   // not specified (detect)
   return (async () => {
-    const fileType = await detectors.fileType();
+    const fileType = await instances.fileType();
     const detected = await fileType.fromBuffer(value);
+    // Known binary
     if (detected) {
       if (detected.mime.endsWith("/xml")) {
         try {
-          const { XMLParser } = await packages.fastXmlParser();
-          const parser = new XMLParser();
+          const parser = await instances.xmlParser();
           const str = decode(value);
           const obj = parser.parse(str);
           return objectData(str, obj, label, detected.mime, `.${detected.ext}`);
         } catch (_) {
-          // Fall through and try to decode as text
+          // Fall through
         }
-      } else {
-        return binaryData(value, label, detected.mime, `.${detected.ext}`);
       }
+      return binaryData(value, label, detected.mime, `.${detected.ext}`);
     }
     try {
       const str = decode(value);
-      const guessLang = await detectors.guessLang();
-      const progLang = await guessLang.runModel(str);
-      if (progLang[0] && progLang[0].confidence > DETECTOR_RELIABLITY_THRESHOLD) {
-        switch (progLang[0].languageId) {
-          case "json":
-            try {
-              const obj = JSON.parse(str);
-              return objectData(str, obj, label, "text/json", ".json");
-            } catch (_) {
-              break;
-            }
-          case "yaml":
-            try {
-              const { parse } = await packages.yaml();
-              const obj = parse(str);
-              return objectData(str, obj, label, "text/yaml", ".yaml");
-            } catch (_) {
-              break;
-            }
-          case "toml":
-            try {
-              const { parse } = await packages.toml();
-              const obj = parse(str);
-              return objectData(str, obj, label, "text/toml", ".toml");
-            } catch (_) {
-              break;
-            }
-          default: {
-            const { languageIDs } = await packages.languageIDs();
-            return textData(str, label, languageIDs[progLang[0].languageId] ?? "");
-          }
-        }
-      }
       return textData(str, label);
     } catch (_) {
-      // cannot decode as string
+      // Non-text, unknown binary
       return binaryData(value, label, "", "");
     }
   })();
@@ -136,7 +105,49 @@ export function textData (value: string, label: string, language?: string) {
     return { type: "text", id: gensym(), label, value, language };
   }
   return (async () => {
+    const guessLang = await instances.guessLang();
     const { francAll } = await packages.franc();
+
+    const progLang = await guessLang.runModel(value);
+    if (progLang[0] && progLang[0].confidence > DETECTOR_RELIABLITY_THRESHOLD) {
+      switch (progLang[0].languageId) {
+        case "xml":
+          try {
+            const parser = await instances.xmlParser();
+            const obj = parser.parse(value);
+            return objectData(value, obj, label, "text/xml", ".xml");
+          } catch (_) {
+            break;
+          }
+        case "json":
+          try {
+            const obj = JSON.parse(value);
+            return objectData(value, obj, label, "text/json", ".json");
+          } catch (_) {
+            break;
+          }
+        case "yaml":
+          try {
+            const { parse } = await packages.yaml();
+            const obj = parse(value);
+            return objectData(value, obj, label, "text/yaml", ".yaml");
+          } catch (_) {
+            break;
+          }
+        case "toml":
+          try {
+            const { parse } = await packages.toml();
+            const obj = parse(value);
+            return objectData(value, obj, label, "text/toml", ".toml");
+          } catch (_) {
+            break;
+          }
+        default:
+      }
+      const { languageIDs } = await packages.languageIDs();
+      return textData(value, label, languageIDs[progLang[0].languageId] ?? "");
+    }
+
     const lang = francAll(value);
     if (lang.length > 0 && lang[0][0] !== "und" &&
         lang[0][1] > DETECTOR_RELIABLITY_THRESHOLD) {
@@ -144,6 +155,7 @@ export function textData (value: string, label: string, language?: string) {
       const name = languageNames[lang[0][0]] ?? "";
       return textData(value, label, name);
     }
+
     return textData(value, label, "");
   })();
 };
