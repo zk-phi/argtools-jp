@@ -57,6 +57,7 @@ const analyze = async (input: Data) => {
 
 export const binaryToImage = simpleAnalyzerFactory({
   label: "バイナリを可視化",
+  app: "/argtools-jp/apps/binary-visualizer",
   detect,
   analyze,
 });
