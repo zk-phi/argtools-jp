@@ -1,9 +1,12 @@
-import { useMemo } from "preact/hooks";
+import { useMemo, useState, useCallback } from "preact/hooks";
 import { toBlobUrl, type BinaryData } from "../datatypes";
 import { save } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
 export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
+  const [full, setFull] = useState(false);
+  const toggleFull = useCallback(() => setFull(full => !full), []);
+
   const url = useMemo(() => toBlobUrl(data), [data]);
   const upcaseExt = useMemo(() => data.ext.slice(1).toUpperCase(), [data]);
 
@@ -16,8 +19,8 @@ export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }
 
   return (
     <ViewerContainer label={data.label} caption={caption} busy={busy}>
-      <div style={{ maxHeight: 420, overflowY: "scroll" }}>
-        <img src={url} />
+      <div style={{ maxHeight: full ? undefined : 420, overflowY: "scroll" }}>
+        <img src={url} style={{ cursor: "pointer" }} onClick={toggleFull} />
       </div>
     </ViewerContainer>
   );
