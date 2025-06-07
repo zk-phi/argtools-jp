@@ -31,6 +31,7 @@ import { audioReverser } from "./audio/audioReverser";
 import { audioMaximizer } from "./audio/audioMaximizer";
 import { waveformRenderer } from "./audio/waveformRenderer";
 import { spectrogramRenderer } from "./audio/spectrogramRenderer";
+import { centerCanceller } from "./audio/centerCanceller";
 
 import { audioExtractor } from "./video/audioExtractor";
 import { slowPlayer } from "./video/slowPlayer";
@@ -74,6 +75,8 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     // もしかしたら
     waveformRenderer,
     spectrogramRenderer,
+    // MicroApp-only
+    centerCanceller,
   ],
 }, {
   category: "映像解析",
