@@ -16,6 +16,7 @@ https://zk-phi.github.io/argtools-jp
 - FileSaver.js (C) Eli Grey / MIT License
 - file-type (C) Sindre Sorhus / MIT License
   - file-type-xml (C) Borewit / MIT License
+- franc (C) Titus Wormer / MIT License
 - iconv-lite (C) Alexander Shtuchkin / MIT License
 - Preact (C) Jason Miller / MIT License
 - punycode (C) Mathias Bynens / MIT License
