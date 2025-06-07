@@ -1,4 +1,3 @@
-import { GuessLang } from "@ray-d-song/guesslang-js";
 import { gensym } from "./utils/gensym";
 import { decode } from "./utils/array/decode";
 import { cacheAsync } from "./utils/cache";
@@ -77,6 +76,7 @@ export function binaryData (array: Uint8Array, label: string, mime?: string, ext
             } catch (_) {
               break;
             }
+          default:
         }
       }
       return textData(str, label);
