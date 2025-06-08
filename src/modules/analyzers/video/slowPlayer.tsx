@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "preact/hooks";
-import { runAnalyzer } from "../../../utils/analyzer";
+import { useAnalyzer } from "../../../utils/analyzer";
 import { useDebouncedValue } from "../../../utils/ui/debounce";
 import { toBlobUrl, type Data, type MaybeData } from "../../../datatypes";
 import type { AnalyzerModule, StateReporter } from "../../";
@@ -17,17 +17,15 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   const [sourceProps, setSourceProps] = useState<{ src: string, type: string } | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
+  useAnalyzer(onUpdate, input, (input: Data) => {
     setSourceProps(null);
-    runAnalyzer(onUpdate, input, (input: Data) => {
-      if (input.type !== "binary" || !input.mime.startsWith("video")) {
-        throw new Error("動画データでないか、非対応の形式です");
-      }
-      const url = toBlobUrl(input);
-      setSourceProps({ src: url, type: input.mime });
-      return null;
-    });
-  }, [onUpdate, input])
+    if (input.type !== "binary" || !input.mime.startsWith("video")) {
+      throw new Error("動画データでないか、非対応の形式です");
+    }
+    const url = toBlobUrl(input);
+    setSourceProps({ src: url, type: input.mime });
+    return null;
+  }, [onUpdate, input]);
 
   useEffect(() => {
     if (videoRef.current) {

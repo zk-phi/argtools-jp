@@ -1,6 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
 import { ellipsis } from "../utils/string";
-import { useAnalyzer, withReporter } from "../utils/analyzer";
+import { useAnalyzer, useReporter } from "../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from ".";
 import { multipleData, type MaybeData, type Data, type AtomicData } from "../datatypes";
 
@@ -74,22 +74,20 @@ export const urlExtractorFactory = (props: UrlExtractorFactoryProps): AnalyzerMo
     ),
     component: ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
       const [urls, setUrls] = useState<string[]>([]);
-      useEffect(() => {
-        withReporter(onUpdate, () => {
-          setUrls([]);
-          if (!input) {
-            return null;
-          }
-          if (input.type !== "text") {
-            throw new Error("テキストデータではありません");
-          }
-          const matches = input.value.match(matcherRegex);
-          if (!matches) {
-            throw new Error("マッチする部分がありませんでした😭");
-          }
-          setUrls(matches.map(props.urlConstructor));
+      useReporter(onUpdate, () => {
+        setUrls([]);
+        if (!input) {
           return null;
-        });
+        }
+        if (input.type !== "text") {
+          throw new Error("テキストデータではありません");
+        }
+        const matches = input.value.match(matcherRegex);
+        if (!matches) {
+          throw new Error("マッチする部分がありませんでした😭");
+        }
+        setUrls(matches.map(props.urlConstructor));
+        return null;
       }, [input, onUpdate, props.urlConstructor]);
       return (
         <ul>

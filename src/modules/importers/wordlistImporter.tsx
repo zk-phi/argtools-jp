@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { useState, useCallback } from "preact/hooks";
 import { wordlistData, type Wordlist } from "../../datatypes";
-import { withReporter } from "../../utils/analyzer";
+import { useReporter } from "../../utils/analyzer";
 import { cacheAsync } from "../../utils/cache";
 import type { AnalyzerModule, StateReporter } from "../";
 
@@ -95,17 +95,17 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
   const [datasetKey, setDatasetKey] = useState("");
 
   const onChange = useCallback((e: JSX.TargetedEvent<HTMLSelectElement, Event>) => {
-    const key = e.currentTarget.value;
-    setDatasetKey(key);
-    withReporter(onUpdate, async () => {
-      const dataset = datasets[key];
-      if (!dataset) {
-        return null;
-      }
-      const { data } = await dataset.module();
-      return wordlistData(data, dataset.label);
-    });
-  }, [onUpdate]);
+    setDatasetKey(e.currentTarget.value);
+  }, []);
+
+  useReporter(onUpdate, async () => {
+    const dataset = datasets[datasetKey];
+    if (!dataset) {
+      return null;
+    }
+    const { data } = await dataset.module();
+    return wordlistData(data, dataset.label);
+  }, [datasetKey]);
 
   return (
     <>
