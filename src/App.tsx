@@ -108,7 +108,7 @@ const allModules = [...analyzerCategories, ...toolCategories];
 const AnalyzersList = () => (
   <section>
     <details>
-      <summary>実装されている変換器・解析器</summary>
+      <summary>実装されているツール一覧</summary>
       {allModules.map(category => (
         !category.unlisted && (
           <div key={category.category}>
