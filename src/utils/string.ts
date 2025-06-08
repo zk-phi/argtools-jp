@@ -25,12 +25,14 @@ export const quoteRegex = (str: string): string => (
 
 // Find un-natural language
 // Returns either `false` (maybe natural), `true` (maybe programming), or `undefined`
-const ALL_ASCII = /^[\x00-\x7F]+$/;
+const ASCII = /[\x00-\x7F]+/g;
 const PROGRAMMING_ISH_SYMBOLS = /[#$%&()*+/:;<=>@[\\\x5c^_{|}~]+/g;
 const OTHER_SYMBOLS = /[!\x22\x27,-.?\x60]/g
 export const maybeProgrammingLanguage = (string: string): boolean | undefined => {
   const digest = string.slice(0, 1000);
-  if (!digest.match(ALL_ASCII)) {
+  const ascii = digest.match(ASCII);
+  if (!ascii || ascii.join("").length / digest.length < 0.8) {
+    // too many non-ascii characters
     return false;
   }
 
