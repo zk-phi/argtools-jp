@@ -53,7 +53,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       return multipleData([...input.datum, ...datum]);
     }
     return multipleData([input, ...datum]);
-  }, [files]);
+  }, [files, input]);
 
   return (
     <input type="file" multiple={true} onChange={onChange} />

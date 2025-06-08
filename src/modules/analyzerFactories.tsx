@@ -1,4 +1,4 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { ellipsis } from "../utils/string";
 import { useAnalyzer, useReporter } from "../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from ".";
@@ -88,7 +88,7 @@ export const urlExtractorFactory = (props: UrlExtractorFactoryProps): AnalyzerMo
         }
         setUrls(matches.map(props.urlConstructor));
         return null;
-      }, [input, onUpdate, props.urlConstructor]);
+      }, [input, props.urlConstructor]);
       return (
         <ul>
           {urls.map(url => (

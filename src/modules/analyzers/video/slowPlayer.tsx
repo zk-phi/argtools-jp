@@ -25,7 +25,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     const url = toBlobUrl(input);
     setSourceProps({ src: url, type: input.mime });
     return null;
-  }, [onUpdate, input]);
+  }, []);
 
   useEffect(() => {
     if (videoRef.current) {
