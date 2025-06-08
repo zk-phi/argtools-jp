@@ -24,10 +24,11 @@ export const quoteRegex = (str: string): string => (
 );
 
 // Find un-natural language
+// Returns either `false` (maybe natural), `true` (maybe programming), or `undefined`
 const ALL_ASCII = /^[\x00-\x7F]+$/;
 const PROGRAMMING_ISH_SYMBOLS = /[#$%&()*+/:;<=>@[\\\x5c^_{|}~]+/g;
 const OTHER_SYMBOLS = /[!\x22\x27,-.?\x60]/g
-export const maybeProgrammingLanguage = (string: string): boolean => {
+export const maybeProgrammingLanguage = (string: string): boolean | undefined => {
   const digest = string.slice(0, 1000);
   if (!digest.match(ALL_ASCII)) {
     return false;
@@ -42,8 +43,8 @@ export const maybeProgrammingLanguage = (string: string): boolean => {
   const otherSymbols = digest.match(OTHER_SYMBOLS);
   const otherSymbolsCount = (otherSymbols ?? []).join("").length;
 
-    if ((symbolsCount + otherSymbolsCount * 0.5) / digest.length > 0.1) {
-      return true;
-    }
-    return false;
+  if ((symbolsCount + otherSymbolsCount * 0.5) / digest.length > 0.1) {
+    return true;
+  }
+  return undefined;
 }

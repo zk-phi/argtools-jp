@@ -2,8 +2,6 @@ import { gensym } from "./utils/gensym";
 import { decode } from "./utils/array/decode";
 import { cacheAsync } from "./utils/cache";
 
-const DETECTOR_RELIABLITY_THRESHOLD = 0.70;
-
 const instances = {
   fileType: cacheAsync(async () => {
     const { FileTypeParser } = await import("file-type");
@@ -107,13 +105,24 @@ export function textData (value: string, label: string, language?: string) {
   }
   return (async () => {
     const guessLang = await instances.guessLang();
-    const { francAll } = await packages.franc();
     const { maybeProgrammingLanguage } = await packages.string();
 
     const maybeProgramming = maybeProgrammingLanguage(value);
+
     const progLang = await guessLang.runModel(value);
-    if (progLang[0] &&
-        (progLang[0].confidence > DETECTOR_RELIABLITY_THRESHOLD || maybeProgramming)) {
+    const isPL = !progLang[0] ? (
+      // no results
+      false
+    ) : maybeProgramming !== false && progLang[0].confidence > 0.8 ? (
+      // guessLang is confident about the result
+      true
+    ) : maybeProgramming === true ? (
+      // we re confident that it's a program, and guessLang finds a sole candidate
+      progLang[0].confidence > 0.4 && (!progLang[1] || progLang[1].confidence < 0.2)
+    ) : (
+      false
+    );
+    if (isPL) {
       switch (progLang[0].languageId) {
         case "xml":
           try {
@@ -152,9 +161,15 @@ export function textData (value: string, label: string, language?: string) {
       return textData(value, label, languageIDs[progLang[0].languageId] ?? "");
     }
 
+    const { francAll } = await packages.franc();
     const lang = francAll(value);
-    if (lang.length > 0 && lang[0][0] !== "und" &&
-        lang[0][1] > DETECTOR_RELIABLITY_THRESHOLD) {
+    const isNL = lang[0] && lang[0][0] !== "und" && maybeProgramming !== true ? (
+      // lang[0][1] seems always 1.0, so we look at the second candidate to measure confidence
+      !lang[1] || lang[1][1] < 0.9
+    ) : (
+      false
+    );
+    if (isNL) {
       const { languageNames } = await packages.languageNames();
       const name = languageNames[lang[0][0]] ?? "";
       return textData(value, label, name);
