@@ -19,13 +19,11 @@ const analyze = async (input: Data) => {
   }
   const { getAllTags } = await packages.exif();
   const tags = getAllTags(input.value.buffer);
-  const datum: AtomicData[] = await Promise.all(
-    Object.keys(tags).filter(key => (
-      tags[key]?.length > 0
-    )).map(key => (
-      textData(`${tags[key]}`, key)
-    ))
-  );
+  const datum: AtomicData[] = Object.keys(tags).filter(key => (
+    tags[key]?.length > 0
+  )).map(key => (
+    textData(`${tags[key]}`, key, "")
+  ));
   return multipleData(datum);
 };
 

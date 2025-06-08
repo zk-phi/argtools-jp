@@ -24,7 +24,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     if (input.type !== "text") {
       throw new Error("テキストデータではありません");
     }
-    return textData(_alterText(input.value, columns), input.label);
+    return textData(_alterText(input.value, columns), input.label, "");
   }, [columns]);
 
   return (

@@ -24,6 +24,6 @@ export const pagerDecoder = simpleTextDecoderFactory({
       const index = Number.parseInt(letter, 10);
       return Number.isNaN(index) ? "" : pagerCharTable.charAt(index)
     }).join("");
-    return textData(decoded, label);
+    return textData(decoded, label, "");
   },
 });

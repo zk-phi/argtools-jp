@@ -42,7 +42,7 @@ const analyze = async (input: Data) => {
     acc.push(Number(int));
   }
   if (acc.length === 1) {
-    return textData(`${input.value} は素数です。`, "素因数分解の結果");
+    return textData(`${input.value} は素数です。`, "素因数分解の結果", "日本語");
   }
   return textData(`${input.value} = ${acc.join(" x ")}`, "素因数分解の結果");
 };

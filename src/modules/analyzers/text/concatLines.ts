@@ -13,7 +13,7 @@ const analyze = (input: Data) => {
     throw new Error("テキストデータではありません");
   }
   const concatenated = input.value.replace(/(\r\n|\n|\r)/gm, "");
-  return textData(concatenated, "結合されたテキスト");
+  return textData(concatenated, "結合されたテキスト", "");
 };
 
 export const concatLines = simpleAnalyzerFactory({
