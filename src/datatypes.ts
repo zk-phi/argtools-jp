@@ -97,6 +97,7 @@ export const errorData = (value: string): ErrorData => (
   { type: "error", id: gensym(), value }
 );
 
+const JS_OR_TS = /^[jt]s$/;
 export function textData (value: string, label: string, language: string): TextData;
 export function textData (value: string, label: string): Promise<TextData>;
 export function textData (value: string, label: string, language?: string) {
@@ -119,7 +120,9 @@ export function textData (value: string, label: string, language?: string) {
     ) : maybeProgramming === true ? (
       // we re confident that it's a program, and guessLang finds a sole candidate
       progLang[0].confidence > 0.1 &&
-      (!progLang[1] || progLang[0].confidence / progLang[1].confidence > 2)
+      (!progLang[1] ||
+       progLang[0].confidence / progLang[1].confidence > 2 ||
+       progLang[0].languageId.match(JS_OR_TS) && progLang[1].languageId.match(JS_OR_TS))
     ) : (
       false
     );
