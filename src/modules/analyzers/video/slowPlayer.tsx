@@ -13,7 +13,7 @@ const detect = (data: Data) => {
 
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [speed, setSpeed] = useState(1.00);
-  const debouncedSpeed = useDebouncedValue(speed, 100);
+  const debouncedSpeed = useDebouncedValue(speed, 100, onUpdate);
   const [sourceProps, setSourceProps] = useState<{ src: string, type: string } | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 

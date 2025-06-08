@@ -55,3 +55,15 @@ export const useAnalyzer = (
     runAnalyzer(reporter, input, fn);
   }, [fn, reporter, input]);
 };
+
+export const useReporter = (
+  reporter: StateReporter,
+  cb: () => Promise<MaybeData> | MaybeData,
+  deps: any[],
+) => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  const fn = useMemo(() => cb, deps);
+  useEffect(() => {
+    withReporter(reporter, fn);
+  }, [fn, reporter]);
+}

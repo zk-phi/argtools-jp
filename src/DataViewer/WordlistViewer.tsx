@@ -27,9 +27,19 @@ const applyFilter = (value: Wordlist, filter: Filter) => (
   })
 );
 
+const busyOverlayStyle = {
+  position: "absolute",
+  top: 0,
+  left: 0,
+  width: "100%",
+  height: "100%",
+  background: "#0004",
+  boxSizing: "border-box",
+};
+
 export const WordlistViewer = ({ value, busy }: { value: Wordlist, busy?: boolean }) => {
   const [filters, setFilters] = useState<Filter[]>([]);
-  const debouncedFilters = useDebouncedValue(filters, 300);
+  const [debouncedFilters, filterBusy] = useDebouncedValue(filters, 300);
 
   const filteredWords = useMemo(() => (
     debouncedFilters.reduce((l, r) => applyFilter(l, r), value)
@@ -67,14 +77,6 @@ export const WordlistViewer = ({ value, busy }: { value: Wordlist, busy?: boolea
       ...filters.slice(ix + 1),
     ]);
   }, [filters]);
-
-  if (busy) {
-    return (
-      <p>
-        解析中 ...
-      </p>
-    );
-  }
 
   return (
     <>
@@ -132,24 +134,31 @@ export const WordlistViewer = ({ value, busy }: { value: Wordlist, busy?: boolea
         </fieldset>
       ))}
       <h4>検索結果</h4>
-      {!filteredWords?.[0] ? "データなし" : (
-        <>
-          <p>{filteredWords.length} 件</p>
-          <table>
-            <tbody>
-              {filteredWords.slice(0, 300).map(row => (
-                <tr key={row.id}>
-                  <td>{row.key}</td>
-                  <td>{row.value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {filteredWords.length > 300 && (
-            <p>... 先頭の 300 件を表示中</p>
-          )}
-        </>
-      )}
+      <div style={{ position: "relative" }}>
+        {!filteredWords?.[0] ? (
+          <p>{busy || filterBusy ? "取得中 ..." : "データなし"}</p>
+        ) : (
+          <>
+            <p>{busy || filterBusy ? "取得中 ..." : `${filteredWords.length} 件`}</p>
+            <div style={{ position: "relative" }}>
+              {(busy || filterBusy) && <div style={busyOverlayStyle} />}
+              <table>
+                <tbody>
+                  {filteredWords.slice(0, 300).map(row => (
+                    <tr key={row.id}>
+                      <td>{row.key}</td>
+                      <td>{row.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {filteredWords.length > 300 && (
+                <p>... 先頭の 300 件を表示中</p>
+              )}
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 }

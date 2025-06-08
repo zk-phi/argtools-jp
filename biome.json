@@ -36,6 +36,10 @@
               "name": "useAnalyzer",
               "closureIndex": 2,
               "dependenciesIndex": 3
+            }, {
+              "name": "useReporter",
+              "closureIndex": 1,
+              "dependenciesIndex": 2
             }]
           }
         }

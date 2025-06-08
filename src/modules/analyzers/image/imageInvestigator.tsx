@@ -27,8 +27,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   });
   const [pow, setPow] = useState(false);
   const [screen, setScreen] = useState(false);
-  const debouncedRect = useDebouncedValue(rect, 50);
-  const debouncedColorProfile = useDebouncedValue(colorProfile, 50);
+  const debouncedRect = useDebouncedValue(rect, 50, onUpdate);
+  const debouncedColorProfile = useDebouncedValue(colorProfile, 50, onUpdate);
 
   const onInputRect = useCallback((field: "l" | "t" | "r" | "b", value: number) => {
     const newRect = { ...rect, [field]: value };

@@ -42,7 +42,7 @@ const utf8Decoder = (arr: Uint8Array): string[] => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [minLength, setMinLength] = useState(8);
   const [encoding, setEncoding] =  useState("ascii");
-  const debouncedMinLength = useDebouncedValue(minLength, 2000);
+  const debouncedMinLength = useDebouncedValue(minLength, 2000, onUpdate);
 
   useAnalyzer(onUpdate, input, async (input: Data) => {
     if (input.type !== "binary") {

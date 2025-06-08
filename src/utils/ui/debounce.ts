@@ -1,27 +1,38 @@
-import { useState, useEffect, useRef, useCallback } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
+import type { StateReporter } from "../../modules";
 
-type Timeout = ReturnType<typeof setTimeout>
+// handle busy state locally
+export function useDebouncedValue<T> (value: T, ms: number): [T, boolean];
+// or use reporter to report busy state globally
+export function useDebouncedValue<T> (value: T, ms: number, reporter: StateReporter): T;
 
-export const useDebouncer = (ms: number) => {
-  const timeoutRef = useRef<Timeout | null>(null);
-
-  const callback = useCallback((fn: () => void) => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-    timeoutRef.current = setTimeout(fn, ms);
-  }, [ms]);
-
-  return callback;
-};
-
-export const useDebouncedValue = <T>(value: T, ms: number): T => {
+export function useDebouncedValue<T> (
+  value: T,
+  ms: number,
+  reporter?: StateReporter
+) {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), ms);
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+      if (reporter) {
+        reporter({ busy: false });
+      } else {
+        setBusy(false);
+      }
+    }, ms);
+    if (reporter) {
+      reporter({ busy: true });
+    } else {
+      setBusy(true);
+    }
     return () => clearTimeout(timer);
-  }, [value, ms]);
+  }, [value, ms, reporter]);
 
-  return debouncedValue;
-};
+  if (reporter) {
+    return debouncedValue;
+  }
+  return [debouncedValue, busy];
+}
