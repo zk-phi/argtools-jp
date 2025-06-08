@@ -118,7 +118,8 @@ export function textData (value: string, label: string, language?: string) {
       true
     ) : maybeProgramming === true ? (
       // we re confident that it's a program, and guessLang finds a sole candidate
-      progLang[0].confidence > 0.4 && (!progLang[1] || progLang[1].confidence < 0.2)
+      progLang[0].confidence > 0.1 &&
+      (!progLang[1] || progLang[0].confidence / progLang[1].confidence > 2)
     ) : (
       false
     );
