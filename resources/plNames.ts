@@ -1,5 +1,5 @@
 // Programming language IDs (for guesslang-js)
-export const languageIDs: Record<string, string> = {
+export const plNames: Record<string, string> = {
   asm: "アセンブリ言語",
   bat: "バッチファイル",
   c: "C言語",

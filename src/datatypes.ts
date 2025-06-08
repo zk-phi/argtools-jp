@@ -24,7 +24,7 @@ const packages = {
   franc: cacheAsync(() => import("franc")),
   string: cacheAsync(() =>  import("./utils/string")),
   languageNames: cacheAsync(() => import("../resources/languageNames")),
-  languageIDs: cacheAsync(() => import("../resources/languageIDs")),
+  languageIDs: cacheAsync(() => import("../resources/plNames")),
 };
 
 /////////////////////
@@ -158,8 +158,8 @@ export function textData (value: string, label: string, language?: string) {
           }
         default:
       }
-      const { languageIDs } = await packages.languageIDs();
-      return textData(value, label, languageIDs[progLang[0].languageId] ?? "");
+      const { plNames } = await packages.languageIDs();
+      return textData(value, label, plNames[progLang[0].languageId] ?? "");
     }
 
     const { francAll } = await packages.franc();
