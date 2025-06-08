@@ -1,4 +1,4 @@
-import { simpleTextDecoderFactory } from "../analyzerFactories";
+import { simpleTextDecoderFactory } from "../../analyzerFactories";
 import { textData } from "../../../datatypes";
 
 const alphabet = "[0-9A-Fa-f]";

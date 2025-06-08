@@ -1,4 +1,4 @@
-import { urlExtractorFactory } from "../analyzerFactories";
+import { urlExtractorFactory } from "../../analyzerFactories";
 
 const body = "[A-z0-9_-]{10,12}";
 const delimited = `(?<=[^A-z0-9_-]|^)${body}(?=[^A-z0-9_-]|$)`;

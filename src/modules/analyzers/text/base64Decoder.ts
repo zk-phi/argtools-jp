@@ -1,4 +1,4 @@
-import { simpleTextDecoderFactory } from "../analyzerFactories";
+import { simpleTextDecoderFactory } from "../../analyzerFactories";
 import { binaryData } from "../../../datatypes";
 
 // real-word example: https://www.dropbox.com/scl/fi/9jkmn1vr6ujtigzouf0vu/binarycity.txt

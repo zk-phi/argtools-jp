@@ -1,4 +1,4 @@
-import { simpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../../analyzerFactories";
 import { mapRange } from "../../../utils/array/range";
 import { cacheAsync } from "../../../utils/cache";
 import { binaryData, multipleData, type AtomicData, type Data } from "../../../datatypes";

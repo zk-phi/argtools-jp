@@ -1,4 +1,4 @@
-import { simpleTextDecoderFactory } from "../analyzerFactories";
+import { simpleTextDecoderFactory } from "../../analyzerFactories";
 import { textData } from "../../../datatypes";
 
 // require at least 2 letters

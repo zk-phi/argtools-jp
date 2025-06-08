@@ -1,4 +1,4 @@
-import { urlExtractorFactory } from "../analyzerFactories";
+import { urlExtractorFactory } from "../../analyzerFactories";
 
 /* elements */
 const d = "[^0-9A-z]?";

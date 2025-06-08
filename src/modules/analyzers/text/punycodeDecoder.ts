@@ -1,4 +1,4 @@
-import { simpleTextDecoderFactory } from "../analyzerFactories";
+import { simpleTextDecoderFactory } from "../../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
 import { textData } from "../../../datatypes";
 

@@ -1,4 +1,4 @@
-import { urlExtractorFactory } from "../analyzerFactories";
+import { urlExtractorFactory } from "../../analyzerFactories";
 
 const body = "([23456789CFGHJMPQRVWX]{4}){1,2}\\+([23456789CFGHJMPQRVWX]){2,15}";
 // reject "abHHCQ+129ue" ("HHCQ+129" part is valid, but "ab" and "ue" parts are invalid)

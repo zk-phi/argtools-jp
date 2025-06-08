@@ -1,4 +1,4 @@
-import { simpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../../analyzerFactories";
 import { textData, type Data } from "../../../datatypes";
 
 const detect = (data: Data) => {

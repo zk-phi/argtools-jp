@@ -5,7 +5,7 @@ import { ViewerContainer } from "./ViewerContainer";
 export const TextViewer = ({ data, busy }: { data: TextData, busy?: boolean }) => {
   const caption = (
     <>
-      文字列（{data.value.length}文字 {data.language || "不明"}）
+      文字列（{data.value.length}文字 {data.language ? `${data.language}？` : "不明"}）
       <a href="javascript: void(0)" onClick={() => savePlainText(data.value)}>保存</a>
     </>
   );

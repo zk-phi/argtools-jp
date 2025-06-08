@@ -1,5 +1,5 @@
 import { textData, type Data } from "../../../datatypes";
-import { simpleAnalyzerFactory } from "../analyzerFactories";
+import { simpleAnalyzerFactory } from "../../analyzerFactories";
 
 const allAscii = /^[\x00-\x7f]+$/;
 const detect = (data: Data) => {

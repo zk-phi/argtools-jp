@@ -1,8 +1,8 @@
 import { useState, useEffect } from "preact/hooks";
-import { ellipsis } from "../../utils/string";
-import { useAnalyzer, withReporter } from "../../utils/analyzer";
-import type { AnalyzerModule, StateReporter } from "../";
-import { multipleData, type MaybeData, type Data, type AtomicData } from "../../datatypes";
+import { ellipsis } from "../utils/string";
+import { useAnalyzer, withReporter } from "../utils/analyzer";
+import type { AnalyzerModule, StateReporter } from ".";
+import { multipleData, type MaybeData, type Data, type AtomicData } from "../datatypes";
 
 // --- simple analyzers (Data -> Data)
 
