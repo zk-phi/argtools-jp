@@ -1,4 +1,5 @@
 import { languageDetector } from "./text/languageDetector";
+import { characterCounter } from "./text/characterCounter";
 import { reverseSpectrogram } from "./image/reverseSpectrogram";
 import { centerCanceller } from "./audio/centerCanceller";
 import { fileTypeDetector } from "./binary/fileTypeDetector";
@@ -16,6 +17,7 @@ export const toolCategories: AnalyzerCategory[] = [{
     fileTypeDetector,
     anything,
     languageDetector,
+    characterCounter,
     centerCanceller,
   ],
 }]
