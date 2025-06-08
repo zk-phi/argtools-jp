@@ -1,6 +1,6 @@
 import { microAppFactory } from "../../../src/microAppFactory";
 import { fileImporter } from "../../../src/modules/importers/fileImporter";
-import { centerCanceller } from "../../../src/modules/analyzers/audio/centerCanceller";
+import { centerCanceller } from "../../../src/modules/tools/audio/centerCanceller";
 
 export const Page = microAppFactory({
   importerLabel: "センターキャンセルしたい音声",

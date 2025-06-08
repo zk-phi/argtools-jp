@@ -2,7 +2,7 @@ import { signal, computed, type Signal } from "@preact/signals";
 import { useMemo } from "preact/hooks";
 import { gensym } from "./utils/gensym";
 import { analyzerCategories, analyzers } from "./modules/analyzers";
-import { encoders } from "./modules/encoders";
+import { toolCategories } from "./modules/tools";
 import { importers } from "./modules/importers";
 import { genInspector } from "./modules/inspector";
 import { DataViewer } from "./DataViewer";
@@ -103,50 +103,31 @@ const createAppState = (): AppState => {
 
 /* ---- UI */
 
+const allModules = [...analyzerCategories, ...toolCategories];
+
 const AnalyzersList = () => (
   <section>
     <details>
       <summary>実装されている変換器・解析器</summary>
-      {analyzerCategories.map(category => (
-        <div key={category.category}>
-          <b>{category.category}</b>
-          <div style={{ marginLeft: "16px", fontSize: "smaller" }}>
-            {category.analyzers.map((analyzer, ix) => (
-              <>
-                {ix > 0 ? "、" : ""}
-                {analyzer.app ? (
-                  <a key={analyzer.label} href={analyzer.app}>{analyzer.label}</a>
-                ) : (
-                  analyzer.label
-                )}
-              </>
-            ))}
+      {allModules.map(category => (
+        !category.unlisted && (
+          <div key={category.category}>
+            <b>{category.category}</b>
+            <div style={{ marginLeft: "16px", fontSize: "smaller" }}>
+              {category.analyzers.map((analyzer, ix) => (
+                <>
+                  {ix > 0 ? "、" : ""}
+                  {analyzer.app ? (
+                    <a key={analyzer.label} href={analyzer.app}>{analyzer.label}</a>
+                  ) : (
+                    analyzer.label
+                  )}
+                </>
+              ))}
+            </div>
           </div>
-        </div>
+        )
       ))}
-      <div>
-        <b>その他</b>
-        <div style={{ marginLeft: "16px", fontSize: "smaller" }}>
-          <a href="/argtools-jp/apps/filetype">ファイル形式の自動判別</a>
-          、<a href="/argtools-jp/anything">条件に一致する単語や地名の特定</a>
-          、プログラミング言語・自然言語の推定
-        </div>
-      </div>
-      <div>
-        <b>謎解き作成支援</b>
-        <div style={{ marginLeft: "16px", fontSize: "smaller" }}>
-          {encoders.map((encoder, ix) => (
-            <>
-              {ix > 0 ? "、" : ""}
-              {encoder.app ? (
-                <a key={encoder.label} href={encoder.app}>{encoder.label}</a>
-              ) : (
-                encoder.label
-              )}
-            </>
-          ))}
-        </div>
-      </div>
     </details>
   </section>
 );
