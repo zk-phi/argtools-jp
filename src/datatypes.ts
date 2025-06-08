@@ -24,6 +24,7 @@ const packages = {
   yaml: cacheAsync(() => import("yaml")),
   toml: cacheAsync(() => import("toml")),
   franc: cacheAsync(() => import("franc")),
+  string: cacheAsync(() =>  import("./utils/string")),
   languageNames: cacheAsync(() => import("../resources/languageNames")),
   languageIDs: cacheAsync(() => import("../resources/languageIDs")),
 };
@@ -107,9 +108,12 @@ export function textData (value: string, label: string, language?: string) {
   return (async () => {
     const guessLang = await instances.guessLang();
     const { francAll } = await packages.franc();
+    const { maybeProgrammingLanguage } = await packages.string();
 
+    const maybeProgramming = maybeProgrammingLanguage(value);
     const progLang = await guessLang.runModel(value);
-    if (progLang[0] && progLang[0].confidence > DETECTOR_RELIABLITY_THRESHOLD) {
+    if (progLang[0] &&
+        (progLang[0].confidence > DETECTOR_RELIABLITY_THRESHOLD || maybeProgramming)) {
       switch (progLang[0].languageId) {
         case "xml":
           try {

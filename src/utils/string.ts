@@ -22,3 +22,28 @@ const _needsEscape = /[.?*+^$[\]\\(){}|-]/g;
 export const quoteRegex = (str: string): string => (
   str.replace(_needsEscape, "\\$&")
 );
+
+// Find un-natural language
+const ALL_ASCII = /^[\x00-\x7F]+$/;
+const PROGRAMMING_ISH_SYMBOLS = /[#$%&()*+/:;<=>@[\\\x5c^_{|}~]+/g;
+const OTHER_SYMBOLS = /[!\x22\x27,-.?\x60]/g
+export const maybeProgrammingLanguage = (string: string): boolean => {
+  const digest = string.slice(0, 1000);
+  if (!digest.match(ALL_ASCII)) {
+    return false;
+  }
+
+  const symbols = digest.match(PROGRAMMING_ISH_SYMBOLS);
+  if (!symbols) {
+    return false;
+  }
+  const symbolsCount = symbols.join("").length;
+
+  const otherSymbols = digest.match(OTHER_SYMBOLS);
+  const otherSymbolsCount = (otherSymbols ?? []).join("").length;
+
+    if ((symbolsCount + otherSymbolsCount * 0.5) / digest.length > 0.1) {
+      return true;
+    }
+    return false;
+}
