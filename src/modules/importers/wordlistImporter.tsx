@@ -98,11 +98,12 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
     setDatasetKey(e.currentTarget.value);
   }, []);
 
-  useReporter(onUpdate, async () => {
+  useReporter(onUpdate, async (reporter: StateReporter) => {
     const dataset = datasets[datasetKey];
     if (!dataset) {
       return null;
     }
+    await reporter({ status: "データセットを読み込んでいます" });
     const { data } = await dataset.module();
     return wordlistData(data, dataset.label);
   }, [datasetKey]);

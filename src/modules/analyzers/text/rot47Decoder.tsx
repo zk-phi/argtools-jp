@@ -1,4 +1,5 @@
 import { textData, type Data } from "../../../datatypes";
+import type { StateReporter } from "../..";
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
 
 const allAscii = /^[\x00-\x7f]+$/;
@@ -20,10 +21,11 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "text") {
     throw new Error("テキストデータではありません");
   }
+  await reporter({ status: "復号化しています" });
   const charCodes = input.value.split("").map(s => s.charCodeAt(0));
   const decodedCharCodes = charCodes.map(ch => {
     if (ch >= 33 && ch <= 126) {

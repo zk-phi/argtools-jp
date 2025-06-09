@@ -78,7 +78,7 @@ export const WordlistViewer = ({ value, status }: { value: Wordlist, status?: st
     ]);
   }, [filters]);
 
-  const statusMessage = status || (filterBusy ? "検索中" : null);
+  const statusMessage = status || (filterBusy ? "検索しています" : null);
 
   return (
     <>

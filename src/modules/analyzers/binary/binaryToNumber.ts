@@ -1,4 +1,5 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
+import type { StateReporter } from "../..";
 import { numberData, multipleData, type Data } from "../../../datatypes";
 
 const detect = (data: Data) => {
@@ -10,10 +11,12 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary") {
     throw new Error("バイナリデータではありません");
   }
+
+  await reporter({ status: "変換しています" });
 
   if (input.value.length === 1) {
     const intView = new Int8Array(input.value.buffer);

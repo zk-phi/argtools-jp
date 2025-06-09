@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from "preact/hooks";
 import { cacheAsync } from "../../utils/cache";
-import { binaryData } from "../../datatypes";
+import { binaryData, errorData } from "../../datatypes";
 import type { AnalyzerModule, StateReporter } from "../";
 
 const packages = {
@@ -14,18 +14,24 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
 
   const ctx = useMemo(() => new AudioContext(), []);
 
-  const initRecorder = useCallback(async() => {
-    const stream = await navigator.mediaDevices.getDisplayMedia({
-      video: true, // must be true from the API spec.
-      audio: true,
-    });
-    setRecorder(new MediaRecorder(stream));
-  }, []);
+  const initRecorder = useCallback(async () => {
+    await onUpdate({ status: "セットアップしています" });
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: true, // must be true from the API spec.
+        audio: true,
+      });
+      setRecorder(new MediaRecorder(stream));
+      await onUpdate({ output: null });
+    } catch (_) {
+      onUpdate({ output: errorData("音声の共有を有効にして、集音対象を選んでください") });
+    }
+  }, [onUpdate]);
 
   const startRecording = useCallback(() => {
     if (recorder) {
       setRecording(true);
-      onUpdate({ status: "集音中" });
+      onUpdate({ status: "録音しています" });
       recorder.start();
     }
   }, [onUpdate, recorder]);
@@ -34,7 +40,8 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
     if (recorder) {
       setDecoding(true);
       setRecording(false);
-      recorder.ondataavailable = (async ({ data: blob }) => {
+      recorder.ondataavailable = async ({ data: blob }) => {
+        await onUpdate({ status: "Wav ファイルを生成しています" });
         const { default: toWav } = await packages.audiobufferToWav();
         const buffer = await blob.arrayBuffer();
         const audioBuffer = await ctx.decodeAudioData(buffer);
@@ -42,7 +49,7 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
         const data = await binaryData(new Uint8Array(wavBuffer), "集音された音声");
         setDecoding(false);
         onUpdate({ output: data });
-      });
+      };
       recorder.stop();
     }
   }, [onUpdate, recorder, ctx]);

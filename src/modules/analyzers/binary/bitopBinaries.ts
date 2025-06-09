@@ -1,4 +1,5 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
+import type { StateReporter } from "../..";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../../datatypes";
 
 const detect = (data: Data) => {
@@ -9,7 +10,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "multiple" || input.datum.length !== 2) {
     throw new Error("データの数が２件ではありません");
   }
@@ -22,6 +23,8 @@ const analyze = async (input: Data) => {
   const arrB = dataB.value
   const lValue = arrA.length >= arrB.length ? arrA : arrB;
   const rValue = arrA.length >= arrB.length ? arrB : arrA;
+
+  await reporter({ status: "計算しています" });
 
   const diff = new Uint8Array(lValue.length);
   const sum = new Uint8Array(lValue.length);

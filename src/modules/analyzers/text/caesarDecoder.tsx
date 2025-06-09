@@ -21,10 +21,11 @@ const detect = (data: Data) => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [n, setN] = useState(13);
 
-  useAnalyzer(onUpdate, input, (input: Data) => {
+  useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
     if (input.type !== "text") {
       throw new Error("テキストデータではありません");
     }
+    await reporter({ status: "復号化しています" });
     const inverseN = 26 - n;
     const charCodes = input.value.split("").map(s => s.charCodeAt(0));
     const decodedCharCodes = charCodes.map(ch => {

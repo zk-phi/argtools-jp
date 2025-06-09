@@ -14,7 +14,7 @@ const body = `xn--${alphabet}{2,}(\\.xn--${alphabet}{2,})*`;
 const delimited = `(?<=[^A-z0-9]|^)${body}(?=[^A-z0-9]|$)`
 
 export const punycodeDecoder = simpleTextDecoderFactory({
-  label: "Punycode を復号化",
+  label: "Punycode を読み取る",
   hint: "xn-- から始まる英数字列 → たぶん Punycode！",
   pattern: delimited,
   decoder: async (str: string, label: string) => {

@@ -1,4 +1,5 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
+import type { StateReporter } from "../..";
 import { binaryData, type Data } from "../../../datatypes";
 
 const detect = (data: Data) => {
@@ -8,10 +9,11 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "text") {
     throw new Error("テキストデータではありません");
   }
+  await reporter({ status: "変換しています" });
   const decoded = (new TextEncoder()).encode(input.value);
   return binaryData(decoded, input.label, "text/plain", ".txt");
 };

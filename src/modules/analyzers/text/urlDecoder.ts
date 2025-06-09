@@ -7,7 +7,7 @@ const body = `(%${alphabet}{2}){2,}`;
 const delimited = `${body}(?=[^0-9A-z]|$)`;
 
 export const urlDecoder = simpleTextDecoderFactory({
-  label: "パーセントエンコードを復号化",
+  label: "パーセントエンコードを読み取り",
   hint: "%**%** 形式の１６進数 → たぶんパーセントエンコード！",
   pattern: delimited,
   decoder: (str: string, label: string) => (

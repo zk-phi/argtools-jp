@@ -30,11 +30,13 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   const [fromEncoding, setFromEncoding] = useState<Encoding>("cp932");
   const [toEncoding, setToEncoding] = useState<Encoding>("utf8");
 
-  useAnalyzer(onUpdate, input, async (input: Data) => {
+  useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
     if (input.type !== "text") {
       throw new Error("テキストデータではありません");
     }
+    await reporter({ status: "セットアップしています" });
     const { fixMojibake } = await packages.mojibake();
+    await reporter({ status: "復元を試みています" });
     const [fixed, allCandidates] = fixMojibake(input.value, fromEncoding, toEncoding);
     const data = multipleData([
       await textData(fixed, "復元されたテキスト", ""),

@@ -17,11 +17,12 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   const [sourceProps, setSourceProps] = useState<{ src: string, type: string } | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  useAnalyzer(onUpdate, input, (input: Data) => {
+  useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
     setSourceProps(null);
     if (input.type !== "binary" || !input.mime.startsWith("video")) {
       throw new Error("動画データでないか、非対応の形式です");
     }
+    await reporter({ status: "読み込んでいます" });
     const url = toBlobUrl(input);
     setSourceProps({ src: url, type: input.mime });
     return null;

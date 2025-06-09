@@ -6,7 +6,7 @@ import { multipleData, type MaybeData, type Data, type AtomicData } from "../dat
 
 // --- simple analyzers (Data -> Data)
 
-type AnalyzerFunction = (input: Data) => Promise<MaybeData> | MaybeData;
+type AnalyzerFunction = (input: Data, reporter: StateReporter) => Promise<MaybeData> | MaybeData;
 
 type SimpleAnalyzerFactoryProps = Omit<AnalyzerModule, "component"> & {
   analyze: AnalyzerFunction,
@@ -28,6 +28,7 @@ type SimpleTextDecoratorFactoryProps = Omit<SimpleAnalyzerFactoryProps, "detect"
   pattern: RegExp | string,
   hint: string,
   decoder: TextDecoder,
+  busyStatus?: string,
 };
 
 export const simpleTextDecoderFactory = (props: SimpleTextDecoratorFactoryProps): AnalyzerModule => {
@@ -38,16 +39,18 @@ export const simpleTextDecoderFactory = (props: SimpleTextDecoratorFactoryProps)
     detect: (suspicious: Data) => (
       suspicious.type === "text" && suspicious.value.match(detectorRegex) ? props.hint : null
     ),
-    analyze: async (input: Data) => {
+    analyze: async (input: Data, reporter: StateReporter) => {
       if (input.type !== "text") {
         throw new Error("テキストデータではありません");
       }
+      await reporter({ status: "読み取れる場所を探しています" });
       const matches = input.value.match(matcherRegex);
       if (!matches) {
         throw new Error("読み取れる部分はありませんでした😭");
       }
+      await reporter({ status: props.busyStatus || "読み取っています" });
       const datum: AtomicData[] = await Promise.all(
-        matches.map(str => props.decoder(str, `${ellipsis(str, 8)} のデコード結果`))
+        matches.map(str => props.decoder(str, `${ellipsis(str, 8)} の読み取り結果`))
       );
       return multipleData(datum);
     },
@@ -74,7 +77,7 @@ export const urlExtractorFactory = (props: UrlExtractorFactoryProps): AnalyzerMo
     ),
     component: ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
       const [urls, setUrls] = useState<string[]>([]);
-      useReporter(onUpdate, () => {
+      useReporter(onUpdate, async (reporter: StateReporter) => {
         setUrls([]);
         if (!input) {
           return null;
@@ -82,10 +85,12 @@ export const urlExtractorFactory = (props: UrlExtractorFactoryProps): AnalyzerMo
         if (input.type !== "text") {
           throw new Error("テキストデータではありません");
         }
+        await reporter({ status: "読み取れる場所を探しています" });
         const matches = input.value.match(matcherRegex);
         if (!matches) {
-          throw new Error("マッチする部分がありませんでした😭");
+          throw new Error("読み取れる部分がありませんでした😭");
         }
+        await reporter({ status: "URL を整形しています" });
         setUrls(matches.map(props.urlConstructor));
         return null;
       }, [input, props.urlConstructor]);

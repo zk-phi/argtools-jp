@@ -56,15 +56,19 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     setColorProfile(newColorProfile);
   }, [colorProfile])
 
-  useAnalyzer(onUpdate, input, async (input: Data) => {
+  useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
     if (input.type !== "binary" || !input.mime.startsWith("image")) {
       throw new Error("画像データでないか、非対応の形式です");
     };
+
+    await reporter({ status: "セットアップしています" });
 
     const { canvasToUint8Array, urlToImg } = await packages.image();
     const { tweakColor } = await packages.color();
     const { l, r, t, b } = debouncedRect;
     const { brightness, contrast } = debouncedColorProfile;
+
+    await reporter({ status: "トリミングしています" });
 
     const image = await urlToImg(toBlobUrl(input));
     const w = image.naturalWidth * (r - l) / 100;
@@ -87,6 +91,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       canvas.width,
       canvas.height,
     );
+
+    await reporter({ status: "補正しています" });
+
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < imageData.data.length; i += 4) {
       imageData.data[i + 0] = tweakColor(

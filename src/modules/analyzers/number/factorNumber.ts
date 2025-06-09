@@ -1,5 +1,6 @@
 import { cacheAsync } from "../../../utils/cache";
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
+import type { StateReporter } from "../..";
 import { textData, type Data } from "../../../datatypes";
 
 const packages = {
@@ -17,7 +18,7 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "integer") {
     throw new Error("整数以外のデータか、大きすぎる整数が与えられました。");
   }
@@ -28,8 +29,10 @@ const analyze = async (input: Data) => {
     throw new Error("２未満の整数には対応していません。");
   }
 
+  await reporter({ status: "セットアップしています" });
   const { PRIMES } = await packages.primes();
 
+  await reporter({ status: "素因数を探しています" });
   let int = input.value;
   const acc: number[] = [];
   for (let i = 0; i < PRIMES.length && PRIMES[i] <= int; i++) {

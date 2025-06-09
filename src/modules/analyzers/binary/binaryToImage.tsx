@@ -1,5 +1,6 @@
 import { cacheAsync } from "../../../utils/cache";
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
+import type { StateReporter } from "../..";
 import { binaryData, type Data } from "../../../datatypes";
 
 const packages = {
@@ -13,12 +14,16 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary") {
     throw new Error("バイナリデータではありません");
   }
 
+  await reporter({ status: "セットアップしています" });
+
   const { canvasToUint8Array } = await packages.image();
+
+  await reporter({ status: "描画しています" });
 
   const arr = input.value;
   const w = 320;

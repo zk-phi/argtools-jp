@@ -1,4 +1,5 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
+import type { StateReporter } from "../..";
 import { textData, type Data } from "../../../datatypes";
 
 const detect = (data: Data) => {
@@ -8,11 +9,12 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "text") {
     throw new Error("テキストデータではありません");
   }
   const concatenated = input.value.replace(/(\r\n|\n|\r)/gm, "");
+  await reporter({ status: "結合しています" });
   return textData(concatenated, "結合されたテキスト", "");
 };
 

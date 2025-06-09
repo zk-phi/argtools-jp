@@ -13,7 +13,7 @@ const delimitedPadded = `(?<=[^0-9A-z+/]|^)${paddedBody}(?=[^=]|$)`;
 const delimited = `${delimitedNonPadded}|${delimitedPadded}`;
 
 export const base64Decoder = simpleTextDecoderFactory({
-  label: "Base64 を復号化",
+  label: "Base64 を読み取り",
   hint: "A〜Z, a〜z, 0〜9, +, /, = の連続する区間がある → Base64 かも？",
   pattern: delimited,
   decoder: async (str: string, label: string) => {

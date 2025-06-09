@@ -22,7 +22,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     }
   }, []);
 
-  useReporter(onUpdate, async () => {
+  useReporter(onUpdate, async (reporter: StateReporter) => {
     if (!files) {
       if (!input) {
         return null;
@@ -33,6 +33,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     if (files.length === 0) {
       throw new Error("ファイルが選択されていません");
     }
+    reporter({ status: "開いています" });
     const datum: AtomicData[] = await Promise.all(
       [...files].map(async file => {
         const buffer = await readFileAsBuffer(file);

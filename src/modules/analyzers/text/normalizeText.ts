@@ -1,4 +1,5 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
+import type { StateReporter } from "../..";
 import { textData, type Data } from "../../../datatypes";
 
 const suspicious = /[Ａ-Ｚａ-ｚ０-９]/;
@@ -10,10 +11,11 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "text") {
     throw new Error("テキストデータではありません") ;
   }
+  await reporter({ status: "変換しています" });
   // Replace ALL full-width ascii characters (not only alphabets and numbers)
   // so that we may analyze float value like "１２３．４".
   const replaced = input.value.replaceAll("　", " ").replace(/[\uFF01-\uFF5e]/g, (s) => (

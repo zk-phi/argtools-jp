@@ -1,5 +1,6 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
+import type { StateReporter } from "../..";
 import { multipleData, binaryData, toBlobUrl, type Data } from "../../../datatypes";
 
 const packages = {
@@ -13,14 +14,16 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary" || !input.mime.startsWith("image")) {
     throw new Error("画像データでないか、非対応の形式です");
   };
 
+  await reporter({ status: "セットアップしています" });
   const { applyFilter } = await packages.image();
   const url = toBlobUrl(input);
 
+  await reporter({ status: "描画しています 1/5" });
   const rImg = await applyFilter(url, (arr) => {
     for (let i = 0; i < arr.length; i += 4) {
       arr[i + 1] = arr[i + 0];
@@ -29,6 +32,7 @@ const analyze = async (input: Data) => {
     }
   });
 
+  await reporter({ status: "描画しています 2/5" });
   const gImg = await applyFilter(url, (arr) => {
     for (let i = 0; i < arr.length; i += 4) {
       arr[i + 0] = arr[i + 1];
@@ -37,6 +41,7 @@ const analyze = async (input: Data) => {
     }
   });
 
+  await reporter({ status: "描画しています 3/5" });
   const bImg = await applyFilter(url, (arr) => {
     for (let i = 0; i < arr.length; i += 4) {
       arr[i + 0] = arr[i + 2];
@@ -45,6 +50,7 @@ const analyze = async (input: Data) => {
     }
   });
 
+  await reporter({ status: "描画しています 4/5" });
   const aImg = await applyFilter(url, (arr) => {
     for (let i = 0; i < arr.length; i += 4) {
       arr[i + 0] = arr[i + 3];
@@ -53,6 +59,7 @@ const analyze = async (input: Data) => {
     }
   });
 
+  await reporter({ status: "描画しています 5/5" });
   const lsbImg = await applyFilter(url, (arr) => {
     for (let i = 0; i < arr.length; i += 1) {
       arr[i] = (arr[i] & 1) * 255;

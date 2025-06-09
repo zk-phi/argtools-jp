@@ -1,5 +1,6 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
+import type { StateReporter } from "../..";
 import { binaryData, type Data } from "../../../datatypes";
 
 const packages = {
@@ -14,13 +15,16 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary" || !input.mime.startsWith("video")) {
     throw new Error("動画データでないか、非対応の形式です") ;
   }
+  await reporter({ status: "セットアップしています" });
   const { decodeAudio } = await packages.audio();
   const { default: toWav } = await packages.audiobufferToWav();
+  await reporter({ status: "デコードしています" });
   const buffer = await decodeAudio(input.value.buffer);
+  await reporter({ status: "Wav ファイルを生成しています" });
   const wavBuffer = toWav(buffer);
   return await binaryData(new Uint8Array(wavBuffer), "抽出された音声");
 };

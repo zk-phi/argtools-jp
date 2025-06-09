@@ -20,7 +20,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     setText(e.currentTarget.value);
   }, []);
 
-  useReporter(onUpdate, async () => {
+  useReporter(onUpdate, async (reporter: StateReporter) => {
+    reporter({ status: "読み取っています" });
     const data = await textData(debouncedText, "入力されたデータ");
     if (!input) {
       return data;

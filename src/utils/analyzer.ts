@@ -7,7 +7,7 @@ import type { StateReporter } from "../modules";
 export const runAnalyzer = async (
   reporter: StateReporter,
   input: MaybeData,
-  analyzer: (input: Data) => Promise<MaybeData> | MaybeData,
+  analyzer: (input: Data, reporter: StateReporter) => Promise<MaybeData> | MaybeData,
 ) => {
   if (!input) {
     return reporter({ output: null });
@@ -17,7 +17,7 @@ export const runAnalyzer = async (
   }
   await reporter({ status: "解析開始" });
   try {
-    reporter({ output: await analyzer(input) });
+    reporter({ output: await analyzer(input, reporter) });
   } catch (e: any) {
     reporter({
       output: errorData("message" in e ? e.message : "Unexpected error."),
@@ -28,12 +28,11 @@ export const runAnalyzer = async (
 // Like runAnalyzer but accepts null as input
 export const withReporter = async (
   reporter: StateReporter,
-  cb: () => Promise<MaybeData> | MaybeData,
+  cb: (reporter: StateReporter) => Promise<MaybeData> | MaybeData,
 ) => {
   await reporter({ status: "解析開始" });
   try {
-    reporter({ output: await cb() });
-    console.log("output reported");
+    reporter({ output: await cb(reporter) });
   } catch (e: any) {
     reporter({
       output: errorData("message" in e ? e.message : "Unexpected error."),
@@ -44,7 +43,7 @@ export const withReporter = async (
 export const useAnalyzer = (
   reporter: StateReporter,
   input: MaybeData,
-  analyzer: (input: Data) => Promise<MaybeData> | MaybeData,
+  analyzer: (input: Data, reporter: StateReporter) => Promise<MaybeData> | MaybeData,
   deps: any[],
 ) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies:
@@ -56,7 +55,7 @@ export const useAnalyzer = (
 
 export const useReporter = (
   reporter: StateReporter,
-  cb: () => Promise<MaybeData> | MaybeData,
+  cb: (reporter: StateReporter) => Promise<MaybeData> | MaybeData,
   deps: any[],
 ) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies:

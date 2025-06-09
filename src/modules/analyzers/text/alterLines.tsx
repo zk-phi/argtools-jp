@@ -20,10 +20,11 @@ const _alterText = (str: string, cols: number): string => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [columns, setColumns] = useState(5);
 
-  useAnalyzer(onUpdate, input, (input: Data) => {
+  useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
     if (input.type !== "text") {
       throw new Error("テキストデータではありません");
     }
+    await reporter({ status: "改行しています" });
     return textData(_alterText(input.value, columns), input.label, "");
   }, [columns]);
 

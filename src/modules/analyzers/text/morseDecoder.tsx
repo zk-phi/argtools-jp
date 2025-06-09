@@ -37,14 +37,16 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     hist[0][0] > hist[1][0] ? hist[1][0] : hist[0][0]
   ));
 
-  useAnalyzer(onUpdate, input, async (input: Data) => {
+  useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
     if (input.type !== "text") {
       throw new Error("テキストデータではありません");
     }
     if (zeroChar.length === 0 || oneChar.length === 0) {
       throw new Error("読み取りに使う文字が指定されていません");
     }
+    await reporter({ status: "セットアップしています" });
     const { decodeMorse } = await packages.morse();
+    await reporter({ status: "読み取っています" });
     const [enMorse, jpMorse] = decodeMorse(input.value, zeroChar, oneChar);
     const data = multipleData([
       await textData(enMorse, "欧文モールスの読み取り結果"),

@@ -1,5 +1,6 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
+import type { StateReporter } from "../..";
 import { multipleData, textData, type Data, type AtomicData } from "../../../datatypes";
 
 const packages = {
@@ -13,11 +14,13 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary" || !input.mime.startsWith("image")) {
     throw new Error("画像データでないか、非対応の形式です");
   }
+  await reporter({ status: "セットアップしています" });
   const { getAllTags } = await packages.exif();
+  await reporter({ status: "抽出しています" });
   const tags = getAllTags(input.value.buffer);
   const datum: AtomicData[] = Object.keys(tags).filter(key => (
     tags[key]?.length > 0

@@ -44,7 +44,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   const [encoding, setEncoding] =  useState("ascii");
   const debouncedMinLength = useDebouncedValue(minLength, 2000, onUpdate);
 
-  useAnalyzer(onUpdate, input, async (input: Data) => {
+  useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
     if (input.type !== "binary") {
       throw new Error("バイナリデータではありません");
     }
@@ -54,11 +54,13 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     if (encoding !== "ascii" && encoding !== "utf-8") {
       throw new Error("UNEXPECTED: 存在しないエンコーディングです");
     }
+    await reporter({ status: "読み取れる場所を探しています" });
     const decoded = encoding === "ascii" ? (
       asciiDecoder(input.value)
     ) : (
       utf8Decoder(input.value)
     );
+    await reporter({ status: "データを整形しています" });
     const datum: AtomicData[] = await Promise.all(
       decoded.filter(str => (
         str.length > debouncedMinLength

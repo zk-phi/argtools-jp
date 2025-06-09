@@ -1,6 +1,7 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
 import { mapRange } from "../../../utils/array/range";
 import { cacheAsync } from "../../../utils/cache";
+import type { StateReporter } from "../..";
 import { binaryData, multipleData, type AtomicData, type Data } from "../../../datatypes";
 
 const packages = {
@@ -15,13 +16,16 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary" || !input.mime.startsWith("audio")) {
     throw new Error("音声データでないか、非対応の形式です");
   }
+  await reporter({ status: "セットアップしています" });
   const { decodeAudio } = await packages.audio();
   const { renderSpectrogram } = await packages.spectrogram();
+  await reporter({ status: "デコードしています" });
   const buffer = await decodeAudio(input.value.buffer);
+  await reporter({ status: "解析しています" });
   const datum: AtomicData[] = await Promise.all(
     mapRange(buffer.numberOfChannels, async ch => {
       const spectrogram = await renderSpectrogram(buffer.getChannelData(ch), 600, 200);

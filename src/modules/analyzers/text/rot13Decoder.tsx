@@ -21,10 +21,11 @@ const detect = (data: Data) => {
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [rotNums, setRotNums] = useState(false);
 
-  useAnalyzer(onUpdate, input, async (input: Data) => {
+  useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
     if (input.type !== "text") {
       throw new Error("テキストデータではありません");
     }
+    await reporter({ status: "復号化しています 1/2" });
     const charCodes = input.value.split("").map(s => s.charCodeAt(0));
     const rot13CharCodes = charCodes.map(ch => {
       if (ch >= 65 && ch <= 90) {
@@ -38,6 +39,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       }
       return ch;
     });
+    await reporter({ status: "復号化しています 2/2" });
     const atbashCharCodes = charCodes.map(ch => {
       if (ch >= 65 && ch <= 90) {
         return (25 - (ch - 65)) + 65;
@@ -50,6 +52,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       }
       return ch;
     });
+    await reporter({ status: "整形しています" });
     const rot13 = rot13CharCodes.map(ch => String.fromCharCode(ch)).join("");
     const atbash = atbashCharCodes.map(ch => String.fromCharCode(ch)).join("");
     const data = multipleData([

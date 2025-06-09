@@ -1,5 +1,6 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
+import type { StateReporter } from "../..";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../../datatypes";
 
 const packages = {
@@ -21,11 +22,12 @@ const detect = (data: Data) => {
 const allDigits = /([0-9#*][^0-9A-z#*]{0,2}){3,}/g;
 const allDelimiters = /[^0-9*#]+/g;
 
-const analyze = async (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "text") {
     throw new Error("テキストデータではありません");
   }
 
+  await reporter({ status: "読み取れる場所を探しています" });
   const matches = input.value.match(allDigits);
   if (!matches) {
     throw new Error("読み取れる部分はありませんでした😭");
@@ -34,8 +36,10 @@ const analyze = async (input: Data) => {
     throw new Error(`候補が多すぎたので中止しました（${matches.length}件）`);
   }
 
+  await reporter({ status: "セットアップしています" });
   const { renderDtmfSound } = await packages.dtmf();
   const { default: toWav } = await packages.audiobufferToWav();
+  await reporter({ status: "音源を生成しています" });
   const datum: AtomicData[] = await Promise.all(
     matches.map(async match => {
       const stripped = match.replaceAll(allDelimiters, "");

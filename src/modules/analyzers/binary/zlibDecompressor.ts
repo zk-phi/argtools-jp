@@ -1,5 +1,6 @@
 import { simpleAnalyzerFactory } from "../../analyzerFactories";
 import { cacheAsync } from "../../../utils/cache";
+import type { StateReporter } from "../..";
 import { binaryData, type Data } from "../../../datatypes";
 
 const packages = {
@@ -16,11 +17,13 @@ const detect = (data: Data) => {
   return null;
 };
 
-const analyze = async (input: Data) => {
+const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary") {
     throw new Error("バイナリデータではありません");
   };
+  await reporter({ status: "セットアップしています" });
   const { unzlibSync } = await packages.fflate();
+  await reporter({ status: "解凍しています" });
   const expanded = unzlibSync(input.value);
   return await binaryData(expanded, "解凍されたデータ");
 };
