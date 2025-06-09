@@ -38,8 +38,8 @@ export const RawBinaryViewer = ({ data, busy }: { data: BinaryData, busy?: boole
   );
 
   return (
-    <ViewerContainer label={data.label} caption={caption} busy={busy}>
-      <pre style={{ maxHeight: 300, overflow: "auto" }}>{hexString}</pre>
+    <ViewerContainer maxHeight={300} scrollX label={data.label} caption={caption} busy={busy}>
+      <pre>{hexString}</pre>
     </ViewerContainer>
   );
 };

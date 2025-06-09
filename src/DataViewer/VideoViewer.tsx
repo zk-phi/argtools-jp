@@ -15,8 +15,8 @@ export const VideoViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }
   );
 
   return (
-    <ViewerContainer label={data.label} caption={caption} busy={busy}>
-      <video controls={true} style={{ maxHeight: 300 }}>
+    <ViewerContainer maxHeight={300} label={data.label} caption={caption} busy={busy}>
+      <video controls={true}>
         <source src={url} type={data.mime} />
       </video>
     </ViewerContainer>

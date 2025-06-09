@@ -5,6 +5,7 @@ import { ViewerContainer } from "./ViewerContainer";
 
 export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
   const [full, setFull] = useState(false);
+  const maxHeight = full ? undefined : 420;
   const toggleFull = useCallback(() => setFull(full => !full), []);
 
   const url = useMemo(() => toBlobUrl(data), [data]);
@@ -18,10 +19,8 @@ export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }
   );
 
   return (
-    <ViewerContainer label={data.label} caption={caption} busy={busy}>
-      <div style={{ maxHeight: full ? undefined : 420, overflowY: "auto" }}>
-        <img src={url} style={{ cursor: "pointer" }} onClick={toggleFull} />
-      </div>
+    <ViewerContainer maxHeight={maxHeight} label={data.label} caption={caption} busy={busy}>
+      <img src={url} style={{ cursor: "pointer" }} onClick={toggleFull} />
     </ViewerContainer>
   );
 };
