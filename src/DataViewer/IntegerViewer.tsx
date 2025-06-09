@@ -15,7 +15,7 @@ export const IntegerViewer = ({ data, status }: { data: IntegerData, status?: st
   );
 
   return (
-    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} status={status}>
+    <ViewerContainer maxHeight={320} scrollX={true} label={data.label} caption={caption} status={status}>
       <blockquote>
         {data.value}
       </blockquote>

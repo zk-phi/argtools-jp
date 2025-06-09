@@ -20,12 +20,13 @@ const busyOverlayStyle = {
   boxSizing: "border-box",
 };
 
-export const ViewerContainer = ({ children, label, caption, status, maxHeight, scrollX }: {
+export const ViewerContainer = ({ children, label, caption, status, maxHeight, maxWidth, scrollX }: {
   children: ComponentChildren,
   label?: string,
   caption: ComponentChildren,
   status?: string | null,
   maxHeight?: number,
+  maxWidth?: number,
   scrollX?: boolean,
 }) => (
   <div style={containerStyle}>
@@ -34,7 +35,7 @@ export const ViewerContainer = ({ children, label, caption, status, maxHeight, s
         <small>{label}</small>
       </div>
     )}
-    <div style={{ maxHeight, overflowY: "auto", overflowX: scrollX ? "auto" : undefined }}>
+    <div style={{ maxHeight, maxWidth, overflowY: "auto", overflowX: scrollX ? "auto" : undefined }}>
       {children}
     </div>
     <div style={{ fontSize: "smaller" }}>

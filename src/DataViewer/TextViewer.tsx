@@ -11,7 +11,7 @@ export const TextViewer = ({ data, status }: { data: TextData, status?: string |
   );
 
   return (
-    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} status={status}>
+    <ViewerContainer maxHeight={320} scrollX={true} label={data.label} caption={caption} status={status}>
       <pre>{data.value}</pre>
     </ViewerContainer>
   )

@@ -15,7 +15,7 @@ export const VideoViewer = ({ data, status }: { data: BinaryData, status?: strin
   );
 
   return (
-    <ViewerContainer maxHeight={300} label={data.label} caption={caption} status={status}>
+    <ViewerContainer maxWidth={640} label={data.label} caption={caption} status={status}>
       <video controls={true}>
         <source src={url} type={data.mime} />
       </video>

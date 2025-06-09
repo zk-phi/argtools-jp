@@ -38,7 +38,7 @@ export const RawBinaryViewer = ({ data, status }: { data: BinaryData, status?: s
   );
 
   return (
-    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} status={status}>
+    <ViewerContainer maxHeight={320} scrollX={true} label={data.label} caption={caption} status={status}>
       <pre>{hexString}</pre>
     </ViewerContainer>
   );
