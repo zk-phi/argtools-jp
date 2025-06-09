@@ -37,7 +37,7 @@ const busyOverlayStyle = {
   boxSizing: "border-box",
 };
 
-export const WordlistViewer = ({ value, busy }: { value: Wordlist, busy?: boolean }) => {
+export const WordlistViewer = ({ value, status }: { value: Wordlist, status?: string | null }) => {
   const [filters, setFilters] = useState<Filter[]>([]);
   const [debouncedFilters, filterBusy] = useDebouncedValue(filters, 300);
 
@@ -77,6 +77,8 @@ export const WordlistViewer = ({ value, busy }: { value: Wordlist, busy?: boolea
       ...filters.slice(ix + 1),
     ]);
   }, [filters]);
+
+  const statusMessage = status || (filterBusy ? "検索中" : null);
 
   return (
     <>
@@ -135,10 +137,10 @@ export const WordlistViewer = ({ value, busy }: { value: Wordlist, busy?: boolea
       ))}
       <h4>検索結果</h4>
       {!filteredWords?.[0] ? (
-        <p>{busy || filterBusy ? "取得中 ..." : "データなし"}</p>
+        <p>{statusMessage ? `${statusMessage} ...` : "データなし"}</p>
       ) : (
         <>
-          <p>{busy || filterBusy ? "取得中 ..." : `${filteredWords.length} 件`}</p>
+          <p>{statusMessage ? `${statusMessage} ...` : `${filteredWords.length} 件`}</p>
           <div style={{ position: "relative" }}>
             <table>
               <tbody>
@@ -153,7 +155,7 @@ export const WordlistViewer = ({ value, busy }: { value: Wordlist, busy?: boolea
             {filteredWords.length > 300 && (
               <p>... 先頭の 300 件を表示中</p>
             )}
-            {(busy || filterBusy) && <div style={busyOverlayStyle} />}
+            {statusMessage && <div style={busyOverlayStyle} />}
           </div>
         </>
       )}

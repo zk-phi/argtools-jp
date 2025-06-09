@@ -2,7 +2,7 @@ import type { IntegerData } from "../datatypes";
 import { savePlainText } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const IntegerViewer = ({ data, busy }: { data: IntegerData, busy?: boolean }) => {
+export const IntegerViewer = ({ data, status }: { data: IntegerData, status?: string | null }) => {
   const caption = (
     <>
       整数値{" "}
@@ -15,7 +15,7 @@ export const IntegerViewer = ({ data, busy }: { data: IntegerData, busy?: boolea
   );
 
   return (
-    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} busy={busy}>
+    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} status={status}>
       <blockquote>
         {data.value}
       </blockquote>

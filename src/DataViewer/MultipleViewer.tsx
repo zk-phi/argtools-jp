@@ -2,12 +2,12 @@ import type { AtomicData } from "../datatypes";
 import { ViewerContainer } from "./ViewerContainer";
 import { DataViewer } from ".";
 
-export const MultipleViewer = ({ datum, onInspect, busy }: {
+export const MultipleViewer = ({ datum, onInspect, status }: {
   datum: AtomicData[],
   onInspect?: (ix: number) => void,
-  busy?: boolean,
+  status?: string | null,
 }) => (
-  <ViewerContainer caption={`複数のデータ（${datum.length}件）`} busy={busy} maxHeight={600}>
+  <ViewerContainer caption={`複数のデータ（${datum.length}件）`} status={status} maxHeight={600}>
     <table>
       <tbody>
         {datum.slice(0, 100).map((data, ix) => (

@@ -18,13 +18,13 @@ export function useDebouncedValue<T> (
     const timer = setTimeout(() => {
       setDebouncedValue(value);
       if (reporter) {
-        reporter({ busy: false });
+        reporter({ status: null });
       } else {
         setBusy(false);
       }
     }, ms);
     if (reporter) {
-      reporter({ busy: true });
+      reporter({ status: "解析開始" });
     } else {
       setBusy(true);
     }

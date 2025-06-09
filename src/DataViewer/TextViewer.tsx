@@ -2,7 +2,7 @@ import type { TextData } from "../datatypes";
 import { savePlainText } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const TextViewer = ({ data, busy }: { data: TextData, busy?: boolean }) => {
+export const TextViewer = ({ data, status }: { data: TextData, status?: string | null }) => {
   const caption = (
     <>
       文字列（{data.value.length}文字 {data.language ? `${data.language}？` : "不明"}）
@@ -11,7 +11,7 @@ export const TextViewer = ({ data, busy }: { data: TextData, busy?: boolean }) =
   );
 
   return (
-    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} busy={busy}>
+    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} status={status}>
       <pre>{data.value}</pre>
     </ViewerContainer>
   )

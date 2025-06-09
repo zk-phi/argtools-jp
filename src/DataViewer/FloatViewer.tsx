@@ -2,7 +2,7 @@ import type { FloatData } from "../datatypes";
 import { savePlainText } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const FloatViewer = ({ data, busy }: { data: FloatData, busy?: boolean }) => {
+export const FloatViewer = ({ data, status }: { data: FloatData, status?: string | null }) => {
   const caption = (
     <>
       数値{" "}
@@ -15,7 +15,7 @@ export const FloatViewer = ({ data, busy }: { data: FloatData, busy?: boolean })
   );
 
   return (
-    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} busy={busy}>
+    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} status={status}>
       <blockquote>{data.value}</blockquote>
     </ViewerContainer>
   );

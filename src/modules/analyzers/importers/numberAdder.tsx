@@ -21,14 +21,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   }, []);
 
   useReporter(onUpdate, () => {
-    if (debouncedNumber === "") {
-      if (!input) {
-        return null;
-      }
-      return input;
-    }
-
-    const data = numberData(Number(debouncedNumber), "入力されたデータ");
+    const parsed = debouncedNumber === "" ? 0 : Number(debouncedNumber);
+    const data = numberData(parsed, "入力されたデータ");
     if (!input) {
       return data;
     }

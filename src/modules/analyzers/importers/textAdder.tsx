@@ -21,13 +21,6 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   }, []);
 
   useReporter(onUpdate, async () => {
-    if (debouncedText === "") {
-      if (!input) {
-        return null;
-      }
-      return input;
-    }
-
     const data = await textData(debouncedText, "入力されたデータ");
     if (!input) {
       return data;

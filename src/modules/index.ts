@@ -1,7 +1,12 @@
 import type { FunctionComponent, ComponentChildren } from "preact";
 import type { MaybeData, Data } from "../datatypes";
 
-export type StateReporter = (state: { busy?: boolean, output?: MaybeData }) => void;
+type ReporterState = {
+  status?: string | null,
+  output?: MaybeData,
+};
+
+export type StateReporter = (state: ReporterState) => Promise<void>;
 
 export type AnalyzerModule = {
   // An user-friendly description.

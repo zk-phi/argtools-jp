@@ -3,7 +3,7 @@ import { toBlobUrl, type BinaryData } from "../datatypes";
 import { save } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
+export const ImageViewer = ({ data, status }: { data: BinaryData, status?: string | null }) => {
   const [full, setFull] = useState(false);
   const maxHeight = full ? undefined : 420;
   const toggleFull = useCallback(() => setFull(full => !full), []);
@@ -19,7 +19,7 @@ export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }
   );
 
   return (
-    <ViewerContainer maxHeight={maxHeight} label={data.label} caption={caption} busy={busy}>
+    <ViewerContainer maxHeight={maxHeight} label={data.label} caption={caption} status={status}>
       <img src={url} style={{ cursor: "pointer" }} onClick={toggleFull} />
     </ViewerContainer>
   );

@@ -7,7 +7,9 @@ export const identity: AnalyzerModule = {
   label: "解析結果",
   detect: () => null,
   component: ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
-    useEffect(() => onUpdate({ output: input }), [onUpdate, input]);
+    useEffect(() => {
+      onUpdate({ output: input });
+    }, [onUpdate, input]);
     return null;
   },
 };

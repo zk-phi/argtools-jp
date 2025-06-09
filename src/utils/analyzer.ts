@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from "preact/hooks";
-import { defer } from "./ui/defer";
 import { errorData, type Data, type MaybeData } from "../datatypes";
 import type { StateReporter } from "../modules";
 
@@ -16,8 +15,7 @@ export const runAnalyzer = async (
   if (input.type === "error") {
     return reporter({ output: input });
   }
-  reporter({ busy: true });
-  await defer(); // wait for the UI to update
+  await reporter({ status: "解析開始" });
   try {
     reporter({ output: await analyzer(input) });
   } catch (e: any) {
@@ -32,10 +30,10 @@ export const withReporter = async (
   reporter: StateReporter,
   cb: () => Promise<MaybeData> | MaybeData,
 ) => {
-  reporter({ busy: true });
-  await defer(); // wait for the UI to update
+  await reporter({ status: "解析開始" });
   try {
     reporter({ output: await cb() });
+    console.log("output reported");
   } catch (e: any) {
     reporter({
       output: errorData("message" in e ? e.message : "Unexpected error."),

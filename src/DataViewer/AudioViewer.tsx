@@ -3,7 +3,7 @@ import { toBlobUrl, type BinaryData } from "../datatypes";
 import { save } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const AudioViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
+export const AudioViewer = ({ data, status }: { data: BinaryData, status?: string | null }) => {
   const url = useMemo(() => toBlobUrl(data), [data]);
   const upcaseExt = useMemo(() => data.ext.slice(1).toUpperCase(), [data]);
 
@@ -15,7 +15,7 @@ export const AudioViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }
   );
 
   return (
-    <ViewerContainer label={data.label} caption={caption} busy={busy}>
+    <ViewerContainer label={data.label} caption={caption} status={status}>
       <audio controls={true} src={url} />
     </ViewerContainer>
   );

@@ -79,9 +79,9 @@ const Field = ({ label, obj, initialOpened }: {
   )
 );
 
-export const ObjectViewer = ({ data, busy }: {
+export const ObjectViewer = ({ data, status }: {
   data: ObjectData,
-  busy?: boolean,
+  status?: string | null,
 }) => {
   const upcaseExt = useMemo(() => data.ext.slice(1).toUpperCase(), [data]);
 
@@ -93,7 +93,7 @@ export const ObjectViewer = ({ data, busy }: {
   );
 
   return (
-    <ViewerContainer label={data.label} caption={caption} busy={busy}>
+    <ViewerContainer label={data.label} caption={caption} status={status}>
       <div style={{ fontFamily: "monospace" }}>
         <Field obj={data.object} initialOpened={true} />
       </div>

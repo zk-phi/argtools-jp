@@ -1,5 +1,6 @@
 import { useState, useCallback } from "preact/hooks";
 import { DataViewer } from "./DataViewer";
+import { defer } from "./utils/ui/defer";
 import type { MaybeData } from "./datatypes"
 import type { AnalyzerModule, StateReporter } from "./modules";
 
@@ -11,23 +12,25 @@ export const microAppFactory = ({ importer, analyzer, importerLabel, outputLabel
 }) => {
   const Component = () => {
     const [importerOutput, setImporterOutput] = useState<MaybeData>(null);
-    const [importerBusy, setImporterBusy] = useState(false);
+    const [importerStatus, setImporterStatus] = useState<string | null>(null);
 
     const onUpdateImporter = useCallback<StateReporter>(state => {
       if (state.output) {
         setImporterOutput(state.output);
       }
-      setImporterBusy(!!state.busy);
+      setImporterStatus(state.status ?? null);
+      return defer();
     }, []);
 
     const [analyzerOutput, setAnalyzerOutput] = useState<MaybeData>(null);
-    const [analyzerBusy, setAnalyzerBusy] = useState(false);
+    const [analyzerStatus, setAnalyzerSttatus] = useState<string | null>(null);
 
     const onUpdateAnalyzer = useCallback<StateReporter>((state) => {
       if (state.output) {
         setAnalyzerOutput(state.output);
       }
-      setAnalyzerBusy(!!state.busy);
+      setAnalyzerSttatus(state.status ?? null);
+      return defer();
     }, []);
 
     const Importer = importer.component;
@@ -45,10 +48,10 @@ export const microAppFactory = ({ importer, analyzer, importerLabel, outputLabel
         {analyzerOutput ? (
           <>
             {outputLabel && (<h3>{outputLabel}</h3>)}
-            <DataViewer data={analyzerOutput} busy={analyzerBusy || importerBusy} />
+            <DataViewer data={analyzerOutput} status={analyzerStatus || importerStatus} />
           </>
-        ) : analyzerBusy || importerBusy ? (
-          <p>解析中 ...</p>
+        ) : analyzerStatus || importerStatus ? (
+          <p>{importerStatus || analyzerStatus} ...</p>
         ) : (
           null
         )}

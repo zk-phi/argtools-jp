@@ -1,6 +1,7 @@
 import { signal, computed, type Signal } from "@preact/signals";
 import { useMemo } from "preact/hooks";
 import { gensym } from "./utils/gensym";
+import { defer } from "./utils/ui/defer";
 import { analyzerCategories, analyzers } from "./modules/analyzers";
 import { toolCategories } from "./modules/tools";
 import { importers } from "./modules/importers";
@@ -27,7 +28,7 @@ type Suggestion = {
 };
 
 type AppState = {
-  busy: Signal<boolean>,
+  status: Signal<string | null>,
   stack: Signal<StackFrame[]>,
   suggestions: Signal<Suggestion[]>,
   pushAnalyzer: (module: AnalyzerModule) => void,
@@ -36,15 +37,15 @@ type AppState = {
 };
 
 const createAppState = (): AppState => {
-  const busy = signal(false);
+  const status = signal<string | null>(null);
   const stack = signal<StackFrame[]>([]);
 
-  const _stateReporterForId = (id: number): StateReporter => (state) => {
+  const _stateReporterForId = (id: number): StateReporter => async (state) => {
     const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
     // If the frame is no longer active, do nothing.
     // This may occur when stateReporter is called from an async analyzer.
     if (id === _stack[_stack.length - 1]?.id) {
-      busy.value = !!state.busy;
+      status.value = state.status ?? null;
       if (state.output !== undefined) {
         stack.value = [
           ..._stack.slice(0, -1),
@@ -52,6 +53,7 @@ const createAppState = (): AppState => {
         ];
       }
     }
+    return defer();
   };
 
   // List of suggestions for the last output.
@@ -73,7 +75,7 @@ const createAppState = (): AppState => {
   const pushAnalyzer = (module: AnalyzerModule) => {
     const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
     const id = gensym();
-    busy.value = false;
+    status.value = null;
     stack.value = [
       ..._stack,
       { id, module, reporter: _stateReporterForId(id), output: null },
@@ -84,7 +86,7 @@ const createAppState = (): AppState => {
   const inspect = (ix: number) => {
     const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
     const id = gensym();
-    busy.value = false;
+    status.value = null;
     stack.value = [
       ..._stack,
       { id, module: genInspector(ix), reporter: _stateReporterForId(id), output: null },
@@ -94,11 +96,11 @@ const createAppState = (): AppState => {
   // Rollback to undo N-th frame (= activate "N-1"-th frame)
   const rollback = (n: number) => {
     const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
-    busy.value = false;
+    status.value = null;
     stack.value = _stack.slice(0, n);
   };
 
-  return { busy, stack, suggestions, pushAnalyzer, inspect, rollback };
+  return { status, stack, suggestions, pushAnalyzer, inspect, rollback };
 }
 
 /* ---- UI */
@@ -161,7 +163,7 @@ const ImporterSelector = ({ state: { stack, pushAnalyzer, rollback } }: {
   )
 );
 
-const Frame = ({ frame, ix, state: { stack, inspect, busy, rollback } }: {
+const Frame = ({ frame, ix, state: { stack, inspect, status, rollback } }: {
   frame: StackFrame,
   ix: number,
   state: AppState,
@@ -171,7 +173,7 @@ const Frame = ({ frame, ix, state: { stack, inspect, busy, rollback } }: {
   const input = stack.value[ix - 1]?.output ?? null;
 
   const isActive = ix === stack.value.length - 1;
-  const isBusy = isActive && busy.value;
+  const statusMessage = isActive ? status.value : null;
 
   const onInspect = isActive ? inspect : undefined;
 
@@ -185,9 +187,9 @@ const Frame = ({ frame, ix, state: { stack, inspect, busy, rollback } }: {
         <Component onUpdate={frame.reporter} input={input} />
       </div>
       {frame.output ? (
-        <DataViewer data={frame.output} onInspect={onInspect} busy={isBusy} />
-      ) : isBusy ? (
-        <p>解析中 ...</p>
+        <DataViewer data={frame.output} onInspect={onInspect} status={statusMessage} />
+      ) : statusMessage ? (
+        <p>{statusMessage} ...</p>
       ) : (
         null
       )}
@@ -202,7 +204,7 @@ const Frame = ({ frame, ix, state: { stack, inspect, busy, rollback } }: {
   );
 };
 
-const Suggestions = ({ state: { suggestions, busy, pushAnalyzer } }: {
+const Suggestions = ({ state: { suggestions, status, pushAnalyzer } }: {
   state: AppState,
 }) => (
   suggestions.value.length > 0 ? (
@@ -215,8 +217,8 @@ const Suggestions = ({ state: { suggestions, busy, pushAnalyzer } }: {
               <td style={{ textAlign: "right" }}>
                 <button
                     type="button"
-                    onClick={busy.value ? undefined : () => pushAnalyzer(suggestion.module)}
-                    disabled={busy.value}>
+                    onClick={status.value ? undefined : () => pushAnalyzer(suggestion.module)}
+                    disabled={!!status.value}>
                   {suggestion.module.label}
                 </button>
               </td>

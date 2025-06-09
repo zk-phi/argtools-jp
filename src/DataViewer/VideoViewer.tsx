@@ -3,7 +3,7 @@ import { toBlobUrl, type BinaryData } from "../datatypes";
 import { save } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const VideoViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }) => {
+export const VideoViewer = ({ data, status }: { data: BinaryData, status?: string | null }) => {
   const url = useMemo(() => toBlobUrl(data), [data]);
   const upcaseExt = useMemo(() => data.ext.slice(1).toUpperCase(), [data]);
 
@@ -15,7 +15,7 @@ export const VideoViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }
   );
 
   return (
-    <ViewerContainer maxHeight={300} label={data.label} caption={caption} busy={busy}>
+    <ViewerContainer maxHeight={300} label={data.label} caption={caption} status={status}>
       <video controls={true}>
         <source src={url} type={data.mime} />
       </video>

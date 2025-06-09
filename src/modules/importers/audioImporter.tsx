@@ -25,7 +25,7 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
   const startRecording = useCallback(() => {
     if (recorder) {
       setRecording(true);
-      onUpdate({ busy: true });
+      onUpdate({ status: "集音中" });
       recorder.start();
     }
   }, [onUpdate, recorder]);
