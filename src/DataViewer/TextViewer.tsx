@@ -12,7 +12,7 @@ export const TextViewer = ({ data, busy }: { data: TextData, busy?: boolean }) =
 
   return (
     <ViewerContainer label={data.label} caption={caption} busy={busy}>
-      <blockquote style={{ maxHeight: 300, maxWidth: 600, overflow: "auto" }}>
+      <blockquote style={{ maxHeight: 300, overflow: "auto" }}>
         <pre>{data.value}</pre>
       </blockquote>
     </ViewerContainer>

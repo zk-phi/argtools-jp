@@ -5,6 +5,8 @@ const containerStyle = {
   display: "inline-block",
   position: "relative",
   padding: "8px 12px",
+  maxWidth: "100%",
+  boxSizing: "border-box",
 };
 
 const busyOverlayStyle = {

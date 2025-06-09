@@ -16,7 +16,7 @@ export const IntegerViewer = ({ data, busy }: { data: IntegerData, busy?: boolea
 
   return (
     <ViewerContainer label={data.label} caption={caption} busy={busy}>
-      <blockquote style={{ maxHeight: 300, maxWidth: 600, overflow: "auto" }}>
+      <blockquote style={{ maxHeight: 300, overflow: "auto" }}>
         {data.value}
       </blockquote>
     </ViewerContainer>

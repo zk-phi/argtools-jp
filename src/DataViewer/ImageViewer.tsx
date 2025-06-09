@@ -19,7 +19,7 @@ export const ImageViewer = ({ data, busy }: { data: BinaryData, busy?: boolean }
 
   return (
     <ViewerContainer label={data.label} caption={caption} busy={busy}>
-      <div style={{ maxHeight: full ? undefined : 420, overflowY: "scroll" }}>
+      <div style={{ maxHeight: full ? undefined : 420, overflowY: "auto" }}>
         <img src={url} style={{ cursor: "pointer" }} onClick={toggleFull} />
       </div>
     </ViewerContainer>
