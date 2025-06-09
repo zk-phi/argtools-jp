@@ -45,7 +45,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   }, [debouncedText, input]);
 
   return (
-    <textarea value={text} rows={20} cols={50} onInput={onInput} />
+    <textarea value={text} rows={20} cols={40} onInput={onInput} />
   );
 };
 
