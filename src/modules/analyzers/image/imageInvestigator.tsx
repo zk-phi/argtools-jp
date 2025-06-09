@@ -61,7 +61,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       throw new Error("画像データでないか、非対応の形式です");
     };
 
-    await reporter({ status: "セットアップしています" });
+    await reporter({ status: "ツールを読み込んでいます" });
 
     const { canvasToUint8Array, urlToImg } = await packages.image();
     const { tweakColor } = await packages.color();

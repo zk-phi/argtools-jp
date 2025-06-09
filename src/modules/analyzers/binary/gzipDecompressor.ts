@@ -22,7 +22,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary") {
     throw new Error("バイナリデータではありません");
   };
-  await reporter({ status: "セットアップしています" });
+  await reporter({ status: "ツールを読み込んでいます" });
   const { gunzipSync } = await packages.fflate();
   const expanded = await gunzipSync(input.value);
   return await binaryData(expanded, "解凍されたデータ");

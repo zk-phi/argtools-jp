@@ -21,7 +21,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary") {
     throw new Error("バイナリデータではありません");
   };
-  await reporter({ status: "セットアップしています" });
+  await reporter({ status: "ツールを読み込んでいます" });
   const { unzlibSync } = await packages.fflate();
   await reporter({ status: "解凍しています" });
   const expanded = unzlibSync(input.value);

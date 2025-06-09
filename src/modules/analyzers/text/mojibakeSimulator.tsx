@@ -34,7 +34,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     if (input.type !== "text") {
       throw new Error("テキストデータではありません");
     }
-    await reporter({ status: "セットアップしています" });
+    await reporter({ status: "ツールを読み込んでいます" });
     const { fixMojibake } = await packages.mojibake();
     await reporter({ status: "復元を試みています" });
     const [fixed, allCandidates] = fixMojibake(input.value, fromEncoding, toEncoding);

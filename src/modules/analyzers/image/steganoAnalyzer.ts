@@ -19,7 +19,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
     throw new Error("画像データでないか、非対応の形式です");
   };
 
-  await reporter({ status: "セットアップしています" });
+  await reporter({ status: "ツールを読み込んでいます" });
   const { applyFilter } = await packages.image();
   const url = toBlobUrl(input);
 

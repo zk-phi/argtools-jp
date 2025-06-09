@@ -29,7 +29,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
     throw new Error("２未満の整数には対応していません。");
   }
 
-  await reporter({ status: "セットアップしています" });
+  await reporter({ status: "ツールを読み込んでいます" });
   const { PRIMES } = await packages.primes();
 
   await reporter({ status: "素因数を探しています" });

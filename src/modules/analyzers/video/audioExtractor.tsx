@@ -19,7 +19,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary" || !input.mime.startsWith("video")) {
     throw new Error("動画データでないか、非対応の形式です") ;
   }
-  await reporter({ status: "セットアップしています" });
+  await reporter({ status: "ツールを読み込んでいます" });
   const { decodeAudio } = await packages.audio();
   const { default: toWav } = await packages.audiobufferToWav();
   await reporter({ status: "デコードしています" });

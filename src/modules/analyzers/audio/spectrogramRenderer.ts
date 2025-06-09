@@ -20,7 +20,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary" || !input.mime.startsWith("audio")) {
     throw new Error("音声データでないか、非対応の形式です");
   }
-  await reporter({ status: "セットアップしています" });
+  await reporter({ status: "ツールを読み込んでいます" });
   const { decodeAudio } = await packages.audio();
   const { renderSpectrogram } = await packages.spectrogram();
   await reporter({ status: "デコードしています" });

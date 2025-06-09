@@ -44,7 +44,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     if (zeroChar.length === 0 || oneChar.length === 0) {
       throw new Error("読み取りに使う文字が指定されていません");
     }
-    await reporter({ status: "セットアップしています" });
+    await reporter({ status: "ツールを読み込んでいます" });
     const { decodeMorse } = await packages.morse();
     await reporter({ status: "読み取っています" });
     const [enMorse, jpMorse] = decodeMorse(input.value, zeroChar, oneChar);

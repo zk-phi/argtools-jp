@@ -36,7 +36,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
     throw new Error(`候補が多すぎたので中止しました（${matches.length}件）`);
   }
 
-  await reporter({ status: "セットアップしています" });
+  await reporter({ status: "ツールを読み込んでいます" });
   const { renderDtmfSound } = await packages.dtmf();
   const { default: toWav } = await packages.audiobufferToWav();
   await reporter({ status: "音源を生成しています" });

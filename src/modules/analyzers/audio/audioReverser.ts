@@ -19,7 +19,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary" || !input.mime.startsWith("audio")) {
     throw new Error("音声データでないか、非対応の形式です");
   }
-  await reporter({ status: "セットアップしています" });
+  await reporter({ status: "ツールを読み込んでいます" });
   const { decodeAudio, reverseAudioBuffer } = await packages.audio();
   const { default: toWav } = await packages.audiobufferToWav();
   await reporter({ status: "音源をデコードしています" });

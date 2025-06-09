@@ -18,7 +18,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "binary" || !input.mime.startsWith("image")) {
     throw new Error("画像データでないか、非対応の形式です");
   }
-  await reporter({ status: "セットアップしています" });
+  await reporter({ status: "ツールを読み込んでいます" });
   const { getAllTags } = await packages.exif();
   await reporter({ status: "抽出しています" });
   const tags = getAllTags(input.value.buffer);
