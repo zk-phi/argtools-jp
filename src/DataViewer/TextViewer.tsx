@@ -11,7 +11,7 @@ export const TextViewer = ({ data, busy }: { data: TextData, busy?: boolean }) =
   );
 
   return (
-    <ViewerContainer maxHeight={300} scrollX label={data.label} caption={caption} busy={busy}>
+    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} busy={busy}>
       <pre>{data.value}</pre>
     </ViewerContainer>
   )

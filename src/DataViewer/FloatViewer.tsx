@@ -15,7 +15,7 @@ export const FloatViewer = ({ data, busy }: { data: FloatData, busy?: boolean })
   );
 
   return (
-    <ViewerContainer maxHeight={300} scrollX label={data.label} caption={caption} busy={busy}>
+    <ViewerContainer maxHeight={300} scrollX={true} label={data.label} caption={caption} busy={busy}>
       <blockquote>{data.value}</blockquote>
     </ViewerContainer>
   );
