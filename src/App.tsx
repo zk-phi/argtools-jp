@@ -40,7 +40,7 @@ const createAppState = (): AppState => {
   const status = signal<string | null>(null);
   const stack = signal<StackFrame[]>([]);
 
-  const _stateReporterForId = (id: number): StateReporter => async (state) => {
+  const _stateReporterForId = (id: number): StateReporter => (state) => {
     const _stack = stack.peek(); // do not subscribe, to avoid infinite loops
     // If the frame is no longer active, do nothing.
     // This may occur when stateReporter is called from an async analyzer.
