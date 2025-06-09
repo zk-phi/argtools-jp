@@ -139,17 +139,16 @@ const ImporterSelector = ({ state: { stack, pushAnalyzer, rollback } }: {
     <section>
       <hr />
       <h3>モードを選ぶ：</h3>
-      {importers.map(module => (
-        <>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5em" }}>
+        {importers.map(module => (
           <button
               key={module.label}
               type="button"
               onClick={() => pushAnalyzer(module)}>
             {module.label}
           </button>
-          {"　"}
-        </>
-      ))}
+        ))}
+      </div>
     </section>
   ) : (
     <section>
