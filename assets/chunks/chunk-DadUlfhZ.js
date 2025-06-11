@@ -1,1 +1,0 @@
-import{g as o}from"./chunk-BM3y1iuq.js";import{e}from"./chunk-DhspdZcK.js";import"./chunk-16BH05ft.js";const p=async(a,r)=>{if(a.type!=="binary")throw new Error("バイナリデータではありません");await r({status:"解凍しています"});const t=await o(a.value);return await e(t,"解凍されたデータ")};export{p as processor};
