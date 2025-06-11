@@ -3,8 +3,9 @@ import { fileImporter } from "../../../src/modules/importers/fileImporter";
 import { spectrogramRenderer } from "../../../src/modules/analyzers/audio/spectrogramRenderer";
 
 export const Page = microAppFactory({
-  importerLabel: "解析したい音声ファイル",
+  pipeline: [
+    { module: fileImporter, label: "解析したい音声ファイル" },
+    { module: spectrogramRenderer },
+  ],
   outputLabel: "解析結果",
-  importer: fileImporter,
-  analyzer: spectrogramRenderer,
 });

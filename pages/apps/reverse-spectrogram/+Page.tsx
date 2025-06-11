@@ -3,8 +3,9 @@ import { fileImporter } from "../../../src/modules/importers/fileImporter";
 import { reverseSpectrogram } from "../../../src/modules/tools/image/reverseSpectrogram";
 
 export const Page = microAppFactory({
-  importerLabel: "埋め込みたい画像データ",
+  pipeline: [
+    { module: fileImporter, label: "埋め込みたい画像データ" },
+    { module: reverseSpectrogram },
+  ],
   outputLabel: "作成された音声",
-  importer: fileImporter,
-  analyzer: reverseSpectrogram,
 });

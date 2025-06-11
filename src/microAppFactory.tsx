@@ -1,57 +1,61 @@
-import { useState, useCallback } from "preact/hooks";
+import { useState, useMemo } from "preact/hooks";
 import { DataViewer } from "./DataViewer";
 import { defer } from "./utils/ui/defer";
 import type { MaybeData } from "./datatypes"
-import type { AnalyzerModule, StateReporter } from "./modules";
+import type { AnalyzerModule, StateReporter, ReporterState } from "./modules";
 
-export const microAppFactory = ({ importer, analyzer, importerLabel, outputLabel }: {
-  importer: AnalyzerModule,
-  analyzer: AnalyzerModule,
-  importerLabel: string,
+type PipelineItem = { label?: string, module: AnalyzerModule };
+type StateFrame = { status: string | null, output: MaybeData };
+
+export const microAppFactory = ({ pipeline, outputLabel }: {
+  pipeline: PipelineItem[],
   outputLabel?: string,
 }) => {
   const Component = () => {
-    const [importerOutput, setImporterOutput] = useState<MaybeData>(null);
-    const [importerStatus, setImporterStatus] = useState<string | null>(null);
+    const [state, setState] = useState<StateFrame[]>(
+      pipeline.map(_ => ({ status: null, output: null }))
+    );
 
-    const onUpdateImporter = useCallback<StateReporter>(state => {
-      if (state.output) {
-        setImporterOutput(state.output);
+    const stateReporters: StateReporter[] = useMemo(() => pipeline.map((_, ix) => (
+      async (value) => {
+        setState(state => {
+          const output = value.output === undefined ? state[ix].output : value.output;
+          const status = value.status ?? null;
+          const newState = [...state];
+          newState[ix] = { output, status };
+          return newState;
+        });
       }
-      setImporterStatus(state.status ?? null);
-      return defer();
-    }, []);
+    )), [pipeline]);
 
-    const [analyzerOutput, setAnalyzerOutput] = useState<MaybeData>(null);
-    const [analyzerStatus, setAnalyzerSttatus] = useState<string | null>(null);
-
-    const onUpdateAnalyzer = useCallback<StateReporter>((state) => {
-      if (state.output) {
-        setAnalyzerOutput(state.output);
-      }
-      setAnalyzerSttatus(state.status ?? null);
-      return defer();
-    }, []);
-
-    const Importer = importer.component;
-    const Analyzer = analyzer.component;
+    const status = useMemo(() => (
+      state.find(frame => !!frame.status)?.status ?? null
+    ), [state]);
 
     return (
       <>
-        {analyzer.description ?? null}
+        {pipeline[pipeline.length - 1].module.description ?? null}
         <hr />
-        <h3>{importerLabel}</h3>
         <div style={{ marginBottom: "1em" }}>
-          <Importer onUpdate={onUpdateImporter} input={null} />
-          <Analyzer onUpdate={onUpdateAnalyzer} input={importerOutput} />
+          {pipeline.map((item, ix) => {
+            const Component = item.module.component;
+            return (
+              <>
+                {item.label && (<h3>{item.label}</h3>)}
+                <Component
+                    input={ix === 0 ? null : state[ix - 1].output}
+                    onUpdate={stateReporters[ix]} />
+              </>
+            );
+          })}
         </div>
-        {analyzerOutput ? (
+        {state[state.length - 1].output ? (
           <>
             {outputLabel && (<h3>{outputLabel}</h3>)}
-            <DataViewer data={analyzerOutput} status={analyzerStatus || importerStatus} />
+            <DataViewer data={state[state.length - 1].output} status={status} />
           </>
-        ) : analyzerStatus || importerStatus ? (
-          <p>{importerStatus || analyzerStatus} ...</p>
+        ) : status ? (
+          <p>{status} ...</p>
         ) : (
           null
         )}

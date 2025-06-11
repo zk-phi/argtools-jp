@@ -3,8 +3,9 @@ import { fileImporter } from "../../../src/modules/importers/fileImporter";
 import { binaryToImage } from "../../../src/modules/analyzers/binary/binaryToImage";
 
 export const Page = microAppFactory({
-  importerLabel: "可視化したいファイル",
+  pipeline: [
+    { module: fileImporter, label: "可視化したいファイル" },
+    { module: binaryToImage },
+  ],
   outputLabel: "出力画像",
-  importer: fileImporter,
-  analyzer: binaryToImage,
 });

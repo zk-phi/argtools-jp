@@ -1,7 +1,7 @@
 import type { FunctionComponent, ComponentChildren } from "preact";
 import type { MaybeData, Data } from "../datatypes";
 
-type ReporterState = {
+export type ReporterState = {
   status?: string | null,
   output?: MaybeData,
 };

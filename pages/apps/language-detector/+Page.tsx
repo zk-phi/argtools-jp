@@ -3,8 +3,9 @@ import { stringImporter } from "../../../src/modules/importers/stringImporter";
 import { languageDetector } from "../../../src/modules/tools/text/languageDetector";
 
 export const Page = microAppFactory({
-  importerLabel: "判定したいテキスト",
+  pipeline: [
+    { module: stringImporter, label: "判定したいテキスト" },
+    { module: languageDetector },
+  ],
   outputLabel: "結果",
-  importer: stringImporter,
-  analyzer: languageDetector,
 });

@@ -3,8 +3,9 @@ import { fileImporter } from "../../../src/modules/importers/fileImporter";
 import { audioMaximizer } from "../../../src/modules/analyzers/audio/audioMaximizer";
 
 export const Page = microAppFactory({
-  importerLabel: "音量を修正したい音声ファイル",
+  pipeline: [
+    { module: fileImporter, label: "音量を修正したい音声ファイル" },
+    { module: audioMaximizer },
+  ],
   outputLabel: "修正された音声",
-  importer: fileImporter,
-  analyzer: audioMaximizer,
 });

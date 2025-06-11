@@ -3,8 +3,9 @@ import { fileImporter } from "../../../src/modules/importers/fileImporter";
 import { steganoAnalyzer } from "../../../src/modules/analyzers/image/steganoAnalyzer";
 
 export const Page = microAppFactory({
-  importerLabel: "解析したい画像ファイル",
+  pipeline: [
+    { module: fileImporter, label: "解析したい画像ファイル" },
+    { module: steganoAnalyzer },
+  ],
   outputLabel: "解析結果",
-  importer: fileImporter,
-  analyzer: steganoAnalyzer,
 });

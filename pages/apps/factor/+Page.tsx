@@ -3,8 +3,9 @@ import { numberImporter } from "../../../src/modules/importers/numberImporter";
 import { factorNumber } from "../../../src/modules/analyzers/number/factorNumber";
 
 export const Page = microAppFactory({
-  importerLabel: "解析したい数値",
+  pipeline: [
+    { module: numberImporter, label: "解析したい数値" },
+    { module: factorNumber },
+  ],
   outputLabel: "解析結果",
-  importer: numberImporter,
-  analyzer: factorNumber,
 });
