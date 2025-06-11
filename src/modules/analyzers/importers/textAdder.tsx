@@ -102,6 +102,7 @@ const TextAdder = ({
 
   return (
     <>
+      <textarea value={text} rows={20} onInput={onInput} />
       {!mode && (
         <p>
           <select
@@ -114,7 +115,6 @@ const TextAdder = ({
           </select>
         </p>
       )}
-      <textarea value={text} rows={20} onInput={onInput} />
     </>
   );
 };
