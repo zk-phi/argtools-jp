@@ -29,7 +29,7 @@ const TextAdder = ({
 
   const onInput = useCallback((e: JSX.TargetedEvent<HTMLTextAreaElement, Event>) => {
     setText(e.currentTarget.value);
-  }, [selectedMode]);
+  }, []);
 
   useReporter(onUpdate, async (reporter: StateReporter) => {
     reporter({ status: "読み取っています" });
@@ -37,13 +37,13 @@ const TextAdder = ({
       await textData(debouncedText, "入力されたデータ")
     ) : selectedMode === "decimal" ? (
       debouncedText.match(DECIMAL_RE) ? (
-        numberData(Number(text), "入力されたデータ")
+        numberData(Number(debouncedText), "入力されたデータ")
       ) : (
         errorData("半角数字で入力してください")
       )
     ) : selectedMode === "hexadecimal" ? (
       debouncedText.match(HEXADECIMAL_RE) ? (
-        numberData(parseInt(text, 16), "入力されたデータ")
+        numberData(Number.parseInt(debouncedText, 16), "入力されたデータ")
       ) : (
         errorData("半角数字で入力してください")
       )
