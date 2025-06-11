@@ -33,7 +33,7 @@ const parseDecimal = (str: string): IntegerData | FloatData | ErrorData => (
   )
 );
 
-const HEXADECIMAL_RE = /^[+-]?(0x)?[0-9a-fA-F]$/;
+const HEXADECIMAL_RE = /^[+-]?(0x)?[0-9a-fA-F]+$/;
 const parseHexadecimal = (str: string): IntegerData | FloatData | ErrorData => (
   str.match(HEXADECIMAL_RE) ? (
     numberData(Number.parseInt(str, 16), "入力されたデータ")
