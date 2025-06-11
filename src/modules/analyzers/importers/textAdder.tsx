@@ -3,7 +3,19 @@ import { useState, useCallback } from "preact/hooks";
 import { useDebouncedValue } from "../../../utils/ui/debounce";
 import { useReporter } from "../../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../";
-import { textData, numberData, errorData, multipleData, type Data, type MaybeData } from "../../../datatypes";
+import {
+  textData,
+  numberData,
+  errorData,
+  binaryData,
+  multipleData,
+  type Data,
+  type MaybeData,
+  type ErrorData,
+  type IntegerData,
+  type FloatData,
+  type BinaryData,
+} from "../../../datatypes";
 
 const detect = (src: Data) => {
   if (src.type !== "wordlist") {
@@ -13,7 +25,33 @@ const detect = (src: Data) => {
 };
 
 const DECIMAL_RE = /^[+-]?([0-9]+|[0-9]*\.[0-9]+)([eE][+-]?[0-9]+)?$/;
-const HEXADECIMAL_RE = /^[+-]?(0x)?[0-9a-fA-F]+$/;
+const parseDecimal = (str: string): IntegerData | FloatData | ErrorData => (
+  str.match(DECIMAL_RE) ? (
+    numberData(Number(str), "入力されたデータ")
+  ) : (
+    errorData("半角数字（0-9）で入力してください")
+  )
+);
+
+const HEXADECIMAL_RE = /^[+-]?(0x)?[0-9a-fA-F]$/;
+const parseHexadecimal = (str: string): IntegerData | FloatData | ErrorData => (
+  str.match(HEXADECIMAL_RE) ? (
+    numberData(Number.parseInt(str, 16), "入力されたデータ")
+  ) : (
+    errorData("半角英数字（0-9, a-f）で入力してください")
+  )
+);
+
+const HEXBINARY_RE = /^((0x)?[0-9a-fA-F]{2}[\s]*){1,}$/;
+const HEXBINARY_BYTES_RE = /(0x)?[0-9a-fA-F]{2}/g;
+const parseHexBinary = async (str: string): Promise<BinaryData | ErrorData> => {
+  if (!str.match(HEXBINARY_RE)) {
+    return errorData("偶数桁の半角英数字（0-9, a-f）で入力してください");
+  }
+  const arr = str.match(HEXBINARY_BYTES_RE)!.map(match => Number.parseInt(match, 16));
+  return await binaryData(Uint8Array.from(arr), "入力されたデータ");
+};
+
 const TextAdder = ({
   onUpdate,
   input,
@@ -36,17 +74,11 @@ const TextAdder = ({
     const data = selectedMode === "string" ? (
       await textData(debouncedText, "入力されたデータ")
     ) : selectedMode === "decimal" ? (
-      debouncedText.match(DECIMAL_RE) ? (
-        numberData(Number(debouncedText), "入力されたデータ")
-      ) : (
-        errorData("半角数字で入力してください")
-      )
+      parseDecimal(debouncedText)
     ) : selectedMode === "hexadecimal" ? (
-      debouncedText.match(HEXADECIMAL_RE) ? (
-        numberData(Number.parseInt(debouncedText, 16), "入力されたデータ")
-      ) : (
-        errorData("半角数字で入力してください")
-      )
+      parseHexadecimal(debouncedText)
+    ) : selectedMode === "hexbytes" ? (
+      await parseHexBinary(debouncedText)
     ) : (
       null
     );
@@ -78,6 +110,7 @@ const TextAdder = ({
             <option value="string">文字列として解析</option>
             <option value="decimal">数値として解析</option>
             <option value="hexadecimal">１６進数として解析</option>
+            <option value="hexbytes">１６進バイナリとして解析</option>
           </select>
         </p>
       )}
