@@ -3,5 +3,5 @@ import type { AnalyzerModule } from "../";
 
 export const fileImporter: AnalyzerModule = {
   ...fileAdder,
-  label: "ファイルを解析",
+  label: "ファイルを開く",
 };

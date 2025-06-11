@@ -16,7 +16,7 @@ export const MultipleViewer = ({ datum, onInspect, status }: {
             {onInspect && (
               <td>
                 <button type="button" onClick={() => onInspect(ix)}>
-                  このデータを精査
+                  この項目を精査
                 </button>
               </td>
             )}

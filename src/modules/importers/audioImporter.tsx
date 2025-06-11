@@ -76,6 +76,6 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
 };
 
 export const audioImporter: AnalyzerModule = {
-  label: "別タブの音声を解析",
+  label: "別タブの音声を録音",
   component,
 };

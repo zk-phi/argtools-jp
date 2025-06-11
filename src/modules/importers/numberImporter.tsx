@@ -3,5 +3,5 @@ import type { AnalyzerModule } from "../";
 
 export const numberImporter: AnalyzerModule = {
   ...numberAdder,
-  label: "数値を解析",
+  label: "数値を入力",
 };

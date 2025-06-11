@@ -83,9 +83,6 @@ export const WordlistViewer = ({ value, status }: { value: Wordlist, status?: st
   return (
     <>
       <h4>絞り込み</h4>
-      <div>
-        <button type="button" onClick={addFilter}>＋ 条件を追加</button>
-      </div>
       {filters.map((filter, ix) => (
         <fieldset key={filter.id}>
           <legend>条件 {ix + 1}</legend>
@@ -135,6 +132,9 @@ export const WordlistViewer = ({ value, status }: { value: Wordlist, status?: st
           </div>
         </fieldset>
       ))}
+      <p>
+        <button type="button" onClick={addFilter}>＋ 条件を追加</button>
+      </p>
       <h4>検索結果</h4>
       {!filteredWords?.[0] ? (
         <p>{statusMessage ? `${statusMessage} ...` : "データなし"}</p>
