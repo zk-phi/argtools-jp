@@ -24,7 +24,7 @@ export function useDebouncedValue<T> (
       }
     }, ms);
     if (reporter) {
-      reporter({ status: "解析開始" });
+      reporter({ status: "入力待機中" });
     } else {
       setBusy(true);
     }
