@@ -98,7 +98,7 @@ const TextAdder = ({
       return multipleData([...input.datum, data]);
     }
     return multipleData([input, data]);
-  }, [debouncedText, input, selectedMode]);
+  }, [input, debouncedText, selectedMode]);
 
   return (
     <>

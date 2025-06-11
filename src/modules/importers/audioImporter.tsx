@@ -15,7 +15,7 @@ const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
   const ctx = useMemo(() => new AudioContext(), []);
 
   const initRecorder = useCallback(async () => {
-    await onUpdate({ status: "ツールを読み込んでいます" });
+    await onUpdate({ status: "レコーダーをセットアップしています" });
     try {
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: true, // must be true from the API spec.

@@ -1,5 +1,4 @@
 import { gensym } from "./utils/gensym";
-import { decode } from "./utils/array/decode";
 import { cacheAsync } from "./utils/cache";
 
 const instances = {
@@ -58,6 +57,19 @@ export type MaybeData = Data | ErrorData | null;
 
 /////////////////////
 
+const ENCODINGS = ["utf-8", "shift-jis", "euc-jp"];
+export const _decode = (array: Uint8Array): string => {
+  for (const encoding of ENCODINGS) {
+    try {
+      const decoder = new TextDecoder(encoding, { fatal: true });
+      return decoder.decode(array);
+    } catch (_) {
+      // fall through to the next decoder
+    }
+  }
+  throw new Error("Cannot decode array.");
+}
+
 export function binaryData (value: Uint8Array, label: string, mime: string, ext: string): BinaryData;
 export function binaryData (value: Uint8Array, label: string): Promise<BinaryData>;
 export function binaryData (value: Uint8Array, label: string, mime?: string, ext?: string) {
@@ -74,7 +86,7 @@ export function binaryData (value: Uint8Array, label: string, mime?: string, ext
       if (detected.mime.endsWith("/xml")) {
         try {
           const parser = await instances.xmlParser();
-          const str = decode(value);
+          const str = _decode(value);
           const obj = parser.parse(str);
           return objectData(str, obj, label, detected.mime, `.${detected.ext}`);
         } catch (_) {
@@ -84,7 +96,7 @@ export function binaryData (value: Uint8Array, label: string, mime?: string, ext
       return binaryData(value, label, detected.mime, `.${detected.ext}`);
     }
     try {
-      const str = decode(value);
+      const str = _decode(value);
       return textData(str, label);
     } catch (_) {
       // Non-text, unknown binary
