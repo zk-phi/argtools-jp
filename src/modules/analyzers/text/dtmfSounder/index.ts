@@ -1,7 +1,6 @@
 import { simpleAnalyzerFactory } from "../../../analyzerFactories";
-import { cacheAsync } from "../../../../utils/cache";
 import type { StateReporter } from "../../..";
-import { binaryData, multipleData, type Data, type AtomicData } from "../../../../datatypes";
+import type { Data, } from "../../../../datatypes";
 
 // require at least 3 digits,
 // at most two delimiter characters are allowed between each digits, like "000, 22, 124"

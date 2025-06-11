@@ -1,5 +1,4 @@
 import { useState } from "preact/hooks";
-import { cacheAsync } from "../../../../utils/cache";
 import { useDebouncedValue } from "../../../../utils/ui/debounce";
 import { useAnalyzer } from "../../../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../../";

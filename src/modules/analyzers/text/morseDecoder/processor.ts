@@ -1,9 +1,7 @@
-import { useState, useMemo } from "preact/hooks";
-import { histogram, quoteRegex } from "../../../../utils/string";
-import { cacheAsync } from "../../../../utils/cache";
-import { useAnalyzer } from "../../../../utils/analyzer";
-import type { AnalyzerModule, StateReporter } from "../../../";
-import { textData, multipleData, type Data, type MaybeData } from "../../../../datatypes";
+
+import { quoteRegex } from "../../../../utils/string";
+import type { StateReporter } from "../../../";
+import { textData, multipleData, type Data, } from "../../../../datatypes";
 
 const MORSE_TABLE_JP: { [key: string]: string } = {
   "・": "ヘ",

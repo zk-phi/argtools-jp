@@ -1,5 +1,4 @@
 import { simpleTextDecoderFactory } from "../../../analyzerFactories";
-import { textData } from "../../../../datatypes";
 
 const htmlHex = "&#x[0-9A-Fa-f]+;";
 const htmlDecimal = "&#[0-9]+;";

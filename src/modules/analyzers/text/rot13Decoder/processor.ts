@@ -1,7 +1,6 @@
-import { useState } from "preact/hooks";
-import { useAnalyzer } from "../../../../utils/analyzer";
-import type { AnalyzerModule, StateReporter } from "../../../";
-import { textData, multipleData, type Data, type MaybeData } from "../../../../datatypes";
+
+import type { StateReporter } from "../../../";
+import { textData, multipleData, type Data, } from "../../../../datatypes";
 
 const decodeRot13 = (str: string, rotateNums: boolean): string => {
   const charCodes = str.split("").map(s => s.charCodeAt(0));

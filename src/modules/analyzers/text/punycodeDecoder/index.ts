@@ -1,10 +1,4 @@
 import { simpleTextDecoderFactory } from "../../../analyzerFactories";
-import { cacheAsync } from "../../../../utils/cache";
-import { textData } from "../../../../datatypes";
-
-const packages = {
-  punycode: cacheAsync(() => import("punycode")),
-};
 
 const alphabet = "[a-z0-9]"
 // require at least 2 digits for each components

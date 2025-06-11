@@ -1,9 +1,8 @@
 import { useState, useMemo } from "preact/hooks";
 import { histogram } from "../../../../utils/string";
-import { cacheAsync } from "../../../../utils/cache";
 import { useAnalyzer } from "../../../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../../";
-import { textData, multipleData, type Data, type MaybeData } from "../../../../datatypes";
+import type { Data, MaybeData } from "../../../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type !== "text") {

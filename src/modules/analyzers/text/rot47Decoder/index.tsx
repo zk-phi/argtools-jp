@@ -1,4 +1,4 @@
-import { textData, type Data } from "../../../../datatypes";
+import type { Data } from "../../../../datatypes";
 import type { StateReporter } from "../../..";
 import { simpleAnalyzerFactory } from "../../../analyzerFactories";
 

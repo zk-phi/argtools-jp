@@ -1,7 +1,7 @@
-import { cacheAsync } from "../../../../utils/cache";
+
 import { simpleAnalyzerFactory } from "../../../analyzerFactories";
 import type { StateReporter } from "../../..";
-import { textData, type Data } from "../../../../datatypes";
+import type { Data } from "../../../../datatypes";
 
 export const MAX_SUPPORTED_INTEGER = 104729 ** 2;
 

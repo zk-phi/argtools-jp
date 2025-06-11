@@ -1,5 +1,4 @@
 import { simpleTextDecoderFactory } from "../../../analyzerFactories";
-import { textData } from "../../../../datatypes";
 
 // require at least 2 letters
 // at most 2 delimiter characters are allowed between each letter, like: "11, 29, 34"

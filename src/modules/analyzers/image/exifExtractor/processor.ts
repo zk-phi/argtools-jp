@@ -1,6 +1,4 @@
 import ExifReader from "exifreader";
-import { simpleAnalyzerFactory } from "../../../analyzerFactories";
-import { cacheAsync } from "../../../../utils/cache";
 import type { StateReporter } from "../../..";
 import { multipleData, textData, type Data, type AtomicData } from "../../../../datatypes";
 

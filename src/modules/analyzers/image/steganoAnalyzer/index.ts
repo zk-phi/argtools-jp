@@ -1,7 +1,6 @@
 import { simpleAnalyzerFactory } from "../../../analyzerFactories";
-import { cacheAsync } from "../../../../utils/cache";
 import type { StateReporter } from "../../..";
-import { multipleData, binaryData, toBlobUrl, type Data } from "../../../../datatypes";
+import type { Data } from "../../../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.mime.startsWith("image")) {

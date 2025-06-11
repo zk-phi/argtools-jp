@@ -1,6 +1,4 @@
 import toWav from "audiobuffer-to-wav";
-import { simpleAnalyzerFactory } from "../../../analyzerFactories";
-import { cacheAsync } from "../../../../utils/cache";
 import type { StateReporter } from "../../..";
 import { binaryData, multipleData, type Data, type AtomicData } from "../../../../datatypes";
 

@@ -1,4 +1,4 @@
-import { simpleTextDecoderFactory } from "../../../analyzerFactories";
+
 import { textData } from "../../../../datatypes";
 
 const pagerCharTable =

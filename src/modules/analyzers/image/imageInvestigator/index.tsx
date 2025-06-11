@@ -1,9 +1,8 @@
 import { useState, useCallback } from "preact/hooks";
-import { cacheAsync } from "../../../../utils/cache";
 import { useAnalyzer } from "../../../../utils/analyzer";
 import { useDebouncedValue } from "../../../../utils/ui/debounce";
 import type { StateReporter } from "../../../";
-import { binaryData, toBlobUrl, type Data, type MaybeData } from "../../../../datatypes";
+import type { Data, MaybeData } from "../../../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.mime.startsWith("image")) {

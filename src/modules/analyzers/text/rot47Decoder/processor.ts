@@ -1,6 +1,5 @@
 import { textData, type Data } from "../../../../datatypes";
 import type { StateReporter } from "../../..";
-import { simpleAnalyzerFactory } from "../../../analyzerFactories";
 
 const decodeRot47 = (str: string): string => {
   const charCodes = str.split("").map(s => s.charCodeAt(0));

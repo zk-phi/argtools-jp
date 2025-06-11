@@ -1,5 +1,4 @@
-import { simpleAnalyzerFactory } from "../../../analyzerFactories";
-import { cacheAsync } from "../../../../utils/cache";
+
 import { urlToImg, imgToCanvas } from "../../../../utils/image";
 import type { StateReporter } from "../../..";
 import { multipleData, binaryData, toBlobUrl, type Data } from "../../../../datatypes";

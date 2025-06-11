@@ -1,7 +1,6 @@
-import { useState, } from "preact/hooks";
-import { useAnalyzer } from "../../../../utils/analyzer";
-import type { AnalyzerModule, StateReporter } from "../../../";
-import { textData, type Data, type MaybeData } from "../../../../datatypes";
+
+import type { StateReporter } from "../../../";
+import { textData, type Data, } from "../../../../datatypes";
 
 const _alterText = (str: string, cols: number): string => {
   const removed = str.replace(/[\r\n]+/g, "");

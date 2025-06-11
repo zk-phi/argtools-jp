@@ -1,12 +1,8 @@
-import toWav from "audiobuffer-to-wav"
+
 import { useState, useCallback } from "preact/hooks";
 import type { AnalyzerModule, StateReporter } from "../../../";
 import { runAnalyzer } from "../../../../utils/analyzer";
-import { cacheAsync } from "../../../../utils/cache";
-import { luminanceFromRGB } from "../../../../utils/image/color";
-import { canvasToURL, urlToImg } from "../../../../utils/image";
-import { remap1D } from "../../../../utils/math";
-import { binaryData, toBlobUrl, type Data, type MaybeData } from "../../../../datatypes";
+import { binaryData, type Data, type MaybeData } from "../../../../datatypes";
 
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [depth, setDepth] = useState(3);
@@ -18,7 +14,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     runAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
       await reporter({ status: "ツールを読み込んでいます" });
       const { processor } = await import("./processor");
-      const [wav, url] = await processor(input, reporter, depth, len, h);
+      await reporter({ status: "音源を生成しています" });
+      const [wav, url] = await processor(input, depth, len, h);
       setImg(url);
       return await binaryData(wav, "画像が埋め込まれた音声");
     });

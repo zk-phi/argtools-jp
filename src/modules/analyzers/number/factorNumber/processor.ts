@@ -1,5 +1,4 @@
-import { cacheAsync } from "../../../../utils/cache";
-import { simpleAnalyzerFactory } from "../../../analyzerFactories";
+
 import type { StateReporter } from "../../..";
 import { textData, type Data } from "../../../../datatypes";
 import { PRIMES } from "../../../../../resources/primes";

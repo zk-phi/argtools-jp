@@ -1,7 +1,6 @@
-import { useState } from "preact/hooks";
-import { useAnalyzer } from "../../../../utils/analyzer";
-import type { AnalyzerModule, StateReporter } from "../../../";
-import { textData, type Data, type MaybeData } from "../../../../datatypes";
+
+import type { StateReporter } from "../../../";
+import { textData, type Data, } from "../../../../datatypes";
 
 const decodeCaesar = (str: string, n: number): string => {
   const inverseN = 26 - n;

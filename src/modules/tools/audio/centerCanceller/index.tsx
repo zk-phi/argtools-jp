@@ -1,7 +1,6 @@
 import { simpleAnalyzerFactory } from "../../../analyzerFactories";
-import { cacheAsync } from "../../../../utils/cache";
 import type { StateReporter } from "../../..";
-import { binaryData, type Data } from "../../../../datatypes";
+import type { Data } from "../../../../datatypes";
 
 const analyze = async (input: Data, reporter: StateReporter) => {
   await reporter({ status: "ツールを読み込んでいます" });

@@ -1,9 +1,7 @@
-import { useState, } from "preact/hooks";
+
 import { encode, decode } from "iconv-lite";
-import { cacheAsync } from "../../../../utils/cache";
-import { useAnalyzer } from "../../../../utils/analyzer";
-import type { AnalyzerModule, StateReporter } from "../../../";
-import { textData, multipleData, type Data, type MaybeData } from "../../../../datatypes";
+import type { StateReporter } from "../../../";
+import { textData, multipleData, type Data, } from "../../../../datatypes";
 import { UTF_TO_JIS_TABLE } from "../../../../../resources/utf8-to-jis-table";
 
 // inspired by https://tmtms.net/mojibake/

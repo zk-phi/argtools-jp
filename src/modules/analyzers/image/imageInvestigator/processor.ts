@@ -1,11 +1,8 @@
-import { useState, useCallback } from "preact/hooks";
+
 import { canvasToUint8Array, urlToImg } from "../../../../utils/image";
 import { clamp } from "../../../../utils/math";
-import { cacheAsync } from "../../../../utils/cache";
-import { useAnalyzer } from "../../../../utils/analyzer";
-import { useDebouncedValue } from "../../../../utils/ui/debounce";
 import type { StateReporter } from "../../../";
-import { binaryData, toBlobUrl, type Data, type MaybeData } from "../../../../datatypes";
+import { binaryData, toBlobUrl, type Data, } from "../../../../datatypes";
 
 // Tweak 0-255 color value
 const tweakColor = (

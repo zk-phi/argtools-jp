@@ -1,12 +1,8 @@
 import toWav from "audiobuffer-to-wav"
-import { useState, useCallback } from "preact/hooks";
-import type { AnalyzerModule, StateReporter } from "../../../";
-import { runAnalyzer } from "../../../../utils/analyzer";
-import { cacheAsync } from "../../../../utils/cache";
 import { luminanceFromRGB } from "../../../../utils/image/color";
 import { canvasToURL, urlToImg } from "../../../../utils/image";
 import { remap1D } from "../../../../utils/math";
-import { binaryData, toBlobUrl, type Data, type MaybeData } from "../../../../datatypes";
+import { toBlobUrl, type Data, } from "../../../../datatypes";
 
 const _simplifyImage = async (
   img: HTMLImageElement,
@@ -90,7 +86,6 @@ export const imageToAudio = async (
 
 export const processor = async (
   input: Data,
-  reporter: StateReporter,
   depth: number,
   seconds: number,
   hResolution: number,

@@ -1,8 +1,7 @@
 import { useState, } from "preact/hooks";
-import { cacheAsync } from "../../../../utils/cache";
 import { useAnalyzer } from "../../../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../../";
-import { textData, type Data, type MaybeData } from "../../../../datatypes";
+import type { Data, MaybeData } from "../../../../datatypes";
 
 const asciiStrMatcher = /^[\x00-\x7F]{30,}/;
 const detect = (data: Data) => {
