@@ -1,11 +1,11 @@
 import { useState, useMemo } from "preact/hooks";
 import { DataViewer } from "./DataViewer";
-import { defer } from "./utils/ui/defer";
+import { gensym } from "./utils/gensym";
 import type { MaybeData } from "./datatypes"
-import type { AnalyzerModule, StateReporter, ReporterState } from "./modules";
+import type { AnalyzerModule, StateReporter } from "./modules";
 
 type PipelineItem = { label?: string, module: AnalyzerModule };
-type StateFrame = { status: string | null, output: MaybeData };
+type StateFrame = { status: string | null, output: MaybeData, id: number };
 
 export const microAppFactory = ({ pipeline, outputLabel }: {
   pipeline: PipelineItem[],
@@ -13,7 +13,7 @@ export const microAppFactory = ({ pipeline, outputLabel }: {
 }) => {
   const Component = () => {
     const [state, setState] = useState<StateFrame[]>(
-      pipeline.map(_ => ({ status: null, output: null }))
+      pipeline.map(_ => ({ status: null, output: null, id: gensym() }))
     );
 
     const stateReporters: StateReporter[] = useMemo(() => pipeline.map((_, ix) => (
@@ -22,7 +22,7 @@ export const microAppFactory = ({ pipeline, outputLabel }: {
           const output = value.output === undefined ? state[ix].output : value.output;
           const status = value.status ?? null;
           const newState = [...state];
-          newState[ix] = { output, status };
+          newState[ix] = { output, status, id: state[ix].id };
           return newState;
         });
       }
@@ -43,6 +43,7 @@ export const microAppFactory = ({ pipeline, outputLabel }: {
               <>
                 {item.label && (<h3>{item.label}</h3>)}
                 <Component
+                    key={state[ix].id}
                     input={ix === 0 ? null : state[ix - 1].output}
                     onUpdate={stateReporters[ix]} />
               </>
