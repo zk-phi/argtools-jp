@@ -55,6 +55,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
 export const binaryToText: AnalyzerModule = {
   label: "文字列データを抽出",
+  app: "/argtools-jp/apps/binary-texts",
   detect,
   component,
 };

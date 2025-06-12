@@ -10,6 +10,7 @@ const delimited = `(?<=[^A-z0-9]|^)${body}(?=[^A-z0-9]|$)`
 export const punycodeDecoder = simpleTextDecoderFactory({
   label: "Punycode を読み取る",
   hint: "xn-- から始まる英数字列 → たぶん Punycode！",
+  app: "/argtools-jp/apps/punycode",
   pattern: delimited,
   decoder: async (str: string, label: string) => {
     const { processor } = await import("./processor");

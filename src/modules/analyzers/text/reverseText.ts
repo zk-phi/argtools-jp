@@ -20,6 +20,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
 
 export const reverseText = simpleAnalyzerFactory({
   label: "反転する",
+  app: "/argtools-jp/apps/reverse-texts",
   detect,
   analyze,
 });
