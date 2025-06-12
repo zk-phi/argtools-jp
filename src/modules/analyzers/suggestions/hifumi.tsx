@@ -1,0 +1,38 @@
+import type { Data } from "../../../datatypes";
+import type { AnalyzerModule } from "../../";
+
+const hifumi = /^(\s*[ひふみよいむなやこと])+\s*$/;
+const detect = (data: Data) => {
+  if (data.type === "text" && data.value.match(hifumi)) {
+    return "「ひふみよいむなやこと」の並び → ひふみ祝詞かも？";
+  }
+  return null;
+};
+
+const component = () => (
+  <>
+    <p>古い数え方「ひ（とつ）」「ふ（たつ）」… の頭文字かもしれません</p>
+    <div style={{ display: "inline-block" }}>
+      <table>
+        <tbody>
+          <tr><td>１</td><td>ひ（とつ）</td></tr>
+          <tr><td>２</td><td>ふ（たつ）</td></tr>
+          <tr><td>３</td><td>み（っつ）</td></tr>
+          <tr><td>４</td><td>よ（っつ）</td></tr>
+          <tr><td>５</td><td>い（つつ）</td></tr>
+          <tr><td>６</td><td>む（っつ）</td></tr>
+          <tr><td>７</td><td>な（なつ）</td></tr>
+          <tr><td>８</td><td>や（っつ）</td></tr>
+          <tr><td>９</td><td>こ（このつ）</td></tr>
+          <tr><td>１０</td><td>と（お）</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </>
+);
+
+export const hifumiSuggestor: AnalyzerModule = {
+  label: "💡 ひふみ祝詞の頭文字",
+  detect,
+  component,
+};

@@ -49,6 +49,7 @@ import { googleLensSuggestor } from "./suggestions/googleLensSuggestor";
 import { googleSuggestor } from "./suggestions/googleSuggestor";
 import { wolframSuggestor } from "./suggestions/wolframSuggestor";
 import { w3wSuggestor } from "./suggestions/w3wSuggestor";
+import { hifumiSuggestor } from "./suggestions/hifumi";
 
 import { fileAdder } from "./importers/fileAdder";
 import { textAdder } from "./importers/textAdder";
@@ -136,24 +137,25 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     factorNumber,
   ],
 }, {
-  category: "他",
-  unlisted: true,
-  analyzers: [
-    // もしかしたら、
-    textAdder,
-    fileAdder,
-  ],
-}, {
   category: "提案",
   analyzers: [
     // →
     w3wSuggestor,
+    hifumiSuggestor,
     // もし
     wolframSuggestor,
     googleSuggestor,
     googleLensSuggestor,
     // もしかしたら
     chatGptSuggestor,
+  ],
+}, {
+  category: "他",
+  unlisted: true,
+  analyzers: [
+    // もしかしたら、
+    textAdder,
+    fileAdder,
   ],
 }];
 
