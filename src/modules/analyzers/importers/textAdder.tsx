@@ -71,7 +71,9 @@ const TextAdder = ({
 
   useReporter(onUpdate, async (reporter: StateReporter) => {
     reporter({ status: "読み取っています" });
-    const data = selectedMode === "string" ? (
+    const data = debouncedText === "" ? (
+      null
+    ) : selectedMode === "string" ? (
       await textData(debouncedText, "入力されたデータ")
     ) : selectedMode === "decimal" ? (
       parseDecimal(debouncedText)
