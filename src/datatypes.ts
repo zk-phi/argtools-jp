@@ -23,7 +23,7 @@ const packages = {
   franc: cacheAsync(() => import("franc")),
   string: cacheAsync(() =>  import("./utils/string")),
   languageNames: cacheAsync(() => import("../resources/languageNames")),
-  languageIDs: cacheAsync(() => import("../resources/plNames")),
+  plNames: cacheAsync(() => import("../resources/plNames")),
 };
 
 /////////////////////
@@ -178,7 +178,7 @@ export function textData (value: string, label: string, language?: string) {
         false
       );
       if (isPL) {
-        const { plNames } = await packages.languageIDs();
+        const { plNames } = await packages.plNames();
         return textData(value, label, plNames[progLang[0].languageId] ?? "");
       }
     }
