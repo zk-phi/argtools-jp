@@ -1,6 +1,6 @@
 import ExifReader from "exifreader";
 import type { StateReporter } from "../../..";
-import { multipleData, textData, type Data, type AtomicData } from "../../../../datatypes";
+import { objectData, type Data } from "../../../../datatypes";
 
 const _flattenTags = (tags: any): any => (
   Object.fromEntries(
@@ -17,7 +17,7 @@ const _flattenTags = (tags: any): any => (
 );
 
 export const getAllTags = (buffer: ArrayBufferLike): any => {
-  const tags = ExifReader.load(buffer, { expanded: false });
+  const tags = ExifReader.load(buffer, { expanded: true });
   return _flattenTags(tags);
 };
 
@@ -27,10 +27,6 @@ export const processor = async (input: Data, reporter: StateReporter) => {
   }
   await reporter({ status: "抽出しています" });
   const tags = getAllTags(input.value.buffer);
-  const datum: AtomicData[] = Object.keys(tags).filter(key => (
-    tags[key]?.length > 0
-  )).map(key => (
-    textData(`${tags[key]}`, key, "")
-  ));
-  return multipleData(datum);
+  const str = JSON.stringify(tags);
+  return objectData(str, JSON.parse(str), "抽出された情報", "text/json", ".json");
 };
