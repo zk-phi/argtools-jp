@@ -4,8 +4,8 @@
       <head>
         <link rel="stylesheet" type="text/css" href="/argtools-jp/assets/static/resources_dark-aebd039b.DIrtAqkC.css">
         <link rel="stylesheet" type="text/css" href="/argtools-jp/assets/static/src_style-2dab7823.BiYUU_ee.css">
-        <title>Anything - 森羅万象検索</title>
-        <meta name="description" content="複雑な条件にマッチする単語や地名などを、各種オープンデータから検索・特定します。">
+        <title>バイナリからテキストを抽出するツール</title>
+        <meta name="description" content="バイナリファイルから、ASCII または UTF-8 文字列として読み取れる部分を抽出します。">
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,10 +20,10 @@
 
       <body>
         <header><a href="/argtools-jp/">＜ 全てのツール</a></header>
-        <h2>Anything - 森羅万象検索</h2>
-        <p>複雑な条件にマッチする単語や地名などを、各種オープンデータから検索・特定します。</p>
+        <h2>バイナリからテキストを抽出するツール</h2>
+        <p>バイナリファイルから、ASCII または UTF-8 文字列として読み取れる部分を抽出します。</p>
         <div id="app">
-          <hr/><div style="margin-bottom:1em;"><h3>データセットを選択</h3><select><option selected value disabled>データセットを選択してください</option><option disabled>---- 日本語</option><option value="nouns">森羅万象（人名以外の名詞）</option><option value="yomigana">しんらばんしょう（よみがな）</option><option value="propers">人名</option><option value="verbs">動詞</option><option value="adjectives">その他・形容詞等</option><option disabled>--- 交通</option><option value="stations">鉄道駅</option><option value="roadsideStations">道の駅</option><option value="airports">空港</option><option value="highwayJoints">IC・JCT・PA・SA 等</option></select></div>
+          <hr/><div style="margin-bottom:1em;"><h3>解析したいファイル</h3><input type="file" multiple/><fieldset><legend>オプション</legend><div><label for="encoding">エンコーディング：</label><select name="encoding"><option selected value="ascii">ASCII（英数字・記号のみ）</option><option value="utf-8">UTF-8</option></select></div><div><label for="minLength">最低文字数：</label><input name="minLength" type="number" min="2" max="30" step="1" value="8"/></div></fieldset></div>
         </div>
         <footer style="font-size:smaller">
           <div>
@@ -45,15 +45,15 @@ function share() {
   window.open("https://twitter.com/share?url=" + url + "&text=" + title + "&hashtags=ARGTOOLS");
 }
         </script>
-        <script id="vike_pageContext" type="application/json">{"_urlRewrite":null,"pageId":"/pages/anything","routeParams":{}}</script>
+        <script id="vike_pageContext" type="application/json">{"_urlRewrite":null,"pageId":"/pages/apps/binary-texts","routeParams":{}}</script>
         <script id="vike_globalContext" type="application/json">{}</script>
         <script src="/argtools-jp/assets/entries/entry-server-routing.FikCvWv4.js" type="module" async></script>
-        <link rel="modulepreload" href="/argtools-jp/assets/entries/pages_anything.BEx9sSNm.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/entries/pages_apps_binary-texts.C37ZsnWo.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-gX9uh-xR.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-16BH05ft.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-xaTTFgmM.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BDxJZQQ3.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BIRmk5hB.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-D5Jy_0Ad.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BYVn2vj-.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BAMY2Nnw.js" as="script" type="text/javascript">
       </body>
 
