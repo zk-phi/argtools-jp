@@ -10,14 +10,12 @@ const toggleStyle = {
   lineHeight: "12px",
   textAlign: "center",
   border: "1px solid",
-  cursor: "pointer",
 };
 
-const Toggle = ({ opened, onClick }: {
+const Toggle = ({ opened }: {
   opened: boolean,
-  onClick: () => void,
 }) => (
-  <span onClick={onClick} style={toggleStyle}>
+  <span style={toggleStyle}>
     {opened ? "-" : "+"}
   </span>
 );
@@ -55,7 +53,9 @@ const CollectionField = ({ label, collection, initialOpened }: {
 
   return (
     <div>
-      <Toggle opened={opened} onClick={onClick} /> {label ? `${label}: `: ""}{opened ? "" : "..."}
+      <span onClick={onClick} style={{ cursor: "pointer" }}>
+        <Toggle opened={opened} /> {label ? `${label}: `: ""}{opened ? "" : "..."}
+      </span>
       {opened && (
         <div style={{ marginLeft: "0.5em", borderLeft: "1px dotted", paddingLeft: "0.5em" }}>
           {entries.map(([label, obj]) => (
