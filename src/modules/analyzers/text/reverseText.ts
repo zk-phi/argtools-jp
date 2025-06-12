@@ -3,7 +3,7 @@ import type { StateReporter } from "../..";
 import { textData, type Data } from "../../../datatypes";
 
 const detect = (data: Data) => {
-  if (data.type === "text") {
+  if (data.type === "text" && data.value.length > 3) {
     return "もし、逆から読めそうだったら";
   }
   return null;
