@@ -1,6 +1,6 @@
 import ExifReader from "exifreader";
 import type { StateReporter } from "../../..";
-import { objectData, multipleData, type Data } from "../../../../datatypes";
+import { objectData, type Data } from "../../../../datatypes";
 
 const _flattenTags = (tags: any): any => (
   Object.fromEntries(
@@ -53,8 +53,10 @@ export const getAllTags = (buffer: ArrayBufferLike): any => {
     "撮影状況": {
       "露出": tags.ExposureTime ?? "-",
       "露出モード": tags.ExposureMode ?? "-",
+      // biome-ignore lint/style/useNamingConvention:
       "F値": tags.FNumber ?? "-",
       "撮影モード": tags.ExposureProgram ?? "-",
+      // biome-ignore lint/style/useNamingConvention:
       "ISO感度": tags.ISOSpeedRatings ?? "-",
       "シャッタースピード": tags.ShutterSpeedValue ?? "-",
       "絞り": tags.ApertureValue ?? "-",
