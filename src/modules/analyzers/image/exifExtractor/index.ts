@@ -17,6 +17,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
 
 export const exifExtractor = simpleAnalyzerFactory({
   label: "メタデータ (Exif 等) 抽出",
+  app: "/argtools-jp/apps/exif",
   detect,
   analyze,
 });
