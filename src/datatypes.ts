@@ -110,6 +110,10 @@ export const errorData = (value: string): ErrorData => (
 );
 
 const JS_OR_TS = /^[jt]s$/;
+const MAYBE_XML = /^\s*</;
+const MAYBE_JSON = /^\s*[[{]/;
+const MAYBE_TOML = /^(\s|#.*\n)*(\[.*\]|.+=)/;
+const MAYBE_YAML = /^(\s|#.*\n)*(-|.+:)/;
 export function textData (value: string, label: string, language: string): TextData;
 export function textData (value: string, label: string): Promise<TextData>;
 export function textData (value: string, label: string, language?: string) {
@@ -117,78 +121,83 @@ export function textData (value: string, label: string, language?: string) {
     return { type: "text", id: gensym(), label, value, language };
   }
   return (async () => {
-    const guessLang = await instances.guessLang();
-    const { maybeProgrammingLanguage } = await packages.string();
-
-    const maybeProgramming = maybeProgrammingLanguage(value);
-
-    const progLang = await guessLang.runModel(value);
-    const isPL = !progLang[0] ? (
-      // no results
-      false
-    ) : maybeProgramming !== false && progLang[0].confidence > 0.8 ? (
-      // guessLang is confident about the result
-      true
-    ) : maybeProgramming === true ? (
-      // we re confident that it's a program, and guessLang finds a sole candidate
-      progLang[0].confidence > 0.1 &&
-      (!progLang[1] ||
-       progLang[0].confidence / progLang[1].confidence > 2 ||
-       progLang[0].languageId.match(JS_OR_TS) && progLang[1].languageId.match(JS_OR_TS))
-    ) : (
-      false
-    );
-    if (isPL) {
-      switch (progLang[0].languageId) {
-        case "xml":
-          try {
-            const parser = await instances.xmlParser();
-            const obj = parser.parse(value);
-            return objectData(value, obj, label, "text/xml", ".xml");
-          } catch (_) {
-            break;
-          }
-        case "json":
-          try {
-            const obj = JSON.parse(value);
-            return objectData(value, obj, label, "text/json", ".json");
-          } catch (_) {
-            break;
-          }
-        case "yaml":
-          try {
-            const { parse } = await packages.yaml();
-            const obj = parse(value);
-            return objectData(value, obj, label, "text/yaml", ".yaml");
-          } catch (_) {
-            break;
-          }
-        case "toml":
-          try {
-            const { parse } = await packages.toml();
-            const obj = parse(value);
-            return objectData(value, obj, label, "text/toml", ".toml");
-          } catch (_) {
-            break;
-          }
-        default:
+    if (value.match(MAYBE_XML)) {
+      try {
+        const parser = await instances.xmlParser();
+        const obj = parser.parse(value);
+        return objectData(value, obj, label, "text/xml", ".xml");
+      } catch (_) {
       }
-      const { plNames } = await packages.languageIDs();
-      return textData(value, label, plNames[progLang[0].languageId] ?? "");
     }
 
-    const { francAll } = await packages.franc();
-    const lang = francAll(value);
-    const isNL = lang[0] && lang[0][0] !== "und" && maybeProgramming !== true ? (
-      // lang[0][1] seems always 1.0, so we look at the second candidate to measure confidence
-      !lang[1] || lang[1][1] < 0.9
-    ) : (
-      false
-    );
-    if (isNL) {
-      const { languageNames } = await packages.languageNames();
-      const name = languageNames[lang[0][0]] ?? "";
-      return textData(value, label, name);
+    if (value.match(MAYBE_JSON)) {
+      try {
+        const obj = JSON.parse(value);
+        return objectData(value, obj, label, "text/json", ".json");
+      } catch (_) {
+      }
+    }
+
+    if (value.match(MAYBE_TOML)) {
+      try {
+        const { parse } = await packages.toml();
+        const obj = parse(value);
+        return objectData(value, obj, label, "text/toml", ".toml");
+      } catch (_) {
+      }
+    }
+
+    if (value.match(MAYBE_YAML)) {
+      try {
+        const { parse } = await packages.yaml();
+        const obj = parse(value);
+        return objectData(value, obj, label, "text/yaml", ".yaml");
+      } catch (_) {
+      }
+    }
+
+    const { maybeProgrammingLanguage } = await packages.string();
+    const maybeProgramming = maybeProgrammingLanguage(value);
+
+    if (maybeProgramming !== false) {
+      const guessLang = await instances.guessLang();
+      const progLang = await guessLang.runModel(value);
+      const isPL = !progLang[0] ? (
+        // no results
+        false
+      ) : progLang[0].confidence > 0.8 ? (
+        // guessLang is confident about the result
+        true
+      ) : maybeProgramming === true ? (
+        // we re confident that it's a program, and progLang[0] is the sole candidate
+        progLang[0].confidence > 0.1 &&
+        (!progLang[1] ||
+         progLang[0].confidence / progLang[1].confidence > 2 ||
+         progLang[0].languageId.match(JS_OR_TS) && progLang[1].languageId.match(JS_OR_TS))
+      ) : (
+        false
+      );
+      if (isPL) {
+        const { plNames } = await packages.languageIDs();
+        return textData(value, label, plNames[progLang[0].languageId] ?? "");
+      }
+    }
+
+    if (maybeProgramming !== true) {
+      const { francAll } = await packages.franc();
+      const lang = francAll(value);
+      const isNL = lang[0] && lang[0][0] !== "und" ? (
+        // lang[0][1] seems always 1.0,
+        // so we look at the second candidate to measure confidence
+        !lang[1] || lang[1][1] < 0.9
+      ) : (
+        false
+      );
+      if (isNL) {
+        const { languageNames } = await packages.languageNames();
+        const name = languageNames[lang[0][0]] ?? "";
+        return textData(value, label, name);
+      }
     }
 
     return textData(value, label, "");
