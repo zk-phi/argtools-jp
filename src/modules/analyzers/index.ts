@@ -49,7 +49,9 @@ import { googleLensSuggestor } from "./suggestions/googleLensSuggestor";
 import { googleSuggestor } from "./suggestions/googleSuggestor";
 import { wolframSuggestor } from "./suggestions/wolframSuggestor";
 import { w3wSuggestor } from "./suggestions/w3wSuggestor";
-import { hifumiSuggestor } from "./suggestions/hifumi";
+import { hifumiSuggestor } from "./suggestions/hifumiSuggestor";
+import { japaneseNumberSuggestor } from "./suggestions/japaneseNumberSuggestor";
+import { daijiNumberSuggestor } from "./suggestions/daijiNumberSuggestor";
 
 import { fileAdder } from "./importers/fileAdder";
 import { textAdder } from "./importers/textAdder";
@@ -137,11 +139,13 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     factorNumber,
   ],
 }, {
-  category: "提案",
+  category: "アイデア・ヒント",
   analyzers: [
     // →
     w3wSuggestor,
     hifumiSuggestor,
+    japaneseNumberSuggestor,
+    daijiNumberSuggestor,
     // もし
     wolframSuggestor,
     googleSuggestor,

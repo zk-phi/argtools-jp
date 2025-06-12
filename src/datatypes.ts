@@ -7,23 +7,11 @@ const instances = {
     const { detectXml } = await import("@file-type/xml");
     return new FileTypeParser({ customDetectors: [detectXml] });
   }),
-  guessLang: cacheAsync(async () => {
-    const { GuessLang } = await import("@ray-d-song/guesslang-js");
-    return new GuessLang();
-  }),
-  xmlParser: cacheAsync(async () => {
-    const { XMLParser } = await import("fast-xml-parser");
-    return new XMLParser();
-  }),
 };
 
 const packages = {
-  yaml: cacheAsync(() => import("yaml")),
-  toml: cacheAsync(() => import("toml")),
-  franc: cacheAsync(() => import("franc")),
-  string: cacheAsync(() =>  import("./utils/string")),
-  languageNames: cacheAsync(() => import("../resources/languageNames")),
-  plNames: cacheAsync(() => import("../resources/plNames")),
+  parseObject: cacheAsync(() => import("./utils/string/parseObject")),
+  detectLanguage: cacheAsync(() => import("./utils/string/detectLanguage")),
 };
 
 /////////////////////
@@ -58,7 +46,7 @@ export type MaybeData = Data | ErrorData | null;
 /////////////////////
 
 const ENCODINGS = ["utf-8", "shift-jis", "euc-jp"];
-export const _decode = (array: Uint8Array): string => {
+export const _decode = (array: Uint8Array): string | null => {
   for (const encoding of ENCODINGS) {
     try {
       const decoder = new TextDecoder(encoding, { fatal: true });
@@ -67,7 +55,7 @@ export const _decode = (array: Uint8Array): string => {
       // fall through to the next decoder
     }
   }
-  throw new Error("Cannot decode array.");
+  return null;
 }
 
 export function binaryData (value: Uint8Array, label: string, mime: string, ext: string): BinaryData;
@@ -84,24 +72,20 @@ export function binaryData (value: Uint8Array, label: string, mime?: string, ext
     // Known binary
     if (detected) {
       if (detected.mime.endsWith("/xml")) {
-        try {
-          const parser = await instances.xmlParser();
-          const str = _decode(value);
-          const obj = parser.parse(str);
-          return objectData(str, obj, label, detected.mime, `.${detected.ext}`);
-        } catch (_) {
-          // Fall through
+        const { maybeParseObject } = await packages.parseObject();
+        const str = _decode(value);
+        const obj = str && maybeParseObject(str);
+        if (obj) {
+          return obj;
         }
       }
       return binaryData(value, label, detected.mime, `.${detected.ext}`);
     }
-    try {
-      const str = _decode(value);
+    const str = _decode(value);
+    if (str) {
       return textData(str, label);
-    } catch (_) {
-      // Non-text, unknown binary
-      return binaryData(value, label, "", "");
     }
+    return binaryData(value, label, "", "");
   })();
 };
 
@@ -109,11 +93,6 @@ export const errorData = (value: string): ErrorData => (
   { type: "error", id: gensym(), value }
 );
 
-const JS_OR_TS = /^[jt]s$/;
-const MAYBE_XML = /^\s*</;
-const MAYBE_JSON = /^\s*[[{]/;
-const MAYBE_TOML = /^(\s|#.*\n)*(\[.*\]|.+=)/;
-const MAYBE_YAML = /^(\s|#.*\n)*(-|.+:)/;
 export function textData (value: string, label: string, language: string): TextData;
 export function textData (value: string, label: string): Promise<TextData>;
 export function textData (value: string, label: string, language?: string) {
@@ -121,90 +100,15 @@ export function textData (value: string, label: string, language?: string) {
     return { type: "text", id: gensym(), label, value, language };
   }
   return (async () => {
-    if (value.match(MAYBE_XML)) {
-      try {
-        const parser = await instances.xmlParser();
-        const obj = parser.parse(value);
-        return objectData(value, obj, label, "text/xml", ".xml");
-      } catch (_) {
-        // fall through to the other possiblities
-      }
+    const { maybeParseObject } = await packages.parseObject();
+    const [obj, ext] = await maybeParseObject(value);
+    if (obj) {
+      return objectData(value, obj, label, `text/${ext}`, `.${ext}`);
     }
 
-    if (value.match(MAYBE_JSON)) {
-      try {
-        const obj = JSON.parse(value);
-        return objectData(value, obj, label, "text/json", ".json");
-      } catch (_) {
-        // fall through to the other possiblities
-      }
-    }
-
-    if (value.match(MAYBE_YAML)) {
-      try {
-        const { parse } = await packages.yaml();
-        const obj = parse(value);
-        return objectData(value, obj, label, "text/yaml", ".yaml");
-      } catch (_) {
-        // fall through to the other possiblities
-      }
-    }
-
-    if (value.match(MAYBE_TOML)) {
-      try {
-        const { parse } = await packages.toml();
-        const obj = parse(value);
-        return objectData(value, obj, label, "text/toml", ".toml");
-      } catch (_) {
-        // fall through to the other possiblities
-      }
-    }
-
-    const { maybeProgrammingLanguage } = await packages.string();
-    const maybeProgramming = maybeProgrammingLanguage(value);
-
-    if (maybeProgramming !== false) {
-      const guessLang = await instances.guessLang();
-      const progLang = await guessLang.runModel(value);
-      const isPL = !progLang[0] ? (
-        // no results
-        false
-      ) : progLang[0].confidence > 0.8 ? (
-        // guessLang is confident about the result
-        true
-      ) : maybeProgramming === true ? (
-        // we re confident that it's a program, and progLang[0] is the sole candidate
-        progLang[0].confidence > 0.1 &&
-        (!progLang[1] ||
-         progLang[0].confidence / progLang[1].confidence > 2 ||
-         progLang[0].languageId.match(JS_OR_TS) && progLang[1].languageId.match(JS_OR_TS))
-      ) : (
-        false
-      );
-      if (isPL) {
-        const { plNames } = await packages.plNames();
-        return textData(value, label, plNames[progLang[0].languageId] ?? "");
-      }
-    }
-
-    if (maybeProgramming !== true) {
-      const { francAll } = await packages.franc();
-      const lang = francAll(value);
-      const isNL = lang[0] && lang[0][0] !== "und" ? (
-        // lang[0][1] seems always 1.0,
-        // so we look at the second candidate to measure confidence
-        !lang[1] || lang[1][1] < 0.9
-      ) : (
-        false
-      );
-      if (isNL) {
-        const { languageNames } = await packages.languageNames();
-        const name = languageNames[lang[0][0]] ?? "";
-        return textData(value, label, name);
-      }
-    }
-
-    return textData(value, label, "");
+    const { maybeDetectLanguage } = await packages.detectLanguage();
+    const language = await maybeDetectLanguage(value);
+    return textData(value, label, language);
   })();
 };
 
