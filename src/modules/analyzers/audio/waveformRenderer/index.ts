@@ -17,6 +17,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
 
 export const waveformRenderer = simpleAnalyzerFactory({
   label: "波形を描画",
+  app: "/argtools-jp/apps/waveform",
   detect,
   analyze,
 });
