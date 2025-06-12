@@ -4,8 +4,8 @@
       <head>
         <link rel="stylesheet" type="text/css" href="/argtools-jp/assets/static/resources_dark-aebd039b.DIrtAqkC.css">
         <link rel="stylesheet" type="text/css" href="/argtools-jp/assets/static/src_style-2dab7823.BiYUU_ee.css">
-        <title>言語判定ツール</title>
-        <meta name="description" content="言語がわからないプログラムや文章を AI パワーで推定します。">
+        <title>画像を色々な方法で合成するツール</title>
+        <meta name="description" content="２枚の画像を重ねたり、 XOR したり、差分を取ったりします。">
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,10 +20,10 @@
 
       <body>
         <header><a href="/argtools-jp/">＜ 全てのツール</a></header>
-        <h2>言語判定ツール</h2>
-        <p>言語がわからないプログラムや文章を AI パワーで推定します。</p>
+        <h2>画像を色々な方法で合成するツール</h2>
+        <p>２枚の画像を重ねたり、 XOR したり、差分を取ったりします。</p>
         <div id="app">
-          <p>長いテキストほど検出精度が上がります。</p><hr/><div style="margin-bottom:1em;"><h3>判定したいテキスト</h3><textarea rows="20"></textarea><table style="margin-top:16px;"><tbody><tr><td>推定言語</td><td>-</td></tr><tr><td>文字数</td><td>- 文字</td></tr><tr><td>うち、改行・スペース等</td><td>- 文字</td></tr><tr><td>行数</td><td>- 行</td></tr><tr><td>容量</td><td>- バイト</td></tr></tbody></table></div>
+          <hr/><div style="margin-bottom:1em;"><h3>１枚目の画像</h3><input type="file" multiple/><h3>２枚目の画像</h3><input type="file" multiple/></div>
         </div>
         <footer style="font-size:smaller">
           <div>
@@ -45,17 +45,16 @@ function share() {
   window.open("https://twitter.com/share?url=" + url + "&text=" + title + "&hashtags=ARGTOOLS");
 }
         </script>
-        <script id="vike_pageContext" type="application/json">{"_urlRewrite":null,"pageId":"/pages/apps/language-detector","routeParams":{}}</script>
+        <script id="vike_pageContext" type="application/json">{"_urlRewrite":null,"pageId":"/pages/apps/merge-images","routeParams":{}}</script>
         <script id="vike_globalContext" type="application/json">{}</script>
         <script src="/argtools-jp/assets/entries/entry-server-routing.Dv4dAent.js" type="module" async></script>
-        <link rel="modulepreload" href="/argtools-jp/assets/entries/pages_apps_language-detector.DSmDipeg.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/entries/pages_apps_merge-images.DNxafRM-.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-gX9uh-xR.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-16BH05ft.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-xaTTFgmM.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-uGepgP71.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BYZJjx2t.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BIx3Gyrx.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BqHX-hyo.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-D5Jy_0Ad.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk--Z92YHPI.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-DwLYUmzG.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BAMY2Nnw.js" as="script" type="text/javascript">
       </body>
 
