@@ -26,6 +26,7 @@ import { factorNumber } from "./number/factorNumber";
 import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
 import { imageInvestigator } from "./image/imageInvestigator";
+import { imageMerger } from "./image/imageMerger";
 
 import { audioReverser } from "./audio/audioReverser";
 import { audioMaximizer } from "./audio/audioMaximizer";
@@ -72,6 +73,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     // もしかしたら
     steganoAnalyzer,
     exifExtractor,
+    imageMerger,
   ],
 }, {
   category: "音声解析",
