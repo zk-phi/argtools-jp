@@ -127,6 +127,7 @@ export function textData (value: string, label: string, language?: string) {
         const obj = parser.parse(value);
         return objectData(value, obj, label, "text/xml", ".xml");
       } catch (_) {
+        // fall through to the other possiblities
       }
     }
 
@@ -135,15 +136,7 @@ export function textData (value: string, label: string, language?: string) {
         const obj = JSON.parse(value);
         return objectData(value, obj, label, "text/json", ".json");
       } catch (_) {
-      }
-    }
-
-    if (value.match(MAYBE_TOML)) {
-      try {
-        const { parse } = await packages.toml();
-        const obj = parse(value);
-        return objectData(value, obj, label, "text/toml", ".toml");
-      } catch (_) {
+        // fall through to the other possiblities
       }
     }
 
@@ -153,6 +146,17 @@ export function textData (value: string, label: string, language?: string) {
         const obj = parse(value);
         return objectData(value, obj, label, "text/yaml", ".yaml");
       } catch (_) {
+        // fall through to the other possiblities
+      }
+    }
+
+    if (value.match(MAYBE_TOML)) {
+      try {
+        const { parse } = await packages.toml();
+        const obj = parse(value);
+        return objectData(value, obj, label, "text/toml", ".toml");
+      } catch (_) {
+        // fall through to the other possiblities
       }
     }
 
