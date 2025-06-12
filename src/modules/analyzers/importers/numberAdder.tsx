@@ -23,11 +23,11 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   useReporter(onUpdate, () => {
     const parsed = debouncedNumber === "" ? 0 : Number(debouncedNumber);
     const data = numberData(parsed, "入力されたデータ");
+    if (input?.type === "error") {
+      return input;
+    }
     if (!input) {
       return data;
-    }
-    if (input.type === "error") {
-      return input;
     }
     if (input.type === "wordlist") {
       throw new Error("データではなく単語リストが与えられました。");

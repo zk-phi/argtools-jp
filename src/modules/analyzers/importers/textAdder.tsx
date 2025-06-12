@@ -82,13 +82,10 @@ const TextAdder = ({
     ) : (
       null
     );
-    if (!input) {
-      return data;
-    }
-    if (data === null || input.type === "error") {
+    if (input?.type === "error") {
       return input;
     }
-    if (data.type === "error") {
+    if (!input || !data || data.type === "error") {
       return data;
     }
     if (input.type === "wordlist") {

@@ -13,23 +13,19 @@ const detect = (data: Data) => {
 };
 
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
-  const [files, setFiles] = useState<FileList>();
+  const [files, setFiles] = useState<FileList | null>(null);
 
   const onChange = useCallback((e: JSX.TargetedMouseEvent<HTMLInputElement>) => {
-    const files = e.currentTarget.files;
-    if (files) {
-      setFiles(files);
-    }
+    setFiles(e.currentTarget.files);
   }, []);
 
   useReporter(onUpdate, async (reporter: StateReporter) => {
-    if (!files) {
-      if (!input) {
-        return null;
-      }
+    if (input?.type === "error") {
       return input;
     }
-
+    if (!files) {
+      return null;
+    }
     if (files.length === 0) {
       throw new Error("ファイルが選択されていません");
     }
@@ -42,10 +38,10 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       })
     );
     if (!input) {
+      if (datum.length === 1) {
+        return datum[0];
+      }
       return multipleData(datum);
-    }
-    if (input.type === "error") {
-      return input;
     }
     if (input.type === "wordlist") {
       throw new Error("データではなく単語リストが与えられました");
