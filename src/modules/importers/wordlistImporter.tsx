@@ -25,6 +25,12 @@ const datasets: { [key: string]: Dataset } = {
     label: "しんらばんしょう（よみがな）",
     license: "現代書き言葉 UniDic (C) 国立国語研究所 / 修正 BSD ライセンス",
   },
+  nItems: {
+    module: cacheAsync(() => import("./wordlists/nItems")),
+    url: "https://nazotoki.fandom.com/ja/wiki/",
+    label: "○つあるもの",
+    license: "一部「謎解き Wiki」から引用 / CC-BY-SA",
+  },
   propers: {
     module: cacheAsync(() => import("./wordlists/propers")),
     url: "https://clrd.ninjal.ac.jp/unidic/",
@@ -73,13 +79,11 @@ type DatasetKey = keyof typeof datasets;
 type DatasetCategory = { label: string, datasetKeys: DatasetKey[] };
 
 const datasetCategories: DatasetCategory[] = [{
-  label: "---- 日本語",
+  label: "---- 単語（謎解き向け）",
   datasetKeys: [
     "nouns",
     "yomigana",
-    "propers",
-    "verbs",
-    "adjectives",
+    "nItems",
   ],
 }, {
   label: "--- 交通",
@@ -89,7 +93,14 @@ const datasetCategories: DatasetCategory[] = [{
     "airports",
     "highwayJoints",
   ],
-}];
+}, {
+  label: "---- 単語（その他）",
+  datasetKeys: [
+    "propers",
+    "verbs",
+    "adjectives",
+  ],
+}, ];
 
 const component = ({ onUpdate }: { onUpdate: StateReporter }) => {
   const [datasetKey, setDatasetKey] = useState("");
