@@ -90,21 +90,30 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     }
   });
 
-  // https://stackoverflow.com/questions/28900598/how-to-combine-two-colors-with-varying-alpha-values
   await reporter({ status: "描画しています 3/3" });
-  const maxDistance = Math.sqrt(255 ** 2 * 3);
+  const MAX_DISTANCE = Math.sqrt(255 ** 2 * 3);
   const distanceImage = await _makeImage(w, h, arr => {
-    for (let i = 0; i < arr.length; i += 4) {
+    let max = 0;
+    const values = new Float32Array(arr.length / 4);
+
+    for (let i = 0; i < values.length; i++) {
       const distance = Math.sqrt(
-        (arr1[i + 0] - arr2[i + 0]) ** 2 +
-        (arr1[i + 1] - arr2[i + 1]) ** 2 +
-        (arr1[i + 2] - arr2[i + 2]) ** 2
+        (arr1[i * 4 + 0] - arr2[i * 4 + 0]) ** 2 +
+        (arr1[i * 4 + 1] - arr2[i * 4 + 1]) ** 2 +
+        (arr1[i * 4 + 2] - arr2[i * 4 + 2]) ** 2
       );
-      const value = Math.round(distance / maxDistance * 255);
-      arr[i + 0] = value;
-      arr[i + 1] = value;
-      arr[i + 2] = value;
-      arr[i + 3] = 255;
+      const ratio = distance / MAX_DISTANCE;
+      max = Math.max(max, ratio);
+      values[i] = ratio;
+    }
+
+    const scaleFactor = 255 / max;
+    for (let i = 0; i < values.length; i++) {
+      const value = Math.round(values[i] * scaleFactor);
+      arr[i * 4 + 0] = value;
+      arr[i * 4 + 1] = value;
+      arr[i * 4 + 2] = value;
+      arr[i * 4 + 3] = 255;
     }
   });
 
