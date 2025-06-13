@@ -54,6 +54,10 @@ import { w3wSuggestor } from "./suggestions/w3wSuggestor";
 import { hifumiSuggestor } from "./suggestions/hifumiSuggestor";
 import { japaneseNumberSuggestor } from "./suggestions/japaneseNumberSuggestor";
 import { daijiNumberSuggestor } from "./suggestions/daijiNumberSuggestor";
+import { dowSuggestor } from "./suggestions/dowSuggestor";
+import { fingerSuggestor } from "./suggestions/fingerSuggestor";
+import { melodySuggestor } from "./suggestions/melodySuggestor";
+import { planetSuggestor } from "./suggestions/planetSuggestor";
 
 import { fileAdder } from "./importers/fileAdder";
 import { textAdder } from "./importers/textAdder";
@@ -150,6 +154,10 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     hifumiSuggestor,
     japaneseNumberSuggestor,
     daijiNumberSuggestor,
+    dowSuggestor,
+    fingerSuggestor,
+    melodySuggestor,
+    planetSuggestor,
     // もし
     wolframSuggestor,
     googleSuggestor,
