@@ -3,7 +3,7 @@ import type { StateReporter } from "../../..";
 import type { Data, } from "../../../../datatypes";
 
 const detect = (data: Data) => {
-  if (data.type === "binary" && data.mime.startsWith("image")) {
+  if (data.type === "binary" && data.mime === "image/gif") {
     return "もしかしたら、どこかのコマにひっそり情報が隠れているかも？";
   }
   return null;
