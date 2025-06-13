@@ -1,0 +1,1 @@
+import{e as t}from"./chunk-BBGo2Y6T.js";import"./chunk-16BH05ft.js";const a=e=>e.split("").map(r=>r.charCodeAt(0)).map(r=>r>=33&&r<=126?(r-33+47)%94+33:r).map(r=>String.fromCharCode(r)).join(""),c=async(e,o)=>{if(e.type!=="text")throw new Error("テキストデータではありません");return await o({status:"復号化しています"}),t(a(e.value),"ROT47 のデコード結果")};export{c as processor};
