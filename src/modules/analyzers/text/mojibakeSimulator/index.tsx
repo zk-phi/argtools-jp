@@ -12,8 +12,9 @@ const encodings: [string, Encoding][] = [
   ["UTF-16", "utf16"],
 ];
 
+const NON_ASCII = /[^\x20-\x7e]/;
 const detect = (data: Data) => {
-  if (data.type === "text") {
+  if (data.type === "text" && data.value.length > 3 && data.value.match(NON_ASCII)) {
     return "もし、テキストが文字化けしてそうなら（見慣れない漢字が並んでいる等）";
   }
   return null;

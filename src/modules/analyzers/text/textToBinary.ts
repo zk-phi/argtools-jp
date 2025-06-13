@@ -2,8 +2,9 @@ import { simpleAnalyzerFactory } from "../../analyzerFactories";
 import type { StateReporter } from "../..";
 import { binaryData, type Data } from "../../../datatypes";
 
+const NON_ASCII = /[^\x20-\x7e]/;
 const detect = (data: Data) => {
-  if (data.type === "text" && data.value.length > 3) {
+  if (data.type === "text" && data.value.length > 3 && data.value.match(NON_ASCII)) {
     return "もし、内容がグチャグチャなら、実は別の形式のデータかも？";
   }
   return null;
