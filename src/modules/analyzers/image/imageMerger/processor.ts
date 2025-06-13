@@ -2,6 +2,9 @@ import { urlToImg } from "../../../../utils/image";
 import type { StateReporter } from "../../..";
 import { multipleData, binaryData, toBlobUrl, type Data } from "../../../../datatypes";
 
+// A real-world example:
+// https://github.com/ipv6-feet-under/WriteUps-S.H.E.L.L.CTF21/tree/main/Forensics/Hidden%20Inside%202
+
 type CanvasAndContext = [HTMLCanvasElement, CanvasRenderingContext2D];
 
 const _makeExpandedImage = (img: HTMLImageElement, w: number, h: number): CanvasAndContext => {
