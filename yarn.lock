@@ -1868,6 +1868,18 @@ minimalistic-crypto-utils@^1.0.1:
   resolved "https://registry.yarnpkg.com/minimalistic-crypto-utils/-/minimalistic-crypto-utils-1.0.1.tgz#f6c00c1c0b082246e5c4d99dfb8c7c083b2b582a"
   integrity sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==
 
+modern-gif@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/modern-gif/-/modern-gif-2.0.4.tgz#22d9da39ab4a64374d0520eaa9f6a89fc64ab7a3"
+  integrity sha512-q3Nf6X3kpnGwiKLzTzOjsbvM16/kPcfy0JrrC79TmuKLCWiOkwb0ztuVhZnqGCizSr4o84gFOaBeGDVaE/Bcgw==
+  dependencies:
+    modern-palette "^2.0.0"
+
+modern-palette@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/modern-palette/-/modern-palette-2.0.0.tgz#433a8d807ea7e10eae46eb829679adc3b996d547"
+  integrity sha512-wKZcom2QzK6sS6h5RLYHEkd3V3maQLzgkI+ekDCimlk7dfXa63aekZcy+7KS+8JEqIDeY/yV1CAvA7l+7u6QHA==
+
 mrmime@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/mrmime/-/mrmime-2.0.1.tgz#bc3e87f7987853a54c9850eeb1f1078cd44adddc"

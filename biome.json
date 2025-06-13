@@ -65,6 +65,7 @@
       },
       "suspicious": {
         "noArrayIndexKey": "warn",
+        "noAssignInExpressions": "off",
         "noControlCharactersInRegex": "off",
         "noExplicitAny": "off"
       }

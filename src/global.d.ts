@@ -7,3 +7,8 @@ declare module "*?raw" {
   const _default: string;
   export default _default;
 }
+
+declare module "*?url" {
+  const _default: string;
+  export default _default;
+}

@@ -27,6 +27,7 @@ import { steganoAnalyzer } from "./image/steganoAnalyzer";
 import { exifExtractor } from "./image/exifExtractor";
 import { imageInvestigator } from "./image/imageInvestigator";
 import { imageMerger } from "./image/imageMerger";
+import { gifSplitter } from "./image/gifSplitter";
 
 import { audioReverser } from "./audio/audioReverser";
 import { audioMaximizer } from "./audio/audioMaximizer";
@@ -74,6 +75,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     steganoAnalyzer,
     exifExtractor,
     imageMerger,
+    gifSplitter,
   ],
 }, {
   category: "音声解析",
