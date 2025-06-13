@@ -33,6 +33,8 @@ const _makeImage = async (
   })
 );
 
+const MAX_DISTANCE = Math.sqrt(255 ** 2 * 3);
+
 export const processor = async (input: Data, reporter: StateReporter) => {
   if (input.type !== "multiple" || input.datum.length !== 2) {
     throw new Error("データの数が２件ではありません");
@@ -91,7 +93,6 @@ export const processor = async (input: Data, reporter: StateReporter) => {
   });
 
   await reporter({ status: "描画しています 3/3" });
-  const MAX_DISTANCE = Math.sqrt(255 ** 2 * 3);
   const distanceImage = await _makeImage(w, h, arr => {
     let max = 0;
     const values = new Float32Array(arr.length / 4);
