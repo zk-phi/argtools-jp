@@ -56,6 +56,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
 export const slowPlayer: AnalyzerModule = {
   label: "超スロー再生",
+  app: "/argtools-jp/apps/slow-player",
   detect,
   component,
 };
