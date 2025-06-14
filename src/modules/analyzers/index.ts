@@ -20,6 +20,7 @@ import { youtubeExtractor } from "./text/youtubeExtractor";
 import { rot13Decoder } from "./text/rot13Decoder";
 import { caesarDecoder } from "./text/caesarDecoder";
 import { rot47Decoder } from "./text/rot47Decoder";
+import { sortLines } from "./text/sortLines";
 
 import { factorNumber } from "./number/factorNumber";
 
@@ -132,6 +133,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     youtubeExtractor,
     dtmfSounder,
     alterLines, // 確度低め
+    sortLines, // 確度低め
     concatLines, // 確度低め
     // もし
     mojibakeSimulator,
