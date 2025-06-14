@@ -27,5 +27,5 @@ export const processor = async (input: Data, reporter: StateReporter, mode: stri
     return mode === "asc" ? 1 : -1;
   }).join(newline[0]);
 
-  return textData(sorted, input.label, "並べ替えたテキスト");
+  return textData(sorted, "並べ替えたテキスト");
 };
