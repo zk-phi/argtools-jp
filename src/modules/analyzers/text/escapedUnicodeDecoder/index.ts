@@ -21,6 +21,7 @@ const sequenceDelimited = `${sequence}(?=[^0-9A-z\\#&]|$)`;
 
 export const escapedUnicodeDecoder = simpleTextDecoderFactory({
   label: "Unicode の数値参照を読み取り",
+  app: "/argtools-jp/apps/escaped-unicode",
   hint: "&#xFF; U+FF \\uFF 0xFF などの１６進数 → たぶん Unicode の文字番号！",
   pattern: sequenceDelimited,
   decoder: async (str: string, label: string) => {

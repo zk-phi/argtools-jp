@@ -14,6 +14,7 @@ const delimited = `${delimitedNonPadded}|${delimitedPadded}`;
 
 export const base64Decoder = simpleTextDecoderFactory({
   label: "Base64 を読み取り",
+  app: "/argtools-jp/apps/base64-decoder",
   hint: "A〜Z, a〜z, 0〜9, +, /, = の連続する区間がある → Base64 かも？",
   pattern: delimited,
   decoder: async (str: string, label: string) => {

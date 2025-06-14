@@ -4,7 +4,7 @@ import { mojibakeSimulator } from "../../../src/modules/analyzers/text/mojibakeS
 
 export const Page = microAppFactory({
   pipeline: [
-    { module: stringImporter, label: "復元したいテキスト" },
+    { module: stringImporter, label: "復元したい文字列" },
     { module: mojibakeSimulator },
   ],
   outputLabel: "復元結果",

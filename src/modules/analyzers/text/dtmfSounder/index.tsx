@@ -21,6 +21,12 @@ const analyze = async (input: Data, reporter: StateReporter) => {
 
 export const dtmfSounder = simpleAnalyzerFactory({
   label: "電話のダイヤル音を再現（DTMF）",
+  app: "/argtools-jp/apps/dtmf-sounder",
+  description: (
+    <p>
+      電話に聞かせると本当にダイヤルできてしまう場合があるのでご注意ください。
+    </p>
+  ),
   detect,
   analyze,
 });

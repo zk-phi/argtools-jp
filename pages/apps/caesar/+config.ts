@@ -1,5 +1,5 @@
 export default {
   backlink: true,
-  title: "シーザー暗号（ROT13）復号化ツール",
-  description: "シーザー暗号（ROT13）を復号化します。",
+  title: "シーザー暗号を復号化するツール",
+  description: "シーザー暗号を復号化します。",
 }

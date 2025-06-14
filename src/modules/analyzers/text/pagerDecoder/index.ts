@@ -9,6 +9,7 @@ const delimited = `(?<=\\*2\\*2|[^0-9]|^)${body}(?=[^0-9]|$)`;
 
 export const pagerDecoder = simpleTextDecoderFactory({
   label: "ポケベル入力を読み取り",
+  app: "/argtools-jp/apps/pager-decoder",
   hint: "0-9 が偶数文字連続",
   pattern: delimited,
   decoder: async (str: string, label: string) => {

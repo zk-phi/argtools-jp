@@ -5,7 +5,7 @@ const value = /(#x?)?[0-9A-Fa-f]+/g;
 export const processor = async (str: string, label: string) => {
   const chars = str.match(value);
   if (!chars) {
-    throw new Error("読み取れる部分はありませんでした😭");
+    throw new Error("読み取れる部分がないか、短かすぎます😭");
   }
   const string = String.fromCodePoint.apply(null, chars.map(char => {
     if (char.startsWith("#x")) {

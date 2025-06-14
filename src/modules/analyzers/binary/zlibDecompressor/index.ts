@@ -20,6 +20,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
 
 export const zlibDecompressor = simpleAnalyzerFactory({
   label: "zilb データを復号化",
+  app: "/argtools-jp/apps/zlib",
   detect,
   analyze,
 });

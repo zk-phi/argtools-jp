@@ -29,6 +29,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
 
 export const rot47Decoder = simpleAnalyzerFactory({
   label: "ROT47 暗号を復号化",
+  app: "/argtools-jp/apps/rot47-decoder",
   detect,
   description: (
     <p>

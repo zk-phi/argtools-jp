@@ -63,6 +63,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
 export const morseDecoder: AnalyzerModule = {
   label: "モールス信号を復号化",
+  app: "/argtools-jp/apps/morse-decoder",
   detect,
   component,
 };

@@ -43,6 +43,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
 export const rot13Decoder: AnalyzerModule = {
   label: "ROT13・Atbash 暗号を復号化",
+  app: "/argtools-jp/apps/rot13-atbash",
   description: (
     <>
       <p>
@@ -53,6 +54,9 @@ export const rot13Decoder: AnalyzerModule = {
         <li>ROT13 の例：「a → n」「b → o」「n → a」</li>
         <li>Atbash の例：「a → z」「b → y」「z → a」</li>
       </ul>
+      <p>
+        数字にも同様の操作を適用すると ROT18 になります。
+      </p>
     </>
   ),
   detect,

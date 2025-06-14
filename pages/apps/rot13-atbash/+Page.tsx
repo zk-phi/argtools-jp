@@ -1,11 +1,11 @@
 import { microAppFactory } from "../../../src/microAppFactory";
 import { stringImporter } from "../../../src/modules/importers/stringImporter";
-import { caesarDecoder } from "../../../src/modules/analyzers/text/caesarDecoder";
+import { rot13Decoder } from "../../../src/modules/analyzers/text/rot13Decoder";
 
 export const Page = microAppFactory({
   pipeline: [
     { module: stringImporter, label: "復号化したい文字列" },
-    { module: caesarDecoder },
+    { module: rot13Decoder },
   ],
   outputLabel: "復号化結果",
 });

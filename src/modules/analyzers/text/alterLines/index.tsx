@@ -37,6 +37,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
 export const alterLines: AnalyzerModule = {
   label: "○○文字目で改行",
+  app: "/argtools-jp/apps/alter-lines",
   detect,
   component,
 };

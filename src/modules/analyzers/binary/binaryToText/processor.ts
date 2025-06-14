@@ -56,7 +56,7 @@ export const processor = async (
     decoded.map((chunk, ix) => textData(chunk, `読み取れた部分 ${ix + 1}`))
   );
   if (datum.length === 0) {
-    throw new Error("読み取れる部分はありませんでした😭");
+    throw new Error("読み取れる部分がないか、短かすぎます😭");
   }
   return multipleData(datum);
 };

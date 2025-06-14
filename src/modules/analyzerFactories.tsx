@@ -46,7 +46,7 @@ export const simpleTextDecoderFactory = (props: SimpleTextDecoratorFactoryProps)
       await reporter({ status: "読み取れる場所を探しています" });
       const matches = input.value.match(matcherRegex);
       if (!matches) {
-        throw new Error("読み取れる部分はありませんでした😭");
+        throw new Error("読み取れる部分がないか、短かすぎます😭");
       }
       await reporter({ status: props.busyStatus || "読み取っています" });
       const datum: AtomicData[] = await Promise.all(
@@ -88,7 +88,7 @@ export const urlExtractorFactory = (props: UrlExtractorFactoryProps): AnalyzerMo
         await reporter({ status: "読み取れる場所を探しています" });
         const matches = input.value.match(matcherRegex);
         if (!matches) {
-          throw new Error("読み取れる部分がありませんでした😭");
+          throw new Error("読み取れる部分がないか、短かすぎます😭");
         }
         await reporter({ status: "URL を整形しています" });
         setUrls(matches.map(props.urlConstructor));
