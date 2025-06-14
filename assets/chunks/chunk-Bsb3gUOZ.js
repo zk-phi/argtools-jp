@@ -1,0 +1,1 @@
+const a=(o,e)=>o.length<=e?o:`${o.slice(0,e)}…`,n=o=>{const e={};for(const s of o)e[s]?e[s]++:e[s]=1;return Object.keys(e).map(s=>[s,e[s]]).sort((s,c)=>c[1]-s[1])},t=/[.?*+^$[\]\\(){}|-]/g,p=o=>o.replace(t,"\\$&");export{a as e,n as h,p as q};
