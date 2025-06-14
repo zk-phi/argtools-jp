@@ -1,4 +1,4 @@
-import { useState, useMemo } from "preact/hooks";
+import { useState, useRef } from "preact/hooks";
 import { histogram } from "../../../../utils/string";
 import { useAnalyzer } from "../../../../utils/analyzer";
 import type { AnalyzerModule, StateReporter } from "../../../";
@@ -17,19 +17,16 @@ const detect = (data: Data) => {
 };
 
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
-  const hist = useMemo(() => {
-    if (!input || input.type !== "text") {
-      return null;
-    }
-    const truncated = input.value.slice(0, 100);
-    return histogram(truncated);
-  }, [input]);
+  // Do not recompute histogram on every input
+  const hist = useRef(
+    (!input || input.type !== "text") ? null : histogram(input.value.slice(0, 100))
+  );
 
-  const [zeroChar, setZeroChar] = useState(!hist ? "・" : (
-    hist[0][0] > hist[1][0] ? hist[0][0] : hist[1][0]
+  const [zeroChar, setZeroChar] = useState(!hist.current ? "." : (
+    hist.current[0][0] > hist.current[1][0] ? hist.current[0][0] : hist.current[1][0]
   ));
-  const [oneChar, setOneChar] = useState(!hist ? "－" : (
-    hist[0][0] > hist[1][0] ? hist[1][0] : hist[0][0]
+  const [oneChar, setOneChar] = useState(!hist.current ? "-" : (
+    hist.current[0][0] > hist.current[1][0] ? hist.current[1][0] : hist.current[0][0]
   ));
 
   useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
