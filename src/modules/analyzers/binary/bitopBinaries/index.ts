@@ -18,6 +18,7 @@ const analyze = async (input: Data, reporter: StateReporter) => {
 
 export const bitopBinary = simpleAnalyzerFactory({
   label: "ビット演算で合成",
+  app: "/argtools-jp/apps/merge-binaries",
   detect,
   analyze,
 });
