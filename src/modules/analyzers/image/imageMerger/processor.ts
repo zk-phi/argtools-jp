@@ -91,10 +91,10 @@ export const processor = async (input: Data, reporter: StateReporter) => {
   const arr2 = data2.data;
 
   await reporter({ status: "描画しています 1/6" });
-  const mergeImage = await compositeImage(w, h, arr1, arr2, (b, f) => f);
+  const mergeImage = await compositeImage(w, h, arr1, arr2, (_, f) => f);
 
   await reporter({ status: "描画しています 2/6" });
-  const mergeImageR = await compositeImage(w, h, arr2, arr1, (b, f) => f);
+  const mergeImageR = await compositeImage(w, h, arr2, arr1, (_, f) => f);
 
   await reporter({ status: "描画しています 3/6" });
   const addImage = await compositeImage(w, h, arr2, arr1, (b, f) => Math.min(255, b + f));
