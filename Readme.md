@@ -21,6 +21,8 @@ https://zk-phi.github.io/argtools-jp
 - jszip (C) Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso / MIT License
 - Preact (C) Jason Miller / MIT License
 - punycode (C) Mathias Bynens / MIT License
+- qr-scanner (C) Nimiq, danimoh / MIT License
+- quagga (C) Christoph Oberhofer / MIT License
 - toml-node (C) Michelle Tilley / MIT License
 - vite-plugin-node-polyfills (C) David R. Myers / MIT License
 - yaml (C) Eemeli Aro / ISC License
