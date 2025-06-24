@@ -12,3 +12,13 @@ declare module "*?url" {
   const _default: string;
   export default _default;
 }
+
+declare module "quagga" {
+  const _default: {
+    decodeSingle: (
+      args: any,
+      cb: (res: { codeResult?: { code: string } }) => void,
+    ) => void,
+  };
+  export default _default;
+}

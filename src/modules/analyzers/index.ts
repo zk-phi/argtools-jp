@@ -30,6 +30,7 @@ import { imageInvestigator } from "./image/imageInvestigator";
 import { imageMerger } from "./image/imageMerger";
 import { gifSplitter } from "./image/gifSplitter";
 import { qrScanner } from "./image/qrScanner";
+import { barcodeScanner } from "./image/barcodeScanner";
 
 import { audioReverser } from "./audio/audioReverser";
 import { audioMaximizer } from "./audio/audioMaximizer";
@@ -78,6 +79,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     // もし
     imageInvestigator,
     qrScanner,
+    barcodeScanner,
     // もしかしたら
     steganoAnalyzer,
     exifExtractor,

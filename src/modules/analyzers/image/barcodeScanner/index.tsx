@@ -4,7 +4,7 @@ import type { Data } from "../../../../datatypes";
 
 const detect = (data: Data) => {
   if (data.type === "binary" && data.mime.startsWith("image")) {
-    return "もし、 QR コードらしきものが写っているなら";
+    return "もし、バーコードらしきものが写っているなら";
   }
   return null;
 };
@@ -15,9 +15,9 @@ const analyze = async (input: Data, reporter: StateReporter) => {
   return await processor(input, reporter);
 };
 
-export const qrScanner = simpleAnalyzerFactory({
-  label: "QR コードを読み取り",
-  app: "/argtools-jp/apps/qr-scanner",
+export const barcodeScanner = simpleAnalyzerFactory({
+  label: "バーコードを読み取り",
+  app: "/argtools-jp/apps/barcode-scanner",
   description: (
     <>
       <p>
@@ -28,9 +28,9 @@ export const qrScanner = simpleAnalyzerFactory({
         などで調整してみてください。
       </p>
       <p>
-        QR コード以外のバーコードは
-        <a href="/argtools-jp/apps/barcode-scanner" target="_blank" rel="noreferrer">
-          バーコードリーダー
+        QR コードは
+        <a href="/argtools-jp/apps/qr-scanner" target="_blank" rel="noreferrer">
+          QR コードリーダー
         </a>
         をお試しください。
       </p>
