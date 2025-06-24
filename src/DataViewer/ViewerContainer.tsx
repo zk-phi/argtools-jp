@@ -1,4 +1,5 @@
 import type { ComponentChildren } from "preact";
+import { BusyOverlay } from "./BusyOverlay";
 
 const containerStyle = {
   border: "1px dashed",
@@ -6,17 +7,6 @@ const containerStyle = {
   position: "relative",
   padding: "8px 12px",
   maxWidth: "100%",
-  boxSizing: "border-box",
-};
-
-const busyOverlayStyle = {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  width: "100%",
-  height: "100%",
-  padding: 24,
-  background: "#0004",
   boxSizing: "border-box",
 };
 
@@ -41,10 +31,6 @@ export const ViewerContainer = ({ children, label, caption, status, maxHeight, m
     <div style={{ fontSize: "smaller" }}>
       {caption}
     </div>
-    {status && (
-      <div style={busyOverlayStyle}>
-        {status} ...
-      </div>
-    )}
+    <BusyOverlay status={status} />
   </div>
 );

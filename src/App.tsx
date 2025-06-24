@@ -175,8 +175,6 @@ const Frame = ({ frame, ix, state: { stack, inspect, status, rollback } }: {
   const isActive = ix === stack.value.length - 1;
   const statusMessage = isActive ? status.value : null;
 
-  const onInspect = isActive ? inspect : undefined;
-
   return (
     <section key={frame.id}>
       <hr />
@@ -187,7 +185,11 @@ const Frame = ({ frame, ix, state: { stack, inspect, status, rollback } }: {
         <Component onUpdate={frame.reporter} input={input} />
       </div>
       {frame.output ? (
-        <DataViewer data={frame.output} onInspect={onInspect} status={statusMessage} />
+        <DataViewer
+            data={frame.output}
+            onInspect={isActive ? inspect : undefined}
+            status={statusMessage}
+            full={isActive} />
       ) : statusMessage ? (
         <p>{statusMessage} ...</p>
       ) : (

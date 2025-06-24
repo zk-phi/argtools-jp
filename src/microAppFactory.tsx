@@ -53,7 +53,7 @@ export const microAppFactory = ({ pipeline, outputLabel }: {
         {state[state.length - 1].output ? (
           <>
             {outputLabel && (<h3>{outputLabel}</h3>)}
-            <DataViewer data={state[state.length - 1].output} status={status} />
+            <DataViewer data={state[state.length - 1].output} status={status} full={true} />
           </>
         ) : status ? (
           <p>{status} ...</p>

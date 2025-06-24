@@ -3,10 +3,18 @@ import { toBlobUrl, type BinaryData } from "../datatypes";
 import { save } from "../utils/file";
 import { ViewerContainer } from "./ViewerContainer";
 
-export const ImageViewer = ({ data, status }: { data: BinaryData, status?: string | null }) => {
-  const [full, setFull] = useState(false);
-  const maxHeight = full ? undefined : 320;
-  const toggleFull = useCallback(() => setFull(full => !full), []);
+export const ImageViewer = ({
+  data,
+  status,
+  full,
+}: {
+  data: BinaryData,
+  status?: string | null,
+  full?: boolean,
+}) => {
+  const [fullState, setFullState] = useState(false);
+  const maxHeight = fullState || full ? undefined : 320;
+  const toggleFull = useCallback(() => setFullState(fullState => !fullState), []);
 
   const url = useMemo(() => toBlobUrl(data), [data]);
   const upcaseExt = useMemo(() => data.ext.slice(1).toUpperCase(), [data]);
