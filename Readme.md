@@ -18,6 +18,7 @@ https://zk-phi.github.io/argtools-jp
   - file-type-xml (C) Borewit / MIT License
 - franc (C) Titus Wormer / MIT License
 - iconv-lite (C) Alexander Shtuchkin / MIT License
+- jszip (C) Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso / MIT License
 - Preact (C) Jason Miller / MIT License
 - punycode (C) Mathias Bynens / MIT License
 - toml-node (C) Michelle Tilley / MIT License
