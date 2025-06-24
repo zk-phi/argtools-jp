@@ -1,1 +1,0 @@
-import{a as o}from"./chunk-mLJ3RaaW.js";import{t as a}from"./chunk-3_CnDNuU.js";const r="[0-9A-Fa-f]",d=`(%${r}{2}){2,}`,p=`${d}(?=[^0-9A-z]|$)`,l=o({label:"パーセントエンコードを読み取り",app:"/argtools-jp/apps/url-decode",hint:"%**%** 形式の１６進数 → たぶんパーセントエンコード！",pattern:p,decoder:(e,t)=>a(decodeURI(e),t)});export{l as u};
