@@ -26,15 +26,15 @@ const FullMultipleViewer = ({
         )}
       </div>
     ))}
-    <div>
+    {datum.length > 50 && (
+      <div>... 先頭の 50 件を表示中</div>
+    )}
+    <p>
       複数のデータ（{datum.length}件）
       <a href="javascript: void(0)" onClick={() => saveZip(datum.map(toBlob))}>
         まとめて保存
       </a>
-    </div>
-    {datum.length > 50 && (
-      <p>... 先頭の 50 件を表示中</p>
-    )}
+    </p>
     <BusyOverlay status={status} />
   </div>
 )
