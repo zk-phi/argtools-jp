@@ -1,12 +1,12 @@
-import type { TextData } from "../datatypes";
-import { savePlainText } from "../utils/file";
+import { toBlob, type TextData } from "../datatypes";
+import { save } from "../utils/file/save";
 import { ViewerContainer } from "./ViewerContainer";
 
 export const TextViewer = ({ data, status }: { data: TextData, status?: string | null }) => {
   const caption = (
     <>
       文字列（{data.value.length}文字 {data.language ? `${data.language}？` : "不明"}）
-      <a href="javascript: void(0)" onClick={() => savePlainText(data.value)}>保存</a>
+      <a href="javascript: void(0)" onClick={() => save(...toBlob(data))}>保存</a>
     </>
   );
 

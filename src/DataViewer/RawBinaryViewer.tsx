@@ -1,7 +1,7 @@
 import { useMemo } from "preact/hooks";
-import type { BinaryData } from "../datatypes";
+import { toBlob, type BinaryData } from "../datatypes";
 import { mapRange } from "../utils/array/range";
-import { save } from "../utils/file";
+import { save } from "../utils/file/save";
 import { ViewerContainer } from "./ViewerContainer";
 
 const byteToAscii = (n: number) => (
@@ -33,7 +33,7 @@ export const RawBinaryViewer = ({ data, status }: { data: BinaryData, status?: s
   const caption = (
     <>
       {maybeExt}（{data.value.length}バイト）
-      <a href="javascript: void(0)" onClick={() => save(data)}>保存</a>
+      <a href="javascript: void(0)" onClick={() => save(...toBlob(data))}>保存</a>
     </>
   );
 

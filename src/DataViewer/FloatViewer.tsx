@@ -1,14 +1,12 @@
-import type { FloatData } from "../datatypes";
-import { savePlainText } from "../utils/file";
+import { toBlob, type FloatData } from "../datatypes";
+import { save } from "../utils/file/save";
 import { ViewerContainer } from "./ViewerContainer";
 
 export const FloatViewer = ({ data, status }: { data: FloatData, status?: string | null }) => {
   const caption = (
     <>
       数値{" "}
-      <a
-          href="javascript: void(0)"
-          onClick={() => savePlainText(data.value.toString())}>
+      <a href="javascript: void(0)" onClick={() => save(...toBlob(data))}>
         保存
       </a>
     </>

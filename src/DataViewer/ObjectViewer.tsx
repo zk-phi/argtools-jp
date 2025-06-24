@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo } from "preact/hooks";
-import { save } from "../utils/file";
+import { save } from "../utils/file/save";
 import { ViewerContainer } from "./ViewerContainer";
-import type { ObjectData, Obj, Atom, Collection } from "../datatypes";
+import { toBlob, type ObjectData, type Obj, type Atom, type Collection } from "../datatypes";
 
 const toggleStyle = {
   display: "inline-block",
@@ -88,7 +88,7 @@ export const ObjectViewer = ({ data, status }: {
   const caption = (
     <>
       {upcaseExt} データ（{data.value.length}バイト）
-      <a href="javascript: void(0)" onClick={() => save(data)}>保存</a>
+      <a href="javascript: void(0)" onClick={() => save(...toBlob(data))}>保存</a>
     </>
   );
 

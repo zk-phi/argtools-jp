@@ -1,5 +1,3 @@
-import fileSaver from "file-saver";
-
 export const readFileAsDataUrl = async (file: File): Promise<string> => (
   new Promise((resolve) => {
     const reader = new FileReader();
@@ -15,19 +13,3 @@ export const readFileAsBuffer = async (file: File): Promise<ArrayBuffer> => (
     reader.readAsArrayBuffer(file);
   })
 );
-
-let fileId = 0;
-export const save = ({ value, mime, ext }: {
-  value: Uint8Array | string,
-  mime: string,
-  ext: string,
-}) => {
-  const blob = new Blob([value], { type: mime });
-  fileId++;
-  fileSaver.saveAs(blob, `ダウンロード${fileId}${ext}`);
-};
-export const savePlainText = (text: string) => {
-  const blob = new Blob([text], { type: "text/plain" });
-  fileId++;
-  fileSaver.saveAs(blob, `ダウンロード${fileId}.txt`);
-};

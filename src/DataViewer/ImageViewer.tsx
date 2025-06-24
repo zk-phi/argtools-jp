@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback } from "preact/hooks";
-import { toBlobUrl, type BinaryData } from "../datatypes";
-import { save } from "../utils/file";
+import { toBlob, toBlobUrl, type BinaryData } from "../datatypes";
+import { save } from "../utils/file/save";
 import { ViewerContainer } from "./ViewerContainer";
 
 export const ImageViewer = ({
@@ -22,7 +22,7 @@ export const ImageViewer = ({
   const caption = (
     <>
       {upcaseExt} 画像（{data.value.length}バイト）
-      <a href="javascript: void(0)" onClick={() => save(data)}>保存</a>
+      <a href="javascript: void(0)" onClick={() => save(...toBlob(data))}>保存</a>
     </>
   );
 

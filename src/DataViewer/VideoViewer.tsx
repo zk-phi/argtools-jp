@@ -1,6 +1,6 @@
 import { useMemo } from "preact/hooks";
-import { toBlobUrl, type BinaryData } from "../datatypes";
-import { save } from "../utils/file";
+import { toBlobUrl, toBlob, type BinaryData } from "../datatypes";
+import { save } from "../utils/file/save";
 import { ViewerContainer } from "./ViewerContainer";
 
 export const VideoViewer = ({ data, status }: { data: BinaryData, status?: string | null }) => {
@@ -10,7 +10,7 @@ export const VideoViewer = ({ data, status }: { data: BinaryData, status?: strin
   const caption = (
     <>
       {upcaseExt} 動画（{data.value.length}バイト）
-      <a href="javascript: void(0)" onClick={() => save(data)}>保存</a>
+      <a href="javascript: void(0)" onClick={() => save(...toBlob(data))}>保存</a>
     </>
   );
 

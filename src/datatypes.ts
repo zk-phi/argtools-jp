@@ -36,8 +36,7 @@ export type Obj = Atom | Collection;
 export type ObjectBody = { object: Obj, value: string, mime: string, ext: string };
 export type ObjectData = { type: "object", id: number, label: string } & ObjectBody;
 
-export type AtomicData =
-  TextData | BinaryData | IntegerData | FloatData | MelodyData | ObjectData;
+export type AtomicData = TextData | BinaryData | IntegerData | FloatData | ObjectData;
 export type MultipleData = { type: "multiple", datum: AtomicData[] };
 
 export type Data = AtomicData | MultipleData | WordlistData;
@@ -128,11 +127,6 @@ export const wordlistData = (value: Wordlist, label: string): WordlistData => (
   { type: "wordlist", id: gensym(), label, value }
 );
 
-export type MelodyData = { type: "mml", id: number, label: string, value: string };
-export const melodyData = (value: string, label: string): MelodyData => (
-  { type: "mml", id: gensym(), label, value }
-);
-
 export const objectData = (value: string, object: Obj, label: string, mime: string, ext: string): ObjectData => (
   { type: "object", id: gensym(), label, value, object, mime, ext }
 );
@@ -146,7 +140,17 @@ export const multipleData = (datum: AtomicData[]): Data => {
 
 // -------- UTILS
 
-export const toBlob = (data: BinaryData): Blob => (
-  new Blob([data.value], { type: data.mime })
-);
-export const toBlobUrl = (data: BinaryData): string => URL.createObjectURL(toBlob(data));
+export const toBlob = (data: AtomicData): [Blob, string] => {
+  if (data.type === "binary" || data.type === "object") {
+    return [new Blob([data.value], { type: data.mime }), data.ext];
+  }
+  if (data.type === "text") {
+    return [new Blob([data.value], { type: "text/plain" }), ".txt"];
+  }
+  if (data.type === "integer" || data.type === "float") {
+    return [new Blob([data.value.toString()], { type: "text/plain" }), ".txt"];
+  }
+  throw new Error("Unexpected: unknown data type given to toBlob function.");
+};
+
+export const toBlobUrl = (data: AtomicData): string => URL.createObjectURL(toBlob(data)[0]);
