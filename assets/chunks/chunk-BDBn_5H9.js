@@ -1,0 +1,1 @@
+import{a as e}from"./chunk-BM3y1iuq.js";import{h as i,m as n}from"./chunk-3_CnDNuU.js";import"./chunk-16BH05ft.js";const y=async(a,o)=>{if(a.type!=="binary")throw new Error("バイナリデータではありません");await o({status:"解凍しています"});const t=e(a.value),s=await Promise.all(Object.keys(t).map(async r=>await i(t[r],r)));return n(s)};export{y as processor};
