@@ -19,7 +19,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     throw new Error("画像データでないか、非対応の形式です");
   };
 
-  const url = toBlobUrl(input);
+  const [url] = toBlobUrl(input);
   const image = await urlToImg(url);
 
   await reporter({ status: "画像を描画しています 1/6" });

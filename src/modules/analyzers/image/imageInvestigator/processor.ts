@@ -1,4 +1,3 @@
-
 import { canvasToUint8Array, urlToImg } from "../../../../utils/image";
 import { clamp } from "../../../../utils/math";
 import type { StateReporter } from "../../../";
@@ -94,7 +93,8 @@ export const processor = async (
 
   await reporter({ status: "トリミングしています" });
 
-  const image = await urlToImg(toBlobUrl(input));
+  const [url] = toBlobUrl(input);
+  const image = await urlToImg(url);
   const arr = await investigateImage(image, rect, colorProfile, powerSelf, screenSelf);
   return await binaryData(arr, "補正画像");
 };

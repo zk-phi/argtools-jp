@@ -93,7 +93,7 @@ export const processor = async (
   if (input.type !== "binary" || !input.mime.startsWith("image")) {
     throw new Error("画像データでないか、非対応の形式です");
   }
-  const blobUrl = toBlobUrl(input);
+  const [blobUrl] = toBlobUrl(input);
   const img = await urlToImg(blobUrl);
   const [buf, url] = await imageToAudio(img, hResolution, seconds, depth);
   const wav = new Uint8Array(toWav(buf));

@@ -23,7 +23,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       throw new Error("動画データでないか、非対応の形式です");
     }
     await reporter({ status: "読み込んでいます" });
-    const url = toBlobUrl(input);
+    const [url] = toBlobUrl(input);
     setSourceProps({ src: url, type: input.mime });
     return null;
   }, []);

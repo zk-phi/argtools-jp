@@ -153,4 +153,7 @@ export const toBlob = (data: AtomicData): [Blob, string] => {
   throw new Error("Unexpected: unknown data type given to toBlob function.");
 };
 
-export const toBlobUrl = (data: AtomicData): string => URL.createObjectURL(toBlob(data)[0]);
+export const toBlobUrl = (data: AtomicData): [string, Blob, string] => {
+  const [blob, ext] = toBlob(data);
+  return [URL.createObjectURL(blob), blob, ext];
+};
