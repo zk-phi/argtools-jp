@@ -28,6 +28,7 @@
     "modern-gif": "^2.0.4",
     "preact": "^10.26.5",
     "punycode": "^2.3.1",
+    "qr-scanner": "^1.4.2",
     "toml": "^3.0.0",
     "vite-plugin-node-polyfills": "^0.23.0",
     "yaml": "^2.8.0"
