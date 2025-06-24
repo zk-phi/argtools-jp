@@ -1,1 +1,0 @@
-import{b as a}from"./chunk-CMh2BFhb.js";import{c as r}from"./chunk-DITnb4iP.js";const t={...r,label:"プログラミング言語・自然言語の自動推定",app:"/argtools-jp/apps/language-detector",description:a("p",{children:"長いテキストほど検出精度が上がります。"})};export{t as l};
