@@ -21,6 +21,7 @@ import { rot13Decoder } from "./text/rot13Decoder";
 import { caesarDecoder } from "./text/caesarDecoder";
 import { rot47Decoder } from "./text/rot47Decoder";
 import { sortLines } from "./text/sortLines";
+import { scytaleDecoder } from "./text/scytaleDecoder";
 
 import { factorNumber } from "./number/factorNumber";
 
@@ -130,6 +131,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     rot13Decoder,
     rot47Decoder,
     caesarDecoder,
+    scytaleDecoder,
     textToDecimal,
     textToHexNumber,
     textToHexBinary,
