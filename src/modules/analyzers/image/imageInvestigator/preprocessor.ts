@@ -1,7 +1,6 @@
-import { canvasToUint8Array, urlToImg, canvasToURL } from "../../../../utils/image";
-import { clamp } from "../../../../utils/math";
+import { urlToImg, canvasToURL } from "../../../../utils/image";
 import type { StateReporter } from "../../../";
-import { binaryData, toBlobUrl, type MaybeData, } from "../../../../datatypes";
+import { toBlobUrl, type MaybeData, } from "../../../../datatypes";
 
 const RESULT_IMAGE_SIZE = 480 * 480;
 
@@ -72,16 +71,16 @@ export const preprocessor = async (
   histogramCanvas.width = 512;
   histogramCanvas.height = 96;
 
-  const FIELDS = [["r", "#ff0000"], ["g", "#00ff00"], ["b", "#0000ff"]] as const;
+  const fields = [["r", "#ff0000"], ["g", "#00ff00"], ["b", "#0000ff"]] as const;
   let histogramMax = 0;
-  for (const [field] of FIELDS) {
+  for (const [field] of fields) {
     for (const value of histogram[field]) {
       histogramMax = Math.max(histogramMax, value);
     }
   }
 
   const hctx = histogramCanvas.getContext("2d")!;
-  for (const [field, color] of FIELDS) {
+  for (const [field, color] of fields) {
     hctx.strokeStyle = color;
     hctx.beginPath();
     hctx.moveTo(0, 95 * histogram[field][0] / histogramMax);

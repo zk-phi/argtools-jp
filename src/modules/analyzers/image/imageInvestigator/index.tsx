@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from "preact/hooks";
-import { useAnalyzer, useErrorHandling, useReporter } from "../../../../utils/analyzer";
+import { useErrorHandling, } from "../../../../utils/analyzer";
 import { useDebouncedValue } from "../../../../utils/ui/debounce";
 import type { StateReporter } from "../../../";
 import type { Data, MaybeData } from "../../../../datatypes";
@@ -15,6 +15,7 @@ const makeGradientBg = (contrast: number, brightness: number, color: string) => 
   const width = 100 / contrast;
   const from = (100 - width) / 2 - 100 * brightness / 255;
   return (
+    // biome-ignore lint/style/useTemplate: Use string concat to avoid very long line
     "linear-gradient(to right, " +
     `transparent ${from}%, ${color} ${from}%, ` +
     `${color} ${from + width}%, transparent ${from + width}%` +
@@ -24,6 +25,7 @@ const makeGradientBg = (contrast: number, brightness: number, color: string) => 
 
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   /* configurations */
+
   const [rect, setRect] = useState({ l: 0, t: 0, r: 100, b: 100 });
   const [colorProfile, setColorProfile] = useState({
     brightness: { r: 0, g: 0, b: 0 },
@@ -34,6 +36,11 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   const debouncedRect = useDebouncedValue(rect, 50, onUpdate);
   const debouncedColorProfile = useDebouncedValue(colorProfile, 50, onUpdate);
 
+  /* caches */
+
+  const [trimmed, setTrimmed] = useState<HTMLCanvasElement>();
+  const [histogram, setHistogram] = useState<string>();
+
   const histogramBg = useMemo(() => {
     const { contrast, brightness } = colorProfile;
     const rGradient = makeGradientBg(contrast.r, brightness.r, "#ff000044");
@@ -41,10 +48,6 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     const bGradient = makeGradientBg(contrast.b, brightness.b, "#0000ff44");
     return `${rGradient}, ${gGradient}, ${bGradient}`;
   }, [colorProfile]);
-
-  /* caches */
-  const [trimmed, setTrimmed] = useState<HTMLCanvasElement>();
-  const [histogram, setHistogram] = useState<string>();
 
   useErrorHandling(onUpdate, async (reporter: StateReporter) => {
     await reporter({ status: "ツールを読み込んでいます" });
@@ -63,6 +66,8 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       reporter({ output: await processor(trimmed, reporter, debouncedColorProfile) });
     }
   }, [trimmed, debouncedColorProfile]);
+
+  /* handlers */
 
   const onInputRect = useCallback((field: "l" | "t" | "r" | "b", value: number) => {
     const newRect = { ...rect, [field]: value };

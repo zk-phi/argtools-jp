@@ -1,7 +1,7 @@
-import { canvasToUint8Array, urlToImg, canvasToURL } from "../../../../utils/image";
+import { canvasToUint8Array, } from "../../../../utils/image";
 import { clamp } from "../../../../utils/math";
 import type { StateReporter } from "../../../";
-import { binaryData, toBlobUrl, type BinaryData, } from "../../../../datatypes";
+import { binaryData, type BinaryData, } from "../../../../datatypes";
 
 // Tweak 0-255 color value
 const tweakColor = (
