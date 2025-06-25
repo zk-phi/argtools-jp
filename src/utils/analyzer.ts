@@ -40,6 +40,21 @@ export const withReporter = async (
   }
 }
 
+// Like withReporter, but does not expect output.
+export const withErrorHandling = async (
+  reporter: StateReporter,
+  cb: (reporter: StateReporter) => Promise<void> | void,
+) => {
+  await reporter({ status: "解析開始" });
+  try {
+    await cb(reporter);
+  } catch (e: any) {
+    reporter({
+      output: errorData("message" in e ? e.message : "Unexpected error."),
+    });
+  }
+}
+
 export const useAnalyzer = (
   reporter: StateReporter,
   input: MaybeData,
@@ -62,5 +77,17 @@ export const useReporter = (
   const fn = useMemo(() => cb, deps);
   useEffect(() => {
     withReporter(reporter, fn);
+  }, [fn, reporter]);
+}
+
+export const useErrorHandling = (
+  reporter: StateReporter,
+  cb: (reporter: StateReporter) => Promise<void> | void,
+  deps: any[],
+) => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
+  const fn = useMemo(() => cb, deps);
+  useEffect(() => {
+    withErrorHandling(reporter, fn);
   }, [fn, reporter]);
 }

@@ -1,5 +1,5 @@
-import { useState, useCallback } from "preact/hooks";
-import { useAnalyzer } from "../../../../utils/analyzer";
+import { useState, useCallback, useMemo } from "preact/hooks";
+import { useAnalyzer, useErrorHandling, useReporter } from "../../../../utils/analyzer";
 import { useDebouncedValue } from "../../../../utils/ui/debounce";
 import type { StateReporter } from "../../../";
 import type { Data, MaybeData } from "../../../../datatypes";
@@ -11,7 +11,19 @@ const detect = (data: Data) => {
   return null;
 };
 
+const makeGradientBg = (contrast: number, brightness: number, color: string) => {
+  const width = 100 / contrast;
+  const from = (100 - width) / 2 - 100 * brightness / 255;
+  return (
+    "linear-gradient(to right, " +
+    `transparent ${from}%, ${color} ${from}%, ` +
+    `${color} ${from + width}%, transparent ${from + width}%` +
+    ")"
+  );
+}
+
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
+  /* configurations */
   const [rect, setRect] = useState({ l: 0, t: 0, r: 100, b: 100 });
   const [colorProfile, setColorProfile] = useState({
     brightness: { r: 0, g: 0, b: 0 },
@@ -21,6 +33,36 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
   const [screen, setScreen] = useState(false);
   const debouncedRect = useDebouncedValue(rect, 50, onUpdate);
   const debouncedColorProfile = useDebouncedValue(colorProfile, 50, onUpdate);
+
+  const histogramBg = useMemo(() => {
+    const { contrast, brightness } = colorProfile;
+    const rGradient = makeGradientBg(contrast.r, brightness.r, "#ff000044");
+    const gGradient = makeGradientBg(contrast.g, brightness.g, "#00ff0044");
+    const bGradient = makeGradientBg(contrast.b, brightness.b, "#0000ff44");
+    return `${rGradient}, ${gGradient}, ${bGradient}`;
+  }, [colorProfile]);
+
+  /* caches */
+  const [trimmed, setTrimmed] = useState<HTMLCanvasElement>();
+  const [histogram, setHistogram] = useState<string>();
+
+  useErrorHandling(onUpdate, async (reporter: StateReporter) => {
+    await reporter({ status: "ツールを読み込んでいます" });
+    const { preprocessor } = await import("./preprocessor");
+    const [trimmed, histogram] = await preprocessor(
+      input, reporter, debouncedRect, pow, screen
+    );
+    setTrimmed(trimmed);
+    setHistogram(histogram);
+  }, [input, debouncedRect, pow, screen])
+
+  useErrorHandling(onUpdate, async (reporter: StateReporter) => {
+    if (trimmed) {
+      await reporter({ status: "ツールを読み込んでいます" });
+      const { processor } = await import("./processor");
+      reporter({ output: await processor(trimmed, reporter, debouncedColorProfile) });
+    }
+  }, [trimmed, debouncedColorProfile]);
 
   const onInputRect = useCallback((field: "l" | "t" | "r" | "b", value: number) => {
     const newRect = { ...rect, [field]: value };
@@ -48,18 +90,10 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     setColorProfile(newColorProfile);
   }, [colorProfile])
 
-  useAnalyzer(onUpdate, input, async (input: Data, reporter: StateReporter) => {
-    await reporter({ status: "ツールを読み込んでいます" });
-    const { processor } = await import("./processor");
-    return await processor(
-      input, reporter, debouncedRect, debouncedColorProfile, pow, screen
-    );
-  }, [debouncedRect, debouncedColorProfile, pow, screen]);
-
   return (
     <>
-      <fieldset>
-        <legend>トリミング</legend>
+      <details>
+        <summary>トリミング</summary>
         <div>
           左：
           <input
@@ -104,9 +138,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               onInput={(e) => onInputRect("b", Number(e.currentTarget.value))} />
           {rect.b}%
         </div>
-      </fieldset>
-      <fieldset>
-        <legend>カラー補正</legend>
+      </details>
+      <details>
+        <summary>前処理</summary>
         <div>
           自身と乗算（明るい部分を見やすく）：
           <input
@@ -121,6 +155,14 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               checked={screen}
               onChange={(e) => setScreen(e.currentTarget.checked)} />
         </div>
+      </details>
+      <details>
+        <summary>カラー補正</summary>
+        {histogram && (
+          <div>
+            <img src={histogram} style={{ background: histogramBg }} />
+          </div>
+        )}
         <div>
           明るさ：
           <input
@@ -245,7 +287,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
             </div>
           </details>
         </div>
-      </fieldset>
+      </details>
     </>
   );
 };
