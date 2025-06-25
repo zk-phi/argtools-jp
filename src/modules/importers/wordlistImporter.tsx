@@ -13,16 +13,22 @@ type Dataset = {
 };
 
 const datasets: { [key: string]: Dataset } = {
+  wikipedia: {
+    module: cacheAsync(() => import("./wordlists/wikipedia")),
+    url: "https://ja.wikipedia.org/",
+    label: "Wikipedia のページタイトル",
+    license: "Wikipedia / CC-BY-SA",
+  },
   nouns: {
     module: cacheAsync(() => import("./wordlists/nouns")),
     url: "https://clrd.ninjal.ac.jp/unidic/",
-    label: "森羅万象（人名以外の名詞）",
+    label: "一般名詞",
     license: "現代書き言葉 UniDic (C) 国立国語研究所 / 修正 BSD ライセンス",
   },
   yomigana: {
     module: cacheAsync(() => import("./wordlists/yomigana")),
     url: "https://clrd.ninjal.ac.jp/unidic/",
-    label: "しんらばんしょう（よみがな）",
+    label: "一般名詞（よみがな）",
     license: "現代書き言葉 UniDic (C) 国立国語研究所 / 修正 BSD ライセンス",
   },
   nItems: {
@@ -84,6 +90,7 @@ const datasetCategories: DatasetCategory[] = [{
     "nouns",
     "yomigana",
     "nItems",
+    "wikipedia",
   ],
 }, {
   label: "--- 交通",
