@@ -53,6 +53,9 @@ export const scytaleDecoder: AnalyzerModule = {
       </p>
       <ul>
         <li>例：幅 3 なら「Hello World!」→「HlWleoodl r!」</li>
+        <li>
+          <pre>{"H l W l\ne o o d\nl   r !"}</pre>
+        </li>
       </ul>
     </>
   ),
