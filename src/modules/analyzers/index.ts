@@ -155,6 +155,14 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     factorNumber,
   ],
 }, {
+  category: "他",
+  unlisted: true,
+  analyzers: [
+    // もしかしたら、
+    textAdder,
+    fileAdder,
+  ],
+}, {
   category: "アイデア・ヒント",
   analyzers: [
     // →
@@ -172,14 +180,6 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     googleLensSuggestor,
     // もしかしたら
     chatGptSuggestor,
-  ],
-}, {
-  category: "他",
-  unlisted: true,
-  analyzers: [
-    // もしかしたら、
-    textAdder,
-    fileAdder,
   ],
 }];
 
