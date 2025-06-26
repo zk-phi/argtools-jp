@@ -22,7 +22,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
   const [url] = toBlobUrl(input);
   const image = await urlToImg(url);
 
-  await reporter({ status: "画像を描画しています 1/6" });
+  await reporter({ status: "画像を描画しています 1/8" });
   const rImg = await applyFilter(image, (arr) => {
     for (let i = 0; i < arr.length; i += 4) {
       arr[i + 1] = arr[i + 0];
@@ -31,7 +31,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     }
   });
 
-  await reporter({ status: "画像を描画しています 2/6" });
+  await reporter({ status: "画像を描画しています 2/8" });
   const gImg = await applyFilter(image, (arr) => {
     for (let i = 0; i < arr.length; i += 4) {
       arr[i + 0] = arr[i + 1];
@@ -40,7 +40,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     }
   });
 
-  await reporter({ status: "画像を描画しています 3/6" });
+  await reporter({ status: "画像を描画しています 3/8" });
   const bImg = await applyFilter(image, (arr) => {
     for (let i = 0; i < arr.length; i += 4) {
       arr[i + 0] = arr[i + 2];
@@ -49,7 +49,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     }
   });
 
-  await reporter({ status: "画像を描画しています 4/6" });
+  await reporter({ status: "画像を描画しています 4/8" });
   const aImg = await applyFilter(image, (arr) => {
     for (let i = 0; i < arr.length; i += 4) {
       arr[i + 0] = arr[i + 3];
@@ -58,17 +58,31 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     }
   });
 
-  await reporter({ status: "画像を描画しています 5/6" });
+  await reporter({ status: "画像を描画しています 5/8" });
   const lsbImg = await applyFilter(image, (arr) => {
     for (let i = 0; i < arr.length; i += 1) {
       arr[i] = (arr[i] & 1) * 255;
     }
   });
 
-  await reporter({ status: "画像を描画しています 6/6" });
+  await reporter({ status: "画像を描画しています 6/8" });
   const lsb2Img = await applyFilter(image, (arr) => {
     for (let i = 0; i < arr.length; i += 1) {
-      arr[i] = (arr[i] & 2) * 85;
+      arr[i] = ((arr[i] & 2) >> 1) * 255;
+    }
+  });
+
+  await reporter({ status: "画像を描画しています 7/8" });
+  const lsb3Img = await applyFilter(image, (arr) => {
+    for (let i = 0; i < arr.length; i += 1) {
+      arr[i] = ((arr[i] & 4) >> 2) * 255;
+    }
+  });
+
+  await reporter({ status: "画像を描画しています 8/8" });
+  const lsb4Img = await applyFilter(image, (arr) => {
+    for (let i = 0; i < arr.length; i += 1) {
+      arr[i] = ((arr[i] & 8) >> 3) * 255;
     }
   });
 
@@ -149,7 +163,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     let value = 0;
     for (let j = 0; j < 4; j++) {
       const ix = (i * 4 + j) * 4 + 0;
-      value = value * 4 + (ix < arr.length ? arr[ix] & 2 : 0);
+      value = value * 4 + (ix < arr.length ? arr[ix] & 3 : 0);
     }
     rLsb2Binary[i] = value;
   }
@@ -160,7 +174,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     let value = 0;
     for (let j = 0; j < 8; j++) {
       const ix = (i * 4 + j) * 4 + 1;
-      value = value * 4 + (ix < arr.length ? arr[ix] & 2 : 0);
+      value = value * 4 + (ix < arr.length ? arr[ix] & 3 : 0);
     }
     gLsb2Binary[i] = value;
   }
@@ -171,7 +185,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     let value = 0;
     for (let j = 0; j < 8; j++) {
       const ix = (i * 4 + j) * 4 + 2;
-      value = value * 4 + (ix < arr.length ? arr[ix] & 2 : 0);
+      value = value * 4 + (ix < arr.length ? arr[ix] & 3 : 0);
     }
     bLsb2Binary[i] = value;
   }
@@ -182,7 +196,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     let value = 0;
     for (let j = 0; j < 8; j++) {
       const ix = (i * 8 + j) * 4 + 3;
-      value = value * 4 + (ix < arr.length ? arr[ix] & 2 : 0);
+      value = value * 4 + (ix < arr.length ? arr[ix] & 3 : 0);
     }
     aLsb2Binary[i] = value;
   }
@@ -194,7 +208,9 @@ export const processor = async (input: Data, reporter: StateReporter) => {
     await binaryData(new Uint8Array(await bImg.arrayBuffer()), "B 成分のみ抽出"),
     await binaryData(new Uint8Array(await aImg.arrayBuffer()), "アルファ値のみ抽出"),
     await binaryData(new Uint8Array(await lsbImg.arrayBuffer()), "最下位ビットを抽出"),
-    await binaryData(new Uint8Array(await lsb2Img.arrayBuffer()), "下位２ビットを抽出"),
+    await binaryData(new Uint8Array(await lsb2Img.arrayBuffer()), "下位２ビット目を抽出"),
+    await binaryData(new Uint8Array(await lsb3Img.arrayBuffer()), "下位３ビット目を抽出"),
+    await binaryData(new Uint8Array(await lsb4Img.arrayBuffer()), "下位４ビット目を抽出"),
     await binaryData(rBinary, "R の画素値をデータ化"),
     await binaryData(gBinary, "G の画素値をデータ化"),
     await binaryData(bBinary, "B の画素値をデータ化"),
