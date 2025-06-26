@@ -33,6 +33,7 @@ https://zk-phi.github.io/argtools-jp
 ## 利用しているオープンデータ
 
 - 現代書き言葉 UniDic (C) 国立国語研究所 / 4-clause BSD License
+- Wikipedia / CC-BY-SA
 - 国土数値情報: 鉄道データ (C) 国土交通省 / CC-BY
 - 国土数値情報: 高速道路時系列データ (C) 国土交通省 / CC-BY
 - 道の駅 (C) 国土交通省, 東京福祉専門学校 IT 医療ソーシャルワーカー科編集 / CC-BY-NC
