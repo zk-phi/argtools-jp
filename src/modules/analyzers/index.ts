@@ -62,6 +62,7 @@ import { dowSuggestor } from "./suggestions/dowSuggestor";
 import { fingerSuggestor } from "./suggestions/fingerSuggestor";
 import { melodySuggestor } from "./suggestions/melodySuggestor";
 import { planetSuggestor } from "./suggestions/planetSuggestor";
+import { pdfSuggestor } from "./suggestions/pdfSuggestor";
 
 import { fileAdder } from "./importers/fileAdder";
 import { textAdder } from "./importers/textAdder";
@@ -175,6 +176,7 @@ export const analyzerCategories: AnalyzerCategory[] = [{
     melodySuggestor,
     planetSuggestor,
     // もし
+    pdfSuggestor,
     wolframSuggestor,
     googleSuggestor,
     googleLensSuggestor,
