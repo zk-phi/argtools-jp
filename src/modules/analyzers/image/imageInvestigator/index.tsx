@@ -43,9 +43,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
   const histogramBg = useMemo(() => {
     const { contrast, brightness } = colorProfile;
-    const rGradient = makeGradientBg(contrast.r, brightness.r, "#ff000044");
-    const gGradient = makeGradientBg(contrast.g, brightness.g, "#00ff0044");
-    const bGradient = makeGradientBg(contrast.b, brightness.b, "#0000ff44");
+    const rGradient = makeGradientBg(contrast.r, brightness.r, "#ff222266");
+    const gGradient = makeGradientBg(contrast.g, brightness.g, "#22ff2266");
+    const bGradient = makeGradientBg(contrast.b, brightness.b, "#4444ff66");
     return `${rGradient}, ${gGradient}, ${bGradient}`;
   }, [colorProfile]);
 
@@ -163,6 +163,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
       </details>
       <details>
         <summary>カラー補正</summary>
+        <p>まずは極端なコントラストをつけて、明るさを動かしてみるのがおすすめです。</p>
         {histogram && (
           <div>
             <img src={histogram} style={{ background: histogramBg }} />
@@ -197,9 +198,9 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
           {colorProfile.contrast.r}
           <details>
             <summary>成分別に調整する</summary>
+            <p>まずは真っ黒な画面にして、色ごとに明るさを足してみるのがおすすめです。</p>
             <div>
-              <div>R 成分</div>
-              明るさ：
+              R 明るさ：
               <input
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
@@ -229,8 +230,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               {colorProfile.contrast.r}
             </div>
             <div>
-              <div>G 成分</div>
-              明るさ：
+              G 明るさ：
               <input
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
@@ -260,8 +260,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
               {colorProfile.contrast.g}
             </div>
             <div>
-              <div>B 成分</div>
-              明るさ：
+              B 明るさ：
               <input
                   type="range"
                   style={{ display: "inline", verticalAlign: "middle", marginRight: "0.5em" }}
@@ -302,9 +301,4 @@ export const imageInvestigator = {
   app: "/argtools-jp/apps/image-investigator",
   detect,
   component,
-  description: (
-    <p>
-      まずは極端なコントラストをつけて、明るさを動かしてみるのがおすすめです。
-    </p>
-  )
 };
