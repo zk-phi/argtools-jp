@@ -1,4 +1,3 @@
-
 import { textData } from "../../../../datatypes";
 
 const pagerCharTable =
