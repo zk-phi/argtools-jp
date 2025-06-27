@@ -39,14 +39,14 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
     <>
       <fieldset>
         <legend>オプション</legend>
-        <label for="zeroChar">短点（・）として扱う文字</label>
+        <label for="zeroChar">短点（・）として扱う文字（列）</label>
         <input
             type="text"
             name="zeroChar"
             maxLength={1}
             value={zeroChar}
             onInput={e => setZeroChar(e.currentTarget.value)} />
-        <label for="oneChar">長点（－）として扱う文字</label>
+        <label for="oneChar">長点（－）として扱う文字（列）</label>
         <input
             type="text"
             name="oneChar"
