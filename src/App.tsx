@@ -2,7 +2,6 @@ import { signal, computed, type Signal } from "@preact/signals";
 import { useMemo } from "preact/hooks";
 import { gensym } from "./utils/gensym";
 import { defer } from "./utils/ui/defer";
-import { toolCategories } from "./modules/tools";
 import { importers } from "./modules/importers";
 import { genInspector } from "./modules/inspector";
 import { DataViewer } from "./DataViewer";
@@ -248,6 +247,7 @@ export const App = ({ analyzers, analyzerCategories }: {
   analyzers: AnalyzerModule[],
   analyzerCategories: AnalyzerCategory[],
 }) => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies:
   const state = useMemo(() => createAppState(analyzers), []);
   const { stack } = state;
 
