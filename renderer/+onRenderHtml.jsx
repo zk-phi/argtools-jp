@@ -10,7 +10,7 @@ export const onRenderHtml = ({ Page, config }) => {
   const prerendered = render(<Page />);
 
   const backlink = config.backlink ? (
-    '<header><a href="/argtools-jp/">＜ 全てのツール</a></header>'
+    '<header><a href="../../">＜ 全てのツール</a></header>'
   ) : (
     ""
   );

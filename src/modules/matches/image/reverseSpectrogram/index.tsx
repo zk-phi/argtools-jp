@@ -81,7 +81,7 @@ const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeD
 
 export const reverseSpectrogram: AnalyzerModule = {
   label: "画像を音声に埋め込む",
-  app: "/argtools-jp/apps/reverse-spectrogram",
+  app: "/argtools-jp/match/apps/reverse-spectrogram",
   description: (
     <>
       綺麗に復元させるコツ：
