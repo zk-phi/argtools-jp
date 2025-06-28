@@ -4,8 +4,8 @@
       <head>
         <link rel="stylesheet" type="text/css" href="/argtools-jp/assets/static/resources_dark-aebd039b.DIrtAqkC.css">
         <link rel="stylesheet" type="text/css" href="/argtools-jp/assets/static/src_style-2dab7823.BiYUU_ee.css">
-        <title>バイナリからテキストを抽出するツール</title>
-        <meta name="description" content="バイナリファイルから、ASCII または UTF-8 文字列として読み取れる部分を抽出します。">
+        <title>裏・ARGTOOLS - 技術系謎解き制作アシスタント</title>
+        <meta name="description" content="ステガノグラフィや暗号作成ツールの集合体です。隠したいデータを入力すると、自動で使えるツールを推薦します。">
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,12 +19,12 @@
       </head>
 
       <body>
-        <header><a href="/argtools-jp/">＜ 全てのツール</a></header>
-        <h2>バイナリからテキストを抽出するツール</h2>
-        <p>バイナリファイルから、ASCII または UTF-8 文字列として読み取れる部分を抽出します。</p>
+        
+        <h2>裏・ARGTOOLS - 技術系謎解き制作アシスタント</h2>
+        <p>ステガノグラフィや暗号作成ツールの集合体です。隠したいデータを入力すると、自動で使えるツールを推薦します。</p>
         
         <div id="app">
-          <hr/><div style="margin-bottom:1em;"><h3>解析したいファイル</h3><input type="file" multiple/><fieldset><legend>オプション</legend><div><label for="encoding">エンコーディング：</label><select name="encoding"><option selected value="ascii">ASCII（英数字・記号のみ）</option><option value="utf-8">UTF-8</option></select></div><div><label for="minLength">最低文字数：</label><input name="minLength" type="number" min="2" max="30" step="1" value="8"/></div></fieldset></div>
+          <section><details><summary>実装されているツール一覧</summary><div><b>謎解き制作支援</b><div style="margin-left:16px;font-size:smaller;"><a href="/argtools-jp/apps/reverse-spectrogram">画像を音声に埋め込む</a></div></div></details></section><section><hr/><h3>モードを選ぶ：</h3><div style="display:flex;flex-wrap:wrap;gap:0.5em;"><button type="button">テキストを入力</button><button type="button">ファイルを開く</button><button type="button">別タブの音声を録音</button><button type="button">単語や地名を特定</button></div></section>
         </div>
         <footer style="font-size:smaller">
           <div>
@@ -46,15 +46,17 @@ function share() {
   window.open("https://twitter.com/share?url=" + url + "&text=" + title + "&hashtags=ARGTOOLS");
 }
         </script>
-        <script id="vike_pageContext" type="application/json">{"_urlRewrite":null,"pageId":"/pages/apps/binary-texts","routeParams":{}}</script>
+        <script id="vike_pageContext" type="application/json">{"_urlRewrite":null,"pageId":"/pages/match/index","routeParams":{}}</script>
         <script id="vike_globalContext" type="application/json">{}</script>
         <script src="/argtools-jp/assets/entries/entry-server-routing.DJU3bRii.js" type="module" async></script>
-        <link rel="modulepreload" href="/argtools-jp/assets/entries/pages_apps_binary-texts.CCmO_1KB.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/entries/pages_match_index.BZL-bpJv.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-D4V6W2MB.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-D8MOA9rb.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BagupLq8.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-B2yk49wT.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-C8RUzgde.js" as="script" type="text/javascript">
         <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-BfUjJ_I8.js" as="script" type="text/javascript">
-        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-DBkGV8z2.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-CMI8ixRG.js" as="script" type="text/javascript">
+        <link rel="modulepreload" href="/argtools-jp/assets/chunks/chunk-CQpigCHo.js" as="script" type="text/javascript">
       </body>
 
     </html>
