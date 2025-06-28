@@ -58,6 +58,5 @@ const component = ({ input }: { input: MaybeData }) => {
 export const characterCounter = {
   label: "文字数カウンタ",
   app: "/argtools-jp/apps/counter",
-  detect: () => null,
   component,
 };

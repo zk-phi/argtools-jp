@@ -84,6 +84,5 @@ export const reverseSpectrogram: AnalyzerModule = {
       </ul>
     </>
   ),
-  detect: () => null,
   component,
 };

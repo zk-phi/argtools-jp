@@ -16,7 +16,5 @@ export const centerCanceller = simpleAnalyzerFactory({
       左 ch の音を反転して右 ch にぶつけることで、中央に定位している音をカットします。
     </p>
   ),
-  // Micro-app only
-  detect: () => null,
   analyze,
 });
