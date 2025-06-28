@@ -69,12 +69,7 @@ import { fileAdder } from "./importers/fileAdder";
 import { textAdder } from "./importers/textAdder";
 
 import type { AnalyzerModule } from "../";
-
-export type AnalyzerCategory = {
-  category: string,
-  analyzers: AnalyzerModule[],
-  unlisted?: boolean,
-};
+import type { AnalyzerCategory } from "../../App";
 
 export const analyzerCategories: AnalyzerCategory[] = [{
   category: "画像解析",
