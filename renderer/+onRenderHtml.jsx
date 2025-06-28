@@ -15,6 +15,12 @@ export const onRenderHtml = ({ Page, config }) => {
     ""
   );
 
+  const details = config.details ? (
+    escapeInject`<p>${config.details}</p>`
+  ) : (
+    ""
+  );
+
   return escapeInject`<!DOCTYPE html>
     <html lang="ja">
 
@@ -37,6 +43,7 @@ export const onRenderHtml = ({ Page, config }) => {
         ${dangerouslySkipEscape(backlink)}
         <h2>${config.title}</h2>
         <p>${config.description}</p>
+        ${details}
         <div id="app">
           ${dangerouslySkipEscape(prerendered)}
         </div>

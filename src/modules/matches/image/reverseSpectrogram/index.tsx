@@ -4,6 +4,13 @@ import type { AnalyzerModule, StateReporter } from "../../../";
 import { runAnalyzer } from "../../../../utils/analyzer";
 import { binaryData, type Data, type MaybeData } from "../../../../datatypes";
 
+const detect = (data: Data) => {
+  if (data.type === "binary" && data.mime.startsWith("image")) {
+    return "波形（スペクトログラム）を解析させる（★★★★☆）";
+  }
+  return null;
+}
+
 const component = ({ onUpdate, input }: { onUpdate: StateReporter, input: MaybeData }) => {
   const [depth, setDepth] = useState(3);
   const [len, setLen] = useState(5);
@@ -84,5 +91,6 @@ export const reverseSpectrogram: AnalyzerModule = {
       </ul>
     </>
   ),
+  detect,
   component,
 };

@@ -253,7 +253,6 @@ export const App = ({ analyzers, analyzerCategories }: {
 
   return (
     <>
-      <p>各種 ARG、高難易度謎解き、CTF、開けないファイルの解析などにどうぞ。</p>
       <AnalyzersList analyzerCategories={analyzerCategories} />
       <ImporterSelector state={state} />
       {stack.value.map((frame, ix) => (

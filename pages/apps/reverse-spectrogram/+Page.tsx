@@ -1,6 +1,6 @@
 import { microAppFactory } from "../../../src/microAppFactory";
 import { fileImporter } from "../../../src/modules/importers/fileImporter";
-import { reverseSpectrogram } from "../../../src/modules/tools/image/reverseSpectrogram";
+import { reverseSpectrogram } from "../../../src/modules/matches/image/reverseSpectrogram";
 
 export const Page = microAppFactory({
   pipeline: [
