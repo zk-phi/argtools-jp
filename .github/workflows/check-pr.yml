@@ -1,0 +1,15 @@
+name: Check PR
+
+on:
+  pull_request:
+
+jobs:
+  check-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3.6.0
+      - run: yarn install
+      - run: yarn run lint
+      - run: yarn run check
+      - run: NODE_OPTIONS="--max-old-space-size=8192" yarn run build
