@@ -21,7 +21,7 @@
     "fflate": "^0.8.2",
     "fft.js": "^4.0.4",
     "file-saver": "^2.0.5",
-    "file-type": "^20.4.1",
+    "file-type": "^21.0.0",
     "franc": "^6.2.0",
     "iconv-lite": "^0.6.3",
     "jszip": "^3.10.1",
