@@ -35,8 +35,13 @@ const _maybeProgrammingLanguage = (string: string): boolean | undefined => {
   const otherSymbols = digest.match(OTHER_SYMBOLS);
   const otherSymbolsCount = (otherSymbols ?? []).join("").length;
 
-  if ((symbolsCount + otherSymbolsCount * 0.5) / digest.length > 0.1) {
+  const symbolsScore = (symbolsCount + otherSymbolsCount * 0.5) / digest.length;
+
+  if (symbolsScore > 0.1) {
     return true;
+  }
+  if (symbolsScore < 0.02) {
+    return false;
   }
   return undefined;
 }
@@ -73,8 +78,10 @@ export const maybeDetectLanguage = async (value: string): Promise<string> => {
     const lang = francAll(value);
     const isNL = lang[0] && lang[0][0] !== "und" ? (
       // lang[0][1] seems always 1.0,
-    // so we look at the second candidate to measure confidence
-      !lang[1] || lang[1][1] < 0.9
+      // so we look at the second candidate to measure confidence
+      !lang[1] ||
+      lang[1][1] < 0.9 ||
+      (maybeProgramming === false && lang[1][1] < 0.99)
     ) : (
       false
     );
