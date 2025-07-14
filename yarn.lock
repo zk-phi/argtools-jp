@@ -572,17 +572,17 @@
     kolorist "^1.8.0"
     vite-prerender-plugin "^0.5.3"
 
-"@preact/signals-core@^1.7.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@preact/signals-core/-/signals-core-1.8.0.tgz#45ffadb81b48a298a4accd26b3f6c0140cd6dacc"
-  integrity sha512-OBvUsRZqNmjzCZXWLxkZfhcgT+Fk8DDcT/8vD6a1xhDemodyy87UJRJfASMuSD8FaAIeGgGm85ydXhm7lr4fyA==
+"@preact/signals-core@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@preact/signals-core/-/signals-core-1.11.0.tgz#9707b75684f009a9ee04541ae5c59d00fca40c82"
+  integrity sha512-jglbibeWHuFRzEWVFY/TT7wB1PppJxmcSfUHcK+2J9vBRtiooMfw6tAPttojNYrrpdGViqAYCbPpmWYlMm+eMQ==
 
-"@preact/signals@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@preact/signals/-/signals-2.0.3.tgz#7f9ae1678456179df9e098ffef17fc5c0f0f5fbf"
-  integrity sha512-ZdC6w8+LdCMeALEoJgzwEAGw2YahqWGCQLfzRCRvRGC411SzcJOiti5gEqrSN+tKtGqMgicHtQ/eUUxWGTBw0A==
+"@preact/signals@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@preact/signals/-/signals-2.2.1.tgz#1935262de30da6d260c20f3a06b05b3ba7cbf944"
+  integrity sha512-cX3mijdjHbbz3dBoJ6z687CGYEOp9ifj3uFnm4UKW+DxXKPMvE2y/VSdm0PXhXmHnr6F0iSnDJ+dLwmV7CYT5A==
   dependencies:
-    "@preact/signals-core" "^1.7.0"
+    "@preact/signals-core" "^1.11.0"
 
 "@prefresh/babel-plugin@0.5.1":
   version "0.5.1"

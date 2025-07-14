@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@file-type/xml": "^0.4.1",
-    "@preact/signals": "^2.0.3",
+    "@preact/signals": "^2.2.1",
     "@ray-d-song/guesslang-js": "^0.1.0",
     "audiobuffer-to-wav": "^1.0.0",
     "exifreader": "^4.28.1",
