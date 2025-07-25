@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from "preact/hooks";
 import type { AnalyzerModule, StateReporter } from "../../../";
 import { runAnalyzer } from "../../../../utils/analyzer";

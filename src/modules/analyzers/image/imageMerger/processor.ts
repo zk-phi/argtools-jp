@@ -72,7 +72,7 @@ export const processor = async (input: Data, reporter: StateReporter) => {
   if (input.datum[0].type !== "binary" || input.datum[1].type !== "binary" ||
       !input.datum[0].mime.startsWith("image") || !input.datum[1].mime.startsWith("image")) {
     throw new Error("画像データでないか、非対応の形式です");
-  };
+  }
 
   const [url1] = toBlobUrl(input.datum[0]);
   const [url2] = toBlobUrl(input.datum[1]);
