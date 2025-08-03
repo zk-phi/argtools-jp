@@ -3,7 +3,9 @@ import type { StateReporter } from "../../..";
 
 // See https://invisible-characters.com for the list of invisible characters
 
-const escapeReplacer = (char: string): string => `<u${char.charCodeAt(0).toString(16)}>`;
+const escapeReplacer = (char: string): string => (
+  `<u${char.charCodeAt(0).toString(16).toUpperCase()}>`
+);
 
 // Popular invisible characters
 const invisibleCharTable: [string, string][] = [
@@ -63,26 +65,25 @@ const invisibleChars2 = [
   "\u3164",
   "\uFFA0",
   "\uFFFC",
-  "\u133FC",
-  "\u1D000",
-  "\u1D0F0",
-  "\u1D100",
-  "\u1D129",
-  "\u1D130",
-  "\u1D13F",
-  "\u1D140",
-  "\u1D145",
-  "\u1D150",
-  "\u1D159",
-  "\uE0001",
+  // "\u{133FC}",
+  // "\u{1D000}",
+  // "\u{1D0F0}",
+  // "\u{1D100}",
+  // "\u{1D129}",
+  // "\u{1D130}",
+  // "\u{1D13F}",
+  // "\u{1D140}",
+  // "\u{1D145}",
+  // "\u{1D150}",
+  // "\u{1D159}",
+  // "\u{E0001}",
   "\u180B-\u180E",
   "\u2061-\u2065",
   "\u206A-\u206F",
   "\uFE00-\uFE0F",
-  "\u1D173-\u1D17A",
-  // // NOT WORKING (WHY?)
-  // "\uE0020-\uE007F",
-  // "\uE0100-\uE01EF",
+  // "\u{1D173}-\u{1D17A}",
+  // "\u{E0020}-\u{E007F}",
+  // "\u{E0100}-\u{E01EF}",
 ]
 
 const invisibleChars2Re = new RegExp(`[${invisibleChars2.join("")}]`, "g");
