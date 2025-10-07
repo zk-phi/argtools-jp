@@ -45,7 +45,7 @@
     "concurrently": "^9.1.2",
     "preact-render-to-string": "^6.5.13",
     "typescript": "^5.8.3",
-    "vike": "^0.4.229",
+    "vike": "^0.4.242",
     "vite": "^6.2.6",
     "vite-bundle-analyzer": "^0.19.0"
   }
