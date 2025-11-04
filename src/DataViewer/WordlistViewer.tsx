@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from "preact/hooks";
 import { useDebouncedValue } from "../utils/ui/debounce";
 import { gensym } from "../utils/gensym";
+import { save } from "../utils/file/save";
 import type { Wordlist } from "../datatypes";
 
 type Filter = { type: string, string: string, length: number, id: number };
@@ -26,6 +27,14 @@ const applyFilter = (value: Wordlist, filter: Filter) => (
     }
   })
 );
+
+const saveAsTsv = (wordlist: Wordlist) => {
+  const tsv = wordlist.map((row) => (
+    `${row.key.replaceAll("\t", " ")}\t${row.value.replaceAll("\t", " ")}`
+  )).join("\n");
+  const blob = new Blob([`${tsv}\n`], { type: "text/tab-separated-values" });
+  save(blob, ".tsv");
+};
 
 const busyOverlayStyle = {
   position: "absolute",
@@ -140,24 +149,31 @@ export const WordlistViewer = ({ value, status }: { value: Wordlist, status?: st
         <p>{statusMessage ? `${statusMessage} ...` : "データなし"}</p>
       ) : (
         <>
-          <p>{statusMessage ? `${statusMessage} ...` : `${filteredWords.length} 件`}</p>
-          <div style={{ position: "relative" }}>
-            <table>
-              <tbody>
-                {filteredWords.slice(0, 300).map(row => (
-                  <tr key={row.id}>
-                    <td>{row.key}</td>
-                    <td>{row.value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {filteredWords.length > 300 && (
-              <p>... 先頭の 300 件を表示中</p>
-            )}
-            {statusMessage && <div style={busyOverlayStyle} />}
-          </div>
-        </>
+          {statusMessage ? (
+            <p>{statusMessage}</p>
+          ) : (
+            <p>
+              {`${filteredWords.length} 件 `}
+              <a href="javascript: void(0)" onClick={() => saveAsTsv(filteredWords)}>保存</a>
+            </p>
+          )}
+        <div style={{ position: "relative" }}>
+          <table>
+            <tbody>
+              {filteredWords.slice(0, 300).map(row => (
+                <tr key={row.id}>
+                  <td>{row.key}</td>
+                  <td>{row.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {filteredWords.length > 300 && (
+            <p>... 先頭の 300 件を表示中</p>
+          )}
+          {statusMessage && <div style={busyOverlayStyle} />}
+        </div>
+    </>
       )}
     </>
   );
