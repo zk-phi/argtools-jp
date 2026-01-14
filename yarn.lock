@@ -3095,10 +3095,10 @@ vike@^0.4.229:
     tinyglobby "^0.2.10"
     vite ">=5.1.0"
 
-vite-bundle-analyzer@^0.19.0:
-  version "0.19.0"
-  resolved "https://registry.yarnpkg.com/vite-bundle-analyzer/-/vite-bundle-analyzer-0.19.0.tgz#1879eebcd9c52333182e44f4bacfb778be95fe13"
-  integrity sha512-kMslGwnRlYpOCYzda+EUI2rRa5DYCdlbvbrVZO7WvwK1suV/uDFgiD1N5e+woHRsePPInt525wUBWYr1mu0oTQ==
+vite-bundle-analyzer@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/vite-bundle-analyzer/-/vite-bundle-analyzer-1.3.2.tgz#087d6312c9cffcb9be5320bf1b9fb9c136c26486"
+  integrity sha512-Od4ILUKRvBV3LuO/E+S+c1XULlxdkRZPSf6Vzzu+UAXG0D3hZYUu9imZIkSj/PU4e1FB14yB+av8g3KiljH8zQ==
 
 vite-plugin-node-polyfills@^0.23.0:
   version "0.23.0"
