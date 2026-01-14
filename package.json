@@ -42,7 +42,7 @@
     "@types/encoding-japanese": "^2.2.1",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^22.14.1",
-    "concurrently": "^9.1.2",
+    "concurrently": "^9.2.1",
     "preact-render-to-string": "^6.5.13",
     "typescript": "^5.8.3",
     "vike": "^0.4.229",
